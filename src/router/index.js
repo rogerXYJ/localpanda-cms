@@ -9,7 +9,7 @@ let routers = [
   {path: '/', name: 'index', title:'CMS首页'},
 
   {path: '/content/addArticle', name: 'addArticle', title:'新增文章'},
-  {path: '/content/editArticle', name: 'editArticle', title:'新增文章'},
+  {path: '/content/editArticle', name: 'editArticle', title:'编辑文章'},
 
   {path: '/lp/', name: 'index', title:'LP首页'},
   {path: '/lp/keyword/', name: 'index', title:'关键词搜索'},

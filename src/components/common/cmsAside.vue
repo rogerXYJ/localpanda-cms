@@ -3,7 +3,7 @@
       <div class="logo"><a href="/">Local panda</a></div>
 
       <div class="aside-content">
-        <el-menu :default-openeds="activeDown" :default-active="activeTitle" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+        <el-menu :default-openeds="activeDown" :default-active="activeTitle" background-color="#333" text-color="#fff" active-text-color="#ffd04b">
           <!-- 内容管理 -->
 
           <!-- 导航渲染 -->
@@ -59,7 +59,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="css">
-  .logo{ font-size: 24px; text-align: center; height: 60px; line-height: 60px; border-bottom: #333 solid 1px;}
+  .logo{ font-size: 24px; text-align: center; height: 60px; line-height: 60px; }
+  .cms-aside{
+    width: 200px; 
+    background-color:#333; 
+    color:#fff; 
+    overflow: hidden; 
+    height: 100vh;
+    position: fixed; left: 0; top: 0;
+  }
   .cms-aside .logo a{ color: #fff;
     display: block;
     width: 100%;
@@ -71,4 +79,24 @@ export default {
   .cms-aside .el-menu-item-group__title{
     display: none;
   }
+  .aside-content{
+    max-height: calc(100% - 60px);
+    overflow-y: auto;
+  }
+  .aside-content .el-menu .is-active .el-menu-item{
+   background-color: #666 !important;
+ }
+ .aside-content>.el-menu>li{
+   border-top: #222 solid 1px;
+ }
+  .aside-content .el-menu .is-active .el-menu-item:hover{
+    background-color: #555 !important;
+  }
+ /* .el-menu .is-active .el-submenu__title{
+   background-color: #555 !important;
+ } */
+
+.aside-content::-webkit-scrollbar { width: 6px;  }
+.aside-content::-webkit-scrollbar-track { background-color: #333;  border-radius: 3px; }
+.aside-content::-webkit-scrollbar-thumb { border-radius: 3px;  background-color: #000; }
 </style>

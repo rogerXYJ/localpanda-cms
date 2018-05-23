@@ -74,14 +74,6 @@ h4{ font-size: 16px;}
 }
 
 /*cms公共样式*/
-.cms-aside{
-  width: 200px; 
-  background-color:#545c64; 
-  color:#fff; 
-  overflow: hidden; 
-  height: 100vh;
-  position: fixed; left: 0; top: 0;
-}
 .cms-page{ padding:0 30px 0 230px;}
 .cms-main{ width: 100%; padding-bottom: 40px;}
 .cms-main::before{ content: ''; display: block; border-top: #333 solid 1px; margin-top: -1px;}

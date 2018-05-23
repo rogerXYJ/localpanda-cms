@@ -1,7 +1,7 @@
 <template>
   <div class="cms-page">
     <!-- 公共导航，activeTitle用来设置导航高亮位置,第几个导航，第几个索引 -->
-    <cmsAside :activeTitle="'2-1'"></cmsAside>
+    <cmsAside :activeTitle="'2-2'"></cmsAside>
 
     <div class="cms-main">
       <h3 class="text_c fs40">Edit article</h3>
@@ -93,7 +93,7 @@ export default {
 
       this.showDialogTip = false;
 
-      if(this.dialogTipTxt != 'error'){
+      if(this.dialogTipTxt != 'error' && this.dialogTipTxt != 'ID does not exist'){
         location.reload();
       }
     },

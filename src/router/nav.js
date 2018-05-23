@@ -10,7 +10,8 @@ var cmsNav = [
   {
     title:'内容管理',
     list:[
-      {'title':'新增文章','url':'/content/addArticle'}
+      {'title':'新增文章','url':'/content/addArticle'},
+      {'title':'编辑文章','url':'/content/editArticle'}
     ]
   }
 ]
