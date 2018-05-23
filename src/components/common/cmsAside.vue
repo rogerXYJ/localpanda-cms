@@ -24,8 +24,9 @@
 </template>
 
 <script>
+//导航配置文件
+import cmsNav from '@/router/nav.js';
 
-//导航配置
 export default {
   name: 'cmsAside',
   props:{
@@ -33,26 +34,11 @@ export default {
   },
   data () {
     return {
-      showAside : false,
-      cmsNav : {}
+      cmsNav : cmsNav,//导航结束
     }
   },
   mounted(){
-    this.cmsNav = [
-      {
-        title:'LP管理',
-        list:[
-          {'title':'关键词管理','url':'/lp/keyword/'}
-        ]
-      },
-      // {
-      //   title:'内容管理',
-      //   list:[
-      //     {'title':'新增文章'}
-      //   ]
-      // }
-    ];
-
+    
   },
   computed:{
     activeDown(){      

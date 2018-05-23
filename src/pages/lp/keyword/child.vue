@@ -176,7 +176,7 @@
 </template>
 
 <script>
-import cmsAside from '@/components/public/cmsAside.vue';
+import cmsAside from '@/components/common/cmsAside.vue';
 import {urlData} from '@/assets/js/base';
 
 

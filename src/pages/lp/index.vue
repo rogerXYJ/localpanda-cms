@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import cmsAside from '@/components/public/cmsAside.vue';
+import cmsAside from '@/components/common/cmsAside.vue';
 
 
 export default {

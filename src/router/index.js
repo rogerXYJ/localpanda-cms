@@ -3,38 +3,53 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-//**  路由设置，//路由名：文件名  */
-let routers = {
-  //首页
-  '/': 'index',
-  
-  //文章页面
-  '/content/addArticle': 'addArticle',
+//**  路由参数：路由,文件名,页面title  */
+let routers = [
 
-  //LP页面
-  '/lp/': 'index',
-  '/lp/keyword/': 'index',
-  '/lp/keyword/tpl1': 'tpl1',
-  '/lp/keyword/tpl2': 'tpl2',
-  '/lp/keyword/tpl3': 'tpl3',
-  '/lp/keyword/child': 'child'
-}
+  {path: '/', name: 'index', title:'CMS首页'},
 
+  {path: '/content/addArticle', name: 'addArticle', title:'新增文章'},
+  {path: '/content/editArticle', name: 'editArticle', title:'新增文章'},
 
-//自动加载路由
+  {path: '/lp/', name: 'index', title:'LP首页'},
+  {path: '/lp/keyword/', name: 'index', title:'关键词搜索'},
+  {path: '/lp/keyword/tpl1', name: 'tpl1', title:'外层模版'},
+  {path: '/lp/keyword/tpl2', name: 'tpl2', title:'中层模版'},
+  {path: '/lp/keyword/tpl3', name: 'tpl3', title:'底层模版'},
+  {path: '/lp/keyword/child', name: 'child', title:'关联子项'},
+
+];
+
+//自动加载文件
 let routesArr = [];
-for(var thisKey in routers){
-  var thisPath = thisKey.replace(/(.+\/).*$/g,'$1');
-  var component = require('@/pages' + thisPath + routers[thisKey] + '.vue');
+for(var i=0;i<routers.length;i++){
+  var thisR = routers[i];
+  var thisPath = thisR.path.replace(/(.+\/).*$/g,'$1');
+  var component = require('@/pages' + thisPath + thisR.name + '.vue');
   routesArr.push({
-    path: thisKey,
-    name: routers[thisKey],
+    path: thisR.path,
+    name: thisR.name,
+    meta:{
+      title: thisR.title
+    },
     component: component.default
   });
 };
-export default new Router({
+
+//设置路由
+const newRouter = new Router({
   mode: 'history', //启用history模式
   base: __dirname,
   routes: routesArr
+});
+
+//设置页面title
+newRouter.afterEach((transition) => {
+  let title = transition.meta.title;
+  if(title){
+    document.title = title;
+  }
 })
+
+export default newRouter;
 

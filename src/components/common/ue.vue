@@ -4,11 +4,11 @@
   </div>
 </template>
 <script>
-//../../..
-import '@/static/UE/ueditor.config.js'
-import '@/static/UE/ueditor.all.min.js'
-import '@/static/UE/lang/en/en.js'
-import '@/static/UE/ueditor.parse.min.js'
+
+import '../../../static/UE/ueditor.config.js'
+import '../../../static/UE/ueditor.all.min.js'
+import '../../../static/UE/lang/en/en.js'
+import '../../../static/UE/ueditor.parse.min.js'
 
   export default {
     name: 'UE',

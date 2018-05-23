@@ -1,7 +1,7 @@
 <template>
   <div class="cms-page">
     <!-- 侧边栏导航，activeTitle传入1-1的格式，即可展开并高亮对应的导航 -->
-    <cmsAside :activeTitle="activeTitle"></cmsAside>
+    <cmsAside :activeTitle="'1-1'"></cmsAside>
 
     <div class="cms-main" v-show="showPage">
       <h3 class="text_c">关键词查找</h3>
@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import cmsAside from '@/components/public/cmsAside.vue';
+import cmsAside from '@/components/common/cmsAside.vue';
 import {urlData} from '@/assets/js/base.js';
 
 
@@ -118,11 +118,7 @@ export default {
   },
   data () {
     return {
-      //页面配置
-      title : 'LP管理-关键词查找',
-      keywords: 'LP管理',
-      description: 'LP管理',
-      activeTitle: '1-1', //导航高亮位置
+      
       showPage : false,
       tableShow : false,
       searchTip : false,
@@ -264,19 +260,6 @@ export default {
           this.addKeyword.resourceTip = false;
         }
       }
-    }
-  },
-  head(){
-    return {
-      title: this.title,
-      meta: [{
-        name: "keywords",
-        content: this.keywords
-      },
-      {
-        name: "description",
-        content: this.description
-      }]
     }
   }
 }
