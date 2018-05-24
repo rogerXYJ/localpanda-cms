@@ -8,7 +8,7 @@
 
           <!-- 导航渲染 -->
             <el-submenu :index="''+(titleIndex+1)" :key="item.title" v-for="(item,titleIndex) in cmsNav">
-                <template slot="title"><i class="el-icon-menu"></i>{{item.title}}</template>
+                <template slot="title"><i :class="item.icon"></i>{{item.title}}</template>
                 <el-menu-item-group>
                     <el-menu-item  :key="nav.url" v-for="(nav,navIndex) in item.list" :index="(titleIndex+1)+'-'+(navIndex+1)" @click="jump(nav.url)">{{nav.title}}</el-menu-item>
                 </el-menu-item-group>

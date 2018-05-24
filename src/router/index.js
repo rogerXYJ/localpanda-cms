@@ -36,6 +36,8 @@ for(var i=0;i<routers.length;i++){
   });
 };
 
+
+
 //设置路由
 const newRouter = new Router({
   mode: 'history', //启用history模式
@@ -50,6 +52,7 @@ newRouter.afterEach((transition) => {
     document.title = title;
   }
 })
+
 
 export default newRouter;
 
