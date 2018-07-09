@@ -11,12 +11,18 @@ let routers = [
   {path: '/content/addArticle', name: 'addArticle', title:'新增文章'},
   {path: '/content/editArticle', name: 'editArticle', title:'编辑文章'},
 
+
   {path: '/lp/', name: 'index', title:'LP首页'},
   {path: '/lp/keyword/', name: 'index', title:'关键词搜索'},
   {path: '/lp/keyword/tpl1', name: 'tpl1', title:'外层模版'},
   {path: '/lp/keyword/tpl2', name: 'tpl2', title:'中层模版'},
   {path: '/lp/keyword/tpl3', name: 'tpl3', title:'底层模版'},
   {path: '/lp/keyword/child', name: 'child', title:'关联子项'},
+  
+  {path:'/grade/index',name: 'index', title:'点评管理首页'},
+  {path:'/grade/checkpending',name: 'checkpending', title:'待审核点评列表'},
+  {path:'/grade/visitorsgrade',name: 'visitorsgrade', title:'审核游客点评'},
+  {path:'/grade/addreview',name: 'addreview', title:'自添加点评'}
 
 ];
 

@@ -15,6 +15,14 @@ var cmsNav = [
       {'title':'新增文章','url':'/content/addArticle'},
       {'title':'编辑文章','url':'/content/editArticle'}
     ]
+  },
+   {
+    title:'点评管理',
+    icon: 'el-icon-star-on',
+    list:[
+      {'title':'点评信息管理','url':'/grade/index'},
+      
+    ]
   }
 ]
 

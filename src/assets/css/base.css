@@ -41,11 +41,12 @@ h4{ font-size: 16px;}
 .mg0{ margin:0 !important;}
 .mt10{ margin-top:10px !important;}
 .mt20{ margin-top:20px !important;}
+.mt30{ margin-top:30px !important;}
 .ml10{ margin-left:10px !important;}
 .ml20{ margin-left:20px !important;}
 .ml30{ margin-left:30px !important;}
 .mt40 { margin-top: 40px !important;}
-
+.pb40{margin-bottom: 40px !important;}
 .mr10{ margin-right: 10px !important;}
 .mr20{ margin-right: 20px !important;}
 .mr30{ margin-right: 30px !important;}
@@ -60,11 +61,18 @@ h4{ font-size: 16px;}
 .fs40{ font-size: 40px;}
 
 .text_c{ text-align: center;}
-.text_r{ text-align: center;}
+.text_r{ text-align: right;}
+
+.inline_block{
+	display: inline-block;
+}
 
 .w50{ width: 50px!important;}
 .w100{ width: 100px!important;}
-
+.w120{ width: 120px!important;}
+.w220{width:220px!important;}
+.wb60{width: 60%!important;}
+.wb90{width: 90%!important;}
 .zindex9{ z-index: 9!important; position: relative;}
 
 .btn_text{ color: #1bbc9d; margin-right:15px; cursor: pointer;}
@@ -84,3 +92,9 @@ h4{ font-size: 16px;}
 /* .cms-aside{ float: left; width: 200px; margin-left: -220px;} */
 .cms-page{ padding-left: 220px;}
 .cms-main{ width: 100%;}
+
+
+/* 评分 */
+.el-rate__item{
+	vertical-align: inherit!important;
+}
