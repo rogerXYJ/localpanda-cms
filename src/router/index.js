@@ -10,6 +10,7 @@ let routers = [
 
   {path: '/content/addArticle', name: 'addArticle', title:'新增文章'},
   {path: '/content/editArticle', name: 'editArticle', title:'编辑文章'},
+  {path: '/content/email', name: 'email', title:'邮件模版'},
 
 
   {path: '/lp/', name: 'index', title:'LP首页'},

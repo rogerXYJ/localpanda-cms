@@ -13,7 +13,8 @@ var cmsNav = [
     icon: 'el-icon-document',
     list:[
       {'title':'新增文章','url':'/content/addArticle'},
-      {'title':'编辑文章','url':'/content/editArticle'}
+      {'title':'编辑文章','url':'/content/editArticle'},
+      {'title':'邮件模版','url':'/content/email'}
     ]
   },
    {

@@ -6,7 +6,7 @@ audio,canvas,video{display:inline;zoom:1}command,datalist,keygen,mark,meter,prog
 .hide{ display:none;}
 .block{ display:block;}
 
-body{margin:0;background:#fff;font:12px/22px "Helvetica Neue", "Arial", "PingFang SC", "Microsoft Yahei", "SimSun", sans-serif; min-width:1200px;}
+body{margin:0;background:#fff;font:12px/1.5 "Helvetica Neue", "Arial", "PingFang SC", "Microsoft Yahei", "SimSun", sans-serif; min-width:1200px;}
 button,input,select,textarea,samp {font-family: "Helvetica Neue", "Arial", "PingFang SC", "Microsoft Yahei", "SimSun", sans-serif;}
 
 a,a:hover{ text-decoration: none;}
