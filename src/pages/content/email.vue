@@ -7,16 +7,14 @@
       <h3 class="text_c">邮件模版</h3>
       <el-form label-width="80px" class="addarticle-form">
 
-        <el-form-item label="状态" class="el-form-min">
-          <el-select v-model="templateName" placeholder="请选择邮件模版">
-            <el-option label="模版1" value="1"></el-option>
-            <el-option label="模版2" value="2"></el-option>
-            <el-option label="模版3" value="3"></el-option>
+        <el-form-item label="邮件模版" class="el-form-min">
+          <el-select v-model="templateName" @change="typeChange" placeholder="请选择邮件模版">
+            <el-option v-for="(item,index) in templateList" :key="index" :label="item.typeName" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="title" v-show="showForm" required>
-            <el-input v-model="title" id="title"></el-input>
+            <el-input v-model="templateData.title" id="title"></el-input>
         </el-form-item>
         <el-form-item label="content" v-show="showForm" required>
           <UE :defaultContent="defaultContent" :config="ueConfig" :id="ueId" ref="ue"></UE>
@@ -51,9 +49,12 @@ export default {
   },
   data() {
     return {
+      templateList: [],
       templateName: '',
-      title : '',
-      content : '',
+      templateData: '',
+      // title:'',
+      // content : '',
+      
       showForm: false,
 
       isLoading : false,
@@ -69,8 +70,23 @@ export default {
     };
   },
   mounted() {
+    var self = this;
+
+    //调用编辑器
     this.ue = this.$refs.ue;
-    
+
+    //列表数据
+    $.ajax({
+      url: 'https://api.localpanda.com/api/public/template',
+      type: 'GET',
+      //contentType: 'application/json',
+      success:function(data){
+        self.templateList = data;
+      },
+      error: function () {
+        
+      }
+    });	
 
   },
   methods: {
@@ -82,12 +98,8 @@ export default {
 
       this.showDialogTip = false;
 
-      if(this.dialogTipTxt != 'error'){
-        this.title = '';
-        this.keywords = '';
-        this.description = '';
-        this.content = '';
-        this.ue.editor.setContent('');
+      if(!/error|失败|错误/.test(this.dialogTipTxt)){
+        location.reload();
       }
     },
     submit(){
@@ -97,16 +109,12 @@ export default {
           return;
       }
       
-
-      
-
       //获取html
       var ue = this.ue;
       var htmlContent = ue.getUEContent();
 
-      this.content = htmlContent;
-      
-      if(this.title==''){
+
+      if(this.templateData.title==''){
           $('#title').focus();
           return;
       }else if(htmlContent==''){
@@ -116,33 +124,42 @@ export default {
       //提交数据
       self.isLoading = true;
       
-
-      //document.getElementById("myForm").submit();
       
       $.ajax({
-          url: 'https://api.localpanda.com/api/travel/article/commit',//https://api.localpanda.com/api/travel/article/commit
+          url: 'https://api.localpanda.com/api/public/template/update',//https://api.localpanda.com/api/travel/article/commit
           type: 'POST',
-          contentType: 'application/x-www-form-urlencoded',
-          data: {
-              title: this.title,
-              keywords: this.keywords,
-              description: this.description,
+          contentType: 'application/json',
+          data: JSON.stringify({
+              typeId: this.templateData.id,
+              title: this.templateData.title,
               content: htmlContent,
-          },
+          }),
           success:function(data){
-              if(data.succeed){
-                  self.dialogTipTxt = 'success!  ID：<a target="_blank" href="https://www.localpanda.com/travel/article/'+data.response+'">'+data.response+'</a>，Click ID to view the article！';
-                  self.showDialogTip = true;
-                  self.isLoading = false;
-              }
-              
-          },
-          error: function () {
-              self.dialogTipTxt = 'error';
+            if(data.succeed){
+              self.dialogTipTxt = '修改成功！';
               self.showDialogTip = true;
               self.isLoading = false;
+            }
+          },
+          error: function () {
+            self.dialogTipTxt = '修改失败，请重试！或联系服务器管理员！';
+            self.showDialogTip = true;
+            self.isLoading = false;
           }
       });	
+    },
+    typeChange(value){
+      for(var i=0;i<this.templateList.length;i++){
+        var thisData = this.templateList[i];
+        if(value == thisData.id){
+        
+          this.templateData = thisData;
+          // this.title = thisData.title;
+          // this.content = thisData.content;
+          this.ue.editor.setContent(thisData.content);
+        }
+        
+      }
     }
   },
   watch:{
