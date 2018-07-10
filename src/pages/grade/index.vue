@@ -16,7 +16,7 @@
 		  <el-form-item label="产品ID:">
 		    <el-input class="w220" v-model="formData.activityId"></el-input>
 		  </el-form-item>
-		  <el-form-item label="User name:">
+		  <!-- <el-form-item label="User name:">
 		    <el-input class="w220" v-model="formData.userName"></el-input>
 		  </el-form-item>
 		  <el-form-item label="发布时间:">
@@ -65,7 +65,7 @@
   				 <el-radio label="1">仅搜自添加</el-radio>
   				 <el-radio label="2">仅搜游客点评</el-radio>
 			  </el-radio-group> 
-		  </el-form-item>
+		  </el-form-item> -->
 		 <el-form-item>
 		    	<el-button @click="sumbitFn" type="primary">查询</el-button>
 		 </el-form-item>
@@ -87,7 +87,7 @@
 			 <el-table-column align="center" prop="userName" label="User name" width="100"></el-table-column>
 			 <el-table-column align="center" prop="source" label="来源" width="100">
 			 	<template slot-scope="scope" >
-						<span>{{scope.row.source?source[scope.row.source]:'-'}}</span>
+						<span>{{scope.row.source?source[scope.row.source-1]:'-'}}</span>
 					</template>	
 			 </el-table-column>
 			 <el-table-column align="center" prop="createTime" label="创建时间" width="160"></el-table-column>
@@ -163,7 +163,7 @@ export default {
 					self.showlist=true
 					self.tableData=data
 				} else {
-					alert('参数错误！');
+					alert('没有相关点评!');
 					this.showlist=false
 				}
 			},

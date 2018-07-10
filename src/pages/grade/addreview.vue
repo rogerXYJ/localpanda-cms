@@ -25,7 +25,6 @@
 
 					<el-form-item label="点评星级: " prop="score">
 						<el-select class="w220" v-model="ruleForm.score">
-							<el-option label="不限" value="null"></el-option>
 							<el-option label="五星" value="10"></el-option>
 							<el-option label="四星半" value="9"></el-option>
 							<el-option label="四星" value="8"></el-option>
@@ -59,7 +58,7 @@
 						</div>
 					</el-col>
 					<el-col :span="5">
-						<input type="file" name="" id="" value="" @change="upload" />
+						<input class="hide" type="file" name="" id="" value="" @change="upload" />
 					</el-col>
 				</el-form-item>
 				<div class="upload_box clearfix">
@@ -74,15 +73,31 @@
 					<div class="hr"></div>
 					<div class="uploadImgs clearfix">
 						<div class="avatar-uploader">
+							
+							<!-- <div class=" el-upload--text ml30 fl" v-for="(i,index) in editImgList">
+								<div class='el-upload'>
+									<img v-if="editImgList.length>0" :src="i.url" class="avatar">
+									<div v-else class="el-icon-plus avatar-uploader-icon"></div>
+								</div>
+								<div class="add">
+									<span class="el-button el-button--primary el-button--mini">选择文件</span>
+									<input type="file" name="" id="" value="" @change="uploadImg($event,index)" />
+									<span @click="delSql(index)" class="el-button el-button--primary el-button--mini ml30">删除</span>
+								</div>
+
+							</div> -->
+
+
+
 							<div class=" el-upload--text ml30 fl" v-for="(i,index) in imageList">
 								<div class='el-upload'>
 									<img v-if="imageList.length>0" :src="i.url" class="avatar">
 									<div v-else class="el-icon-plus avatar-uploader-icon"></div>
 								</div>
 								<div class="add">
-									<span class="el-button el-button--primary el-button--mini">选择文件</span>
+									<span class="el-button el-button--primary el-button--mini" :class="{'el-button--success':i.photoId}">{{i.photoId?'修改图片':'选择文件'}}</span>
 									<input type="file" name="" id="" value="" @change="uploadImg($event,index)" />
-									<span @click="del(index)" class="el-button el-button--primary el-button--mini ml30">删除</span>
+									<span @click="del(index,i.photoId)" class="el-button el-button--primary el-button--mini ml30" :class="{'el-button--danger':i.photoId}">删除</span>
 								</div>
 
 							</div>
@@ -110,7 +125,7 @@
 		</div>
 		
 		
-		
+		<Loading :loadingStatus="showLoading"></Loading>
 		
 		<!-- 提交成功弹框 -->
 		
@@ -119,11 +134,13 @@
 
 	<script>
 		import cmsAside from "@/components/common/cmsAside.vue";
+		import Loading from '@/components/plugin/Loading'
 
 		export default {
 			name: "addreview",
 			components: {
 				cmsAside,
+				Loading
 			},
 			data() {
 				let checkCreateTime = (rule, value, callback) => {
@@ -139,7 +156,7 @@
 						id: id,
 						activityId: '', //关联产品ID
 						content: '', //点评内容	
-						score: '', //评分
+						score: '10', //评分
 						userName: '', //用户名称
 						createTime: '', //发布时间
 
@@ -169,7 +186,8 @@
 							trigger: 'blur'
 						},
 						createTime: {
-							validator: checkCreateTime,
+							required: false,
+							//validator: checkCreateTime,
 							message: '请选择日期',
 							trigger: 'change'
 						},
@@ -180,12 +198,18 @@
 						}
 					},
 					imageUrl: '',
+					editImgList: [],
 					imageList: [],
 					fileData: '',
 					addimage: true,
 					fileDatas: [],
 					contentType: 'application/json; charset=UTF-8',
-					err:false
+					err:false,
+
+					fileAllLength:0,
+					fileOkLength:0,
+					showLoading:false,
+					tipText: id?'修改成功！':'添加成功！'
 				}
 			},
 			mounted() {
@@ -206,14 +230,17 @@
 							var resData = data;
 
 							if(resData.length > 0) {
-
+								//星级转为字符串
+								resData[0].score+='';
 								self.ruleForm = resData[0];
-								if( resData[0].userCommentUrl){
-									self.imageList = resData[0].userCommentUrl;
-								}
 								
-								if(resData[0].userPortraitUrl){
-									self.imageUrl = resData[0].userPortraitUrl
+								//点评图片
+								if( resData[0].userCommentPhoto){
+									self.imageList = resData[0].userCommentPhoto;
+								}
+								//用户头像
+								if(resData[0].userPortraitPhoto){
+									self.imageUrl = resData[0].userPortraitPhoto.url
 								}
 								
 
@@ -231,7 +258,7 @@
 			methods: {
 				//上传头图
 				uploadimg(id, file) {
-
+					var self = this;
 					let postdata = {
 						objectId: id,
 						objectType: "COMMENT_PORTRAIT",
@@ -253,7 +280,20 @@
 						success: function(data) {
 							var resData = data;
 							if(resData.succeed) {
-
+								self.fileOkLength++;
+								console.log('头像上传完毕！');
+								console.log(self.fileOkLength,self.fileAllLength);
+								if(self.fileOkLength>=self.fileAllLength){
+									self.showLoading = false;
+									self.$alert(self.tipText, '', {
+										confirmButtonText: '确定',
+										callback: action => {
+											location.href='/grade/index'
+										}
+									});
+									console.log('全部上传完毕！');
+								}
+								
 							} else {
 								alert('参数错误！');
 							}
@@ -266,6 +306,7 @@
 				},
 				//上传多张图片
 				uploadimgList(id, files) {
+					var self = this;
 					let postdata = {
 						objectId: id,
 						objectType: "USER_COMMENT",
@@ -275,6 +316,8 @@
 //					for(var key in postdata){
 //						param.append(key,postdata[key])
 //					}
+
+					console.log(files);
 					
 					param.append("objectId",postdata.objectId);
 					param.append("objectType",postdata.objectType);
@@ -290,8 +333,21 @@
 						processData: false,
 						success: function(data) {
 							var resData = data;
-							console.log(data)
 							if(resData.succeed) {
+								self.fileOkLength++;
+								console.log('点评图片上传完毕！');
+								console.log(self.fileOkLength,self.fileAllLength);
+								//判断头像和点评图片是否上传完毕
+								if(self.fileOkLength>=self.fileAllLength){
+									self.showLoading = false;
+									self.$alert(self.tipText, '', {
+										confirmButtonText: '确定',
+										callback: action => {
+											location.href='/grade/index'
+										}
+									});
+									console.log('全部上传完毕！');
+								}
 								
 							} else {
 								alert('参数错误！');
@@ -312,6 +368,7 @@
 							
 							delete formData.userPortraitUrl;
 							delete formData.userCommentUrl;
+
 							
 							//formData.createTime=formData.time+'00:00:00'
 							//delete formData.time
@@ -330,6 +387,9 @@
 							//         		formData = param;
 
 							//return
+
+							self.showLoading = true;
+
 							$.ajax({
 								url: postUrl,
 								type: 'POST',
@@ -339,7 +399,8 @@
 								//processData: false,
 								success: function(data) {
 									var resData = data;
-									let objectId=""
+									let objectId="";
+
 									if(resData.succeed) {
 										if(self.ruleForm.id){
 											objectId=self.ruleForm.id
@@ -347,20 +408,31 @@
 											objectId=data.response
 										}
 										 
-										if(self.fileData) {
-											self.uploadimg(objectId, self.fileData)
+										
+										
+										if(self.fileDatas.length || self.fileData) {
+											//上传头像
+											if(self.fileData) {
+												self.fileAllLength++;
+												self.uploadimg(objectId, self.fileData);
+												
+											}
+											//上传点评图
+											if(self.fileDatas.length){
+												self.fileAllLength++;
+												self.uploadimgList(objectId, self.fileDatas)
+											}
+											
+										}else{
+											self.showLoading = false;
+											self.$alert(self.tipText, '', {
+												confirmButtonText: '确定',
+												callback: action => {
+													location.href='/grade/index'
+												}
+											});
 										}
 										
-										if(self.fileDatas.length) {
-											
-											self.uploadimgList(objectId, self.fileDatas)
-										}
-										 self.$alert('添加成功', '', {
-									          confirmButtonText: '确定',
-									          callback: action => {
-									            location.href='/grade/index'
-									          }
-									        });
 												
 									} else {
 										alert('参数错误！');
@@ -377,11 +449,30 @@
 						}
 					});
 				},
-				del(index) {
+				del(index,photoId) {
 					console.log(index)
-					this.fileDatas.splice(index, 1)
-					this.imageList.splice(index, 1)
+					this.fileDatas.splice(index, 1);
+					this.imageList.splice(index, 1);
+
+					if(photoId){
+						$.ajax({
+							url: 'https://api.localpanda.com/api/content/photo/delete/'+photoId,
+							type: 'DELETE',
+							dataType: 'json', //如果跨域用jsonp
+							//processData: false,
+							success: function(data) {
+								var resData = data;
+								let objectId="";
+								if(resData.succeed) {
+									alert('删除成功！');
+								}
+							}
+						});
+					}
 					
+				},
+				delSql(){
+
 				},
 				//头图
 				upload(e, index) {
@@ -425,6 +516,8 @@
 								self.imageList.push({
 									url: windowURL.createObjectURL(file[i])
 								})
+
+								console.log(self.imageList);
 							}
 						}
 					}
@@ -433,7 +526,7 @@
 				//多图上传单个
 
 				uploadImg(e, index) {
-					var file = e.target.files[index];
+					var file = e.target.files[0];
 					const isJPG = file.type === 'image/jpeg';
 					const isPNG = file.type === 'image/png';
 					const isLt2K = file.size / 1024 / 1024 < 20;
@@ -445,6 +538,34 @@
 						this.fileDatas[index] = file
 						var windowURL = window.URL || window.webkitURL;
 						this.imageList[index].url = windowURL.createObjectURL(file);
+
+						var photoId = this.imageList[index].photoId;
+						if(photoId){
+
+							let param = new FormData();
+							param.append("file",file);
+							param.append("photoId",photoId);
+							param.append("objectId",this.imageList[index].objectId);
+							param.append("objectType",'USER_COMMENT');
+
+							$.ajax({
+								url: 'https://api.localpanda.com/api/content/photo/update',
+								type: 'POST',
+								dataType: 'json', //如果跨域用jsonp
+								data: param,
+								contentType: false,
+								processData: false,
+								//processData: false,
+								success: function(data) {
+									var resData = data;
+									let objectId="";
+
+									if(resData.succeed) {
+										alert('修改成功！');
+									}
+								}
+							});
+						}
 						
 					}
 				}
@@ -473,10 +594,18 @@
 			cursor: pointer;
 			position: relative;
 			overflow: hidden;
+			
+		}
+		.hide{
+			display: none;
 		}
 		
 		.avatar-uploader .el-upload:hover {
 			border-color: #409EFF;
+		}
+		
+		.el-upload--text{
+			margin-top: 20px;
 		}
 		
 		.avatar-uploader-icon {
@@ -490,6 +619,7 @@
 		
 		.el-button--text {
 			padding: 0;
+			
 		}
 		
 		.avatar {
@@ -515,6 +645,7 @@
 				opacity: 0;
 				width: 80px;
 				height: 30px;
+				cursor: pointer;
 			}
 		}
 		
