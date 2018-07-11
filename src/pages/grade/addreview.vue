@@ -54,7 +54,7 @@
 							<div class="el-upload el-upload--text">
 								<img v-if="imageUrl " :src="imageUrl" class="avatar">
 								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-								<input id="headPicFile" type="file" @change="upload"/>
+								<input id="headPicFile" type="file" @change="upload" />
 							</div>
 						</div>
 					</el-col>
@@ -108,12 +108,6 @@
 			</el-form>
 
 		</div>
-		
-		
-		
-		
-		<!-- 提交成功弹框 -->
-		
 	</div>
 	</template>
 
@@ -185,7 +179,8 @@
 					addimage: true,
 					fileDatas: [],
 					contentType: 'application/json; charset=UTF-8',
-					err:false
+					err: false,
+					photoId:''
 				}
 			},
 			mounted() {
@@ -208,14 +203,14 @@
 							if(resData.length > 0) {
 
 								self.ruleForm = resData[0];
-								if( resData[0].userCommentUrl){
+								if(resData[0].userCommentUrl) {
 									self.imageList = resData[0].userCommentUrl;
+									self.imageList = resData[0].userCommentPhoto.photoId;
 								}
-								
-								if(resData[0].userPortraitUrl){
+
+								if(resData[0].userPortraitUrl) {
 									self.imageUrl = resData[0].userPortraitUrl
 								}
-								
 
 							} else {
 								alert('参数错误！');
@@ -231,11 +226,16 @@
 			methods: {
 				//上传头图
 				uploadimg(id, file) {
-
 					let postdata = {
 						objectId: id,
 						objectType: "COMMENT_PORTRAIT",
 						files: file
+					}
+					let postUrl = ""
+					if(this.ruleForm.id) {
+						postUrl = "https://api.localpanda.com/api/content/photo/update"
+					} else {
+						postUrl = "https://api.localpanda.com/api/content/photo/commit"
 					}
 					let param = new FormData();
 					for(let key in postdata) {
@@ -244,7 +244,7 @@
 					postdata = param;
 
 					$.ajax({
-						url: "https://api.localpanda.com/api/content/photo/commit",
+						url: postUrl,
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: param,
@@ -271,18 +271,20 @@
 						objectType: "USER_COMMENT",
 						files: files
 					}
+					let postUrl = "https://api.localpanda.com/api/content/photo/commit"
+
 					let param = new FormData();
-//					for(var key in postdata){
-//						param.append(key,postdata[key])
-//					}
-					
-					param.append("objectId",postdata.objectId);
-					param.append("objectType",postdata.objectType);
-					postdata.files.forEach((item)=>{
-						param.append("files",item)
+					//					for(var key in postdata){
+					//						param.append(key,postdata[key])
+					//					}
+
+					param.append("objectId", postdata.objectId);
+					param.append("objectType", postdata.objectType);
+					postdata.files.forEach((item) => {
+						param.append("files", item)
 					})
 					$.ajax({
-						url: "https://api.localpanda.com/api/content/photo/commit",
+						url: postUrl,
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: param,
@@ -290,9 +292,8 @@
 						processData: false,
 						success: function(data) {
 							var resData = data;
-							console.log(data)
 							if(resData.succeed) {
-								
+
 							} else {
 								alert('参数错误！');
 							}
@@ -309,10 +310,10 @@
 					self.$refs[formName].validate((valid) => {
 						if(valid) {
 							let formData = self.ruleForm;
-							
+
 							delete formData.userPortraitUrl;
 							delete formData.userCommentUrl;
-							
+
 							//formData.createTime=formData.time+'00:00:00'
 							//delete formData.time
 							var postUrl = ""
@@ -322,7 +323,7 @@
 							} else {
 								postUrl = "https://api.localpanda.com/api/user/comment/commit"
 							}
-							
+
 							//         		let param = new FormData();
 							//         		for(let key in formData){
 							//		            param.append(key, formData[key])  // 通过append向form对象添加数据
@@ -339,29 +340,29 @@
 								//processData: false,
 								success: function(data) {
 									var resData = data;
-									let objectId=""
+									let objectId = ""
 									if(resData.succeed) {
-										if(self.ruleForm.id){
-											objectId=self.ruleForm.id
-										}else{
-											objectId=data.response
+										if(self.ruleForm.id) {
+											objectId = self.ruleForm.id
+										} else {
+											objectId = data.response
 										}
-										 
+
 										if(self.fileData) {
 											self.uploadimg(objectId, self.fileData)
 										}
-										
+
 										if(self.fileDatas.length) {
-											
+
 											self.uploadimgList(objectId, self.fileDatas)
 										}
-										 self.$alert('添加成功', '', {
-									          confirmButtonText: '确定',
-									          callback: action => {
-									            location.href='/grade/index'
-									          }
-									        });
-												
+										self.$alert('添加成功', '', {
+											confirmButtonText: '确定',
+											callback: action => {
+												// location.href='/grade/index'
+											}
+										});
+
 									} else {
 										alert('参数错误！');
 									}
@@ -372,7 +373,7 @@
 							});
 
 						} else {
-							self.err=true
+							self.err = true
 							return false;
 						}
 					});
@@ -381,7 +382,7 @@
 					console.log(index)
 					this.fileDatas.splice(index, 1)
 					this.imageList.splice(index, 1)
-					
+
 				},
 				//头图
 				upload(e, index) {
@@ -404,12 +405,12 @@
 				},
 				//多张图片
 				uploadImsList(e) {
-					let self=this
+					let self = this
 					var file = e.target.files;
 					for(var i = 0; i < file.length; i++) {
 						const isJPG = file[i].type === 'image/jpeg';
 						const isPNG = file[i].type === 'image/png';
-						const isLt2K = file[i].size / 1024  < 200;
+						const isLt2K = file[i].size / 1024 < 200;
 						if(!isJPG && !isPNG) {
 							self.$message.error('上传头像图片格式不正确！');
 						} else if(!isLt2K) {
@@ -421,7 +422,7 @@
 							} else {
 								self.fileDatas.push(file[i])
 								var windowURL = window.URL || window.webkitURL;
-								
+
 								self.imageList.push({
 									url: windowURL.createObjectURL(file[i])
 								})
@@ -434,17 +435,51 @@
 
 				uploadImg(e, index) {
 					var file = e.target.files[index];
+					var self=this
 					const isJPG = file.type === 'image/jpeg';
 					const isPNG = file.type === 'image/png';
-					const isLt2K = file.size / 1024 / 1024 < 20;
+					const isLt2K = file.size / 1024  < 200;
 					if(!isJPG && !isPNG) {
-						this.$message.error('上传头像图片格式不正确！');
+						self.$message.error('上传头像图片格式不正确！');
 					} else if(!isLt2K) {
-						this.$message.error('上传头像图片大小不能超过 20MB!');
+						self.$message.error('上传头像图片大小不能超过 200K!');
 					} else {
-						this.fileDatas[index] = file
+						self.fileDatas[index] = file
 						var windowURL = window.URL || window.webkitURL;
 						this.imageList[index].url = windowURL.createObjectURL(file);
+						if(self.ruleForm.id){
+							let postdata = {
+								objectId: self.ruleForm.id,
+								objectType: "USER_COMMENT",
+							
+								files: file
+							}
+							let postUrl = "https://api.localpanda.com/api/content/photo/update"
+							let param = new FormData();
+							for(let key in postdata) {
+								param.append(key, postdata[key]) // 通过append向form对象添加数据
+							}
+							postdata = param;
+							$.ajax({
+								url: postUrl,
+								type: 'POST',
+								dataType: 'json', //如果跨域用jsonp
+								data: param,
+								contentType: false,
+								processData: false,
+								success: function(data) {
+									var resData = data;
+									if(resData.succeed) {
+										self.$message.error('图片更新成功!!');
+									} else {
+										alert('图片更新失败!!！');
+									}
+								},
+								error: function() {
+									alert('请求失败！');
+								}
+							});
+						}
 						
 					}
 				}
@@ -497,7 +532,8 @@
 			height: 178px;
 			display: block;
 		}
-		#headPicFile{
+		
+		#headPicFile {
 			position: absolute;
 			width: 100%;
 			height: 100%;
@@ -505,6 +541,7 @@
 			top: 0;
 			opacity: 0;
 		}
+		
 		.add {
 			position: relative;
 			overflow: hidden;
