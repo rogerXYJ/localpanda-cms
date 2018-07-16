@@ -17,11 +17,19 @@ var cmsNav = [
       {'title':'邮件模版','url':'/content/email'}
     ]
   },
-   {
+  {
     title:'点评管理',
     icon: 'el-icon-star-on',
     list:[
       {'title':'点评信息管理','url':'/grade/index'},
+      
+    ]
+  },
+  {
+    title:'活动产品管理',
+    icon: 'el-icon-menu',
+    list:[
+      {'title':'产品基本信息','url':'/activity/info'},
       
     ]
   }

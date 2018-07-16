@@ -7,6 +7,7 @@ Vue.use(Router)
 let routers = [
 
   {path: '/', name: 'index', title:'CMS首页'},
+  {path: '/login/', name: 'index', title:'登录'},
 
   {path: '/content/addArticle', name: 'addArticle', title:'新增文章'},
   {path: '/content/editArticle', name: 'editArticle', title:'编辑文章'},
@@ -23,7 +24,10 @@ let routers = [
   {path:'/grade/index',name: 'index', title:'点评管理首页'},
   {path:'/grade/checkpending',name: 'checkpending', title:'待审核点评列表'},
   {path:'/grade/visitorsgrade',name: 'visitorsgrade', title:'审核游客点评'},
-  {path:'/grade/addreview',name: 'addreview', title:'自添加点评'}
+  {path:'/grade/addreview',name: 'addreview', title:'自添加点评'},
+
+
+  {path:'/activity/info',name: 'info', title:'产品基本信息'}
 
 ];
 
