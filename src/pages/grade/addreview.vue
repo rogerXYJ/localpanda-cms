@@ -18,8 +18,8 @@
 				</el-form-item>
 				<div class="upload_box">
 					<el-form-item label="点评正文: " prop="content">
-						<el-col :span="10">
-							<el-input type="textarea" rows="4" v-model="ruleForm.content"></el-input>
+						<el-col :span="23">
+							<el-input type="textarea" rows="10" v-model="ruleForm.content"></el-input>
 						</el-col>
 					</el-form-item>
 
@@ -44,7 +44,7 @@
 
 				</el-form-item>
 				<el-form-item label="发布时间: " prop="createTime">
-					<el-date-picker class="w220" type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:ss:mm " value-format="yyyy-MM-dd HH:ss:mm" v-model="ruleForm.createTime"></el-date-picker>
+					<el-date-picker class="w220" type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm:ss " value-format="yyyy-MM-dd HH:mm:ss" v-model="ruleForm.createTime"></el-date-picker>
 				</el-form-item>
 
 				<el-form-item label="头像：">
@@ -63,7 +63,7 @@
 				</el-form-item>
 				<div class="upload_box clearfix">
 					<p class="ml20 wb90">图片：每个点评最多可以添加6张图片，您可以点击右侧"添加图片按钮"进行添加多张
-						<span class="add fr" v-if="fileDatas.length<6">
+						<span class="add fr" v-if="imageList.length<6">
 							<el-button  type="text">添加图片</el-button>
 						    <input type="file" @change="uploadImsList" multiple/>
 						</span>
@@ -84,7 +84,6 @@
 									<input type="file" name="" id="" value="" @change="uploadImg($event,index)" />
 									<span @click="delSql(index)" class="el-button el-button--primary el-button--mini ml30">删除</span>
 								</div>
-
 							</div> -->
 
 
@@ -135,7 +134,6 @@
 	<script>
 		import cmsAside from "@/components/common/cmsAside.vue";
 		import Loading from '@/components/plugin/Loading'
-
 		export default {
 			name: "addreview",
 			components: {
@@ -159,7 +157,6 @@
 						score: '10', //评分
 						userName: '', //用户名称
 						createTime: '', //发布时间
-
 						status: 0, //点评审核状态
 						source: 1
 						//file:'',
@@ -205,7 +202,6 @@
 					fileDatas: [],
 					contentType: 'application/json; charset=UTF-8',
 					err:false,
-
 					fileAllLength:0,
 					fileOkLength:0,
 					showLoading:false,
@@ -218,9 +214,8 @@
 					let param = {
 						id: self.ruleForm.id
 					}
-
 					$.ajax({
-						url: 'https://api.localpanda.com/api/user/comment/detail/list',
+						url: 'https://api.localpanda.com/cms/user/comment/list',
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: JSON.stringify(param),
@@ -228,7 +223,6 @@
 						//processData: false,
 						success: function(data) {
 							var resData = data;
-
 							if(resData.length > 0) {
 								//星级转为字符串
 								resData[0].score+='';
@@ -243,7 +237,6 @@
 									self.imageUrl = resData[0].userPortraitPhoto.url
 								}
 								
-
 							} else {
 								alert('参数错误！');
 							}
@@ -253,7 +246,6 @@
 						}
 					});
 				}
-
 			},
 			methods: {
 				//上传头图
@@ -269,7 +261,6 @@
 						param.append(key, postdata[key]) // 通过append向form对象添加数据
 					}
 					postdata = param;
-
 					$.ajax({
 						url: "https://api.localpanda.com/api/content/photo/commit",
 						type: 'POST',
@@ -302,7 +293,6 @@
 							alert('请求失败！');
 						}
 					});
-
 				},
 				//上传多张图片
 				uploadimgList(id, files) {
@@ -316,7 +306,6 @@
 //					for(var key in postdata){
 //						param.append(key,postdata[key])
 //					}
-
 					console.log(files);
 					
 					param.append("objectId",postdata.objectId);
@@ -357,7 +346,6 @@
 							alert('请求失败！');
 						}
 					});
-
 				},
 				//提交
 				sumbitFrom(formName) {
@@ -368,16 +356,17 @@
 							
 							delete formData.userPortraitUrl;
 							delete formData.userCommentUrl;
-
 							
 							//formData.createTime=formData.time+'00:00:00'
 							//delete formData.time
-							var postUrl = ""
+							var type = "";
+							var postUrl="https://api.localpanda.com/cms/user/comment"
 							if(self.ruleForm.id) {
-								postUrl = "https://api.localpanda.com/api/user/comment/update"
-
+								type="POST"
+								//postUrl = "https://api.localpanda.com/api/user/comment/update"
 							} else {
-								postUrl = "https://api.localpanda.com/api/user/comment/commit"
+								type="PUT"
+								//postUrl = "https://api.localpanda.com/api/user/comment/commit"
 							}
 							
 							//         		let param = new FormData();
@@ -385,14 +374,11 @@
 							//		            param.append(key, formData[key])  // 通过append向form对象添加数据
 							//		        }
 							//         		formData = param;
-
 							//return
-
 							self.showLoading = true;
-
 							$.ajax({
 								url: postUrl,
-								type: 'POST',
+								type: type,
 								dataType: 'json', //如果跨域用jsonp
 								data: JSON.stringify(formData),
 								contentType: self.contentType,
@@ -400,7 +386,6 @@
 								success: function(data) {
 									var resData = data;
 									let objectId="";
-
 									if(resData.succeed) {
 										if(self.ruleForm.id){
 											objectId=self.ruleForm.id
@@ -442,7 +427,6 @@
 									alert('请求失败！');
 								}
 							});
-
 						} else {
 							self.err=true
 							return false;
@@ -453,7 +437,6 @@
 					console.log(index)
 					this.fileDatas.splice(index, 1);
 					this.imageList.splice(index, 1);
-
 					if(photoId){
 						$.ajax({
 							url: 'https://api.localpanda.com/api/content/photo/delete/'+photoId,
@@ -472,11 +455,9 @@
 					
 				},
 				delSql(){
-
 				},
 				//头图
 				upload(e, index) {
-
 					var file = e.target.files[0];
 					const isJPG = file.type === 'image/jpeg';
 					const isPNG = file.type === 'image/png';
@@ -489,14 +470,13 @@
 						this.fileData = file
 						var windowURL = window.URL || window.webkitURL;
 						this.imageUrl = windowURL.createObjectURL(file);
-
 					}
-
 				},
 				//多张图片
 				uploadImsList(e) {
 					let self=this
 					var file = e.target.files;
+					var imgArr=self.imageList
 					for(var i = 0; i < file.length; i++) {
 						const isJPG = file[i].type === 'image/jpeg';
 						const isPNG = file[i].type === 'image/png';
@@ -506,9 +486,12 @@
 						} else if(!isLt2K) {
 							self.$message.error('上传图片大小不能超过 200k!');
 						} else {
-							if(file.length > 6) {
+							if(file.length+imgArr.length > 6) {
+								
+								
+								
 								self.$message.error('最多可上传6张图片！');
-
+								break
 							} else {
 								self.fileDatas.push(file[i])
 								var windowURL = window.URL || window.webkitURL;
@@ -516,15 +499,12 @@
 								self.imageList.push({
 									url: windowURL.createObjectURL(file[i])
 								})
-
-								console.log(self.imageList);
+								
 							}
 						}
 					}
-
 				},
 				//多图上传单个
-
 				uploadImg(e, index) {
 					var file = e.target.files[0];
 					const isJPG = file.type === 'image/jpeg';
@@ -538,16 +518,13 @@
 						this.fileDatas[index] = file
 						var windowURL = window.URL || window.webkitURL;
 						this.imageList[index].url = windowURL.createObjectURL(file);
-
 						var photoId = this.imageList[index].photoId;
 						if(photoId){
-
 							let param = new FormData();
 							param.append("file",file);
 							param.append("photoId",photoId);
 							param.append("objectId",this.imageList[index].objectId);
 							param.append("objectType",'USER_COMMENT');
-
 							$.ajax({
 								url: 'https://api.localpanda.com/api/content/photo/update',
 								type: 'POST',
@@ -559,7 +536,6 @@
 								success: function(data) {
 									var resData = data;
 									let objectId="";
-
 									if(resData.succeed) {
 										alert('修改成功！');
 									}
@@ -571,7 +547,6 @@
 				}
 			},
 			watch: {
-
 			}
 		};
 	</script>

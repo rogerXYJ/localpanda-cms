@@ -12,10 +12,10 @@
        		</div>
        </div>
       <!-- 筛选 -->
-      <el-form  :model="formData" class="mt30"  label-width="100px" >
-		  <el-form-item label="产品ID:">
-		    <el-input class="w220" v-model="formData.activityId"></el-input>
-		  </el-form-item>
+      <el-form @submit.native.prevent  :model="formData" class="mt30"  label-width="100px" >
+			  <el-form-item label="产品ID:">
+			 		<el-input class="w220" v-model="formData.activityId" @keyup.enter.native="sumbitFn"></el-input>
+			  </el-form-item>
 		  <!-- <el-form-item label="User name:">
 		    <el-input class="w220" v-model="formData.userName"></el-input>
 		  </el-form-item>
@@ -123,12 +123,12 @@ export default {
     return {
     	formData:{
     		activityId:null,
-    		userName:null,
-    		hasPhoto:null,
-    		source:null,
-    		score:null,
-    		hasPhoto:null,
-    		status:null,
+//  		userName:null,
+//  		hasPhoto:null,
+//  		source:null,
+//  		score:null,
+//  		hasPhoto:null,
+//  		status:null,
     		pageNum:1,
     		pageSize:20,
     	},
@@ -144,8 +144,8 @@ export default {
   },
   methods: {
   	sumbitFn(){
-  		console.log(this.formData)
-  		let postUrl='https://api.localpanda.com/api/user/comment/list',
+  		console.log(111)
+  		let postUrl='https://api.localpanda.com/cms/user/comment/list',
   		self=this,
   		formData=this.formData,
   		contentType='application/json; charset=UTF-8';
@@ -157,11 +157,13 @@ export default {
 			data: JSON.stringify(formData),
 			contentType: contentType,
 			success: function(data) {
+					console.log(data)
+					
 				var resData = data;
-				console.log(resData)
+			
 				if(resData.length>0) {
 					self.showlist=true
-					self.tableData=data
+					self.tableData=resData
 				} else {
 					alert('没有相关点评!');
 					this.showlist=false
