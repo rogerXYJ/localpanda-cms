@@ -77,7 +77,7 @@ export default {
 
     //列表数据
     $.ajax({
-      url: 'https://api.localpanda.com/api/public/template',
+      url: 'https://api.localpanda.com/cms/public/template',
       type: 'GET',
       //contentType: 'application/json',
       success:function(data){
@@ -126,7 +126,7 @@ export default {
       
       
       $.ajax({
-          url: 'https://api.localpanda.com/api/public/template/update',//https://api.localpanda.com/api/travel/article/commit
+          url: 'https://api.localpanda.com/cms/public/template/update',//https://api.localpanda.com/cms/travel/article/commit
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({

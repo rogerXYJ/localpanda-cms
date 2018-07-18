@@ -189,7 +189,7 @@ export default {
       for(let key in formData){
         param.append(key, formData[key])  // 通过append向form对象添加数据
       }
-      this.axios.post('https://api.localpanda.com/api/content/landingpage/valid/update',param,{
+      this.axios.post('https://api.localpanda.com/cms/content/landingpage/valid/update',param,{
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }
@@ -213,7 +213,7 @@ export default {
 
       //异步请求
       $.ajax({
-        url: 'https://api.localpanda.com/api/content/landingpage/info',
+        url: 'https://api.localpanda.com/cms/content/landingpage/info',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType:'application/json',

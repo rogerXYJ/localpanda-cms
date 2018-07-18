@@ -262,7 +262,7 @@
 					}
 					postdata = param;
 					$.ajax({
-						url: "https://api.localpanda.com/api/content/photo/commit",
+						url: "https://api.localpanda.com/cms/content/photo/commit",
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: param,
@@ -314,7 +314,7 @@
 						param.append("files",item)
 					})
 					$.ajax({
-						url: "https://api.localpanda.com/api/content/photo/commit",
+						url: "https://api.localpanda.com/cms/content/photo/commit",
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: param,
@@ -363,10 +363,10 @@
 							var postUrl="https://api.localpanda.com/cms/user/comment"
 							if(self.ruleForm.id) {
 								type="POST"
-								//postUrl = "https://api.localpanda.com/api/user/comment/update"
+								//postUrl = "https://api.localpanda.com/cms/user/comment/update"
 							} else {
 								type="PUT"
-								//postUrl = "https://api.localpanda.com/api/user/comment/commit"
+								//postUrl = "https://api.localpanda.com/cms/user/comment/commit"
 							}
 							
 							//         		let param = new FormData();
@@ -439,7 +439,7 @@
 					this.imageList.splice(index, 1);
 					if(photoId){
 						$.ajax({
-							url: 'https://api.localpanda.com/api/content/photo/delete/'+photoId,
+							url: 'https://api.localpanda.com/cms/content/photo/delete/'+photoId,
 							type: 'DELETE',
 							dataType: 'json', //如果跨域用jsonp
 							//processData: false,
@@ -526,7 +526,7 @@
 							param.append("objectId",this.imageList[index].objectId);
 							param.append("objectType",'USER_COMMENT');
 							$.ajax({
-								url: 'https://api.localpanda.com/api/content/photo/update',
+								url: 'https://api.localpanda.com/cms/content/photo/update',
 								type: 'POST',
 								dataType: 'json', //如果跨域用jsonp
 								data: param,
