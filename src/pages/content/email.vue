@@ -77,7 +77,7 @@ export default {
 
     //列表数据
     $.ajax({
-      url: 'https://api.localpanda.com/cms/public/template',
+      url: 'https://api.localpanda.com/cms/public/template/list/all',
       type: 'GET',
       //contentType: 'application/json',
       success:function(data){

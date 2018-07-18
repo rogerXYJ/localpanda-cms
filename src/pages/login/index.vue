@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h2>CMS管理系统</h2>
+    <h2>Localpanda CMS管理系统</h2>
     <div class="login_box">
       <h3>登录</h3>
       <ul>
@@ -14,14 +14,14 @@
         <li>
           <el-form ref="form" :model="form" label-width="50px">
             <el-form-item label="密码">
-              <el-input v-model="form.passWorld"></el-input>
+              <el-input type="password" v-model="form.password"></el-input>
             </el-form-item>
           </el-form>
         </li>
         <li>
           <el-form ref="form" :model="form" label-width="50px">
             <el-form-item label="">
-              <el-button class="btn" type="primary">登录</el-button>
+              <el-button class="btn" @click="login" type="primary">登录</el-button>
             </el-form-item>
           </el-form>
           
@@ -49,11 +49,34 @@ export default {
   data () {
     return {
       form : {
-        userName: '',
-        passWorld: ''
+        userName: 'Tester1',
+        password: 'OnlyForTest'
       },
       errorTip:'',
     }
+  },
+  methods:{
+    login(){
+      var self = this;
+      $.ajax({
+        url: 'https://api.localpanda.com/cms/account/login',
+        type: 'POST',
+        contentType: 'application/json',
+        data:JSON.stringify(this.form),
+        success:function(data){
+          console.log(data);
+          if(data.succeed){
+            //location.href = '/';
+          }else{
+            self.errorTip = '账号或密码错误！';
+          }
+        },
+        error: function () {
+          
+        }
+      });	
+    }
+    
   },
   mounted(){
 
@@ -72,11 +95,11 @@ export default {
       addMouseControls: false,
       addTouchControls: false,
       hideContextMenu: false,
-      starCount: 1000,
-      starBgCount: 400,
+      starCount: 800,
+      starBgCount: 100,
       starBgColor: { r:0, g:204, b:255 },
-      starBgColorRangeMin: 10,
-      starBgColorRangeMax: 20,
+      starBgColorRangeMin: 150,
+      starBgColorRangeMax: 250,
       starColor: { r:0, g:204, b:255 },
       starColorRangeMin: 50,
       starColorRangeMax: 255,
@@ -107,10 +130,7 @@ export default {
 
     setTimeout(function(){
       $('.login_box').addClass('show_login show_login_run');
-    },500);
-    
-  },
-  methods:{
+    },300);
     
   }
 }
@@ -121,6 +141,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+
   .login{
     background-color: rgba(0,0,0,0.5);
     overflow: hidden;
@@ -173,6 +194,9 @@ export default {
   
 </style>
 <style lang="scss">
+body{
+  min-width: 500px;
+}
 .login_box{
   li{
     .el-form-item__label{ color: #bbb;}
