@@ -67,9 +67,106 @@
               </dd>
             </dl>
           </el-form-item>
+
+          <el-form-item label="出发地：" required>
+            <el-button type="primary" plain @click="addDepartures">添加</el-button>
+            <dl class="change_type_list">
+              <dd>
+                <p class="destination_change"><span v-for="items in pageData.departures" :key="items">{{items}}</span></p>
+              </dd>
+            </dl>
+          </el-form-item>
+
+
+          <el-form-item label="活动时长：" required>
+            <el-input v-model="pageData.duration"></el-input>
+            <el-select v-model="pageData.durationUnit" placeholder="请选择交通类型">
+              <el-option label="Hours" value="Hours">Hours</el-option>
+              <el-option label="Day" value="Day">Day</el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="排序顺序：" required>
+            <el-input v-model="pageData.ranking"></el-input>　数值越小，排序权重越大！
+          </el-form-item>
+
+          <el-form-item label="适合儿童：" required>
+            <el-radio v-model="pageData.suitableForChildren" label="Yes">Yes</el-radio>
+            <el-radio v-model="pageData.suitableForChildren" label="No">No</el-radio>
+          </el-form-item>
+
+          <el-form-item label="前台可见：" required>
+            <el-radio v-model="pageData.display" label="Yes">Yes</el-radio>
+            <el-radio v-model="pageData.display" label="No">No</el-radio>
+          </el-form-item>
           
 
+          <div class="hr"></div>
+
+          <el-form-item label="资审时效：" required>
+            <el-input v-model="pageData.workdayConfirmCost"></el-input>　工作日资审时间　
+            <el-select v-model="pageData.ConfirmCostUnit" placeholder="请选择交通类型">
+              <el-option label="Hours" value="Hours">Hours</el-option>
+              <el-option label="Day" value="Day">Day</el-option>
+            </el-select>　超过10小时请选择按天计算
+          </el-form-item>
+
           
+          <el-form-item label="集合方式：" required>
+            <el-radio v-model="pageData.pickup" label="提供接送">提供接送</el-radio>
+            <el-radio v-model="pageData.pickup" label="自行前往">自行前往</el-radio>
+            <div class="" v-if="pageData.pickup=='自行前往'">
+              <ul class="jihe_info">
+                <li v-for="(item,index) in pageData.venues">
+                  <p><span class="red">*</span> 集合信息描述1</p>
+                  <el-input
+                    type="textarea"
+                    :rows="3"
+                    placeholder="请输入内容"
+                    v-model="pageData.venues[index]">
+                  </el-input>
+                  <el-button type="primary" plain>Del</el-button><br>
+                  <el-button type="danger" plain>Add</el-button>
+                </li>
+              </ul>
+            </div>
+          </el-form-item>
+
+
+          <div class="hr"></div>
+          
+
+          <el-form-item label="推荐理由：" required>
+            <el-input
+              type="textarea"
+              :rows="4"
+              placeholder="请输入内容"
+              v-model="pageData.recommendedReason">
+            </el-input>
+          </el-form-item>
+
+          <el-form-item label="活动亮点：" required>
+            <el-input
+              type="textarea"
+              :rows="4"
+              placeholder="请输入内容"
+              v-model="pageData.highlights">
+            </el-input>
+          </el-form-item>
+
+          <el-form-item label="备注说明：">
+            <el-input
+              type="textarea"
+              :rows="6"
+              placeholder="请输入内容"
+              v-model="pageData.notice">
+            </el-input>
+          </el-form-item>
+
+
+
+
+
 
           <el-form-item>
             <el-button type="primary" @click="submitForm('addForm')">{{pageId?'修改基本信息':'新增基本信息'}}</el-button>
@@ -104,6 +201,18 @@
 
           <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="attractions_change">确 定</el-button>
+          </span>
+        </el-dialog>
+
+
+        <!-- 选择出发地弹窗 -->
+        <el-dialog title="选择出发地" :visible.sync="departuresDialogShow" width="800px" class="destination_dialog">
+          <el-checkbox-group v-model="departuresDialogChange">
+            <el-checkbox v-for="city in departuresAll" :label="city" :key="city">{{city}}</el-checkbox>
+          </el-checkbox-group>
+
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="departures_change">确 定</el-button>
           </span>
         </el-dialog>
 
@@ -162,18 +271,56 @@ export default {
         Beijing:['The Bund','Yu Garden','French Concession'],
       },
       attractionsDialogChange:[],
-      attractionsDialogShow:true,
+      attractionsDialogShow:false,
+
+
+      departuresAll:['Shanghai','Beijing'],
+      departuresDialogChange:[],
+      departuresDialogShow:false,
+
+      //venuesList: {},
 
       pageData:{
         serviceType: 'Private',
         trafficType: '',
+
         tourType: [],
         tourTypeArr: ['Landmarks','City Tour','Food','Old Neighborhood','Architecture'],
+
         destinations: [],
+
         attractions: {
           Shanghai:['The Bund','Yu Garden'],
           Beijing:['The Bund'],
-        }
+        },
+        departures: [],
+        
+        // 活动时长
+        duration:3,
+        durationUnit: 'Hours',
+
+        //权重
+        ranking:3,
+
+        //是否适合儿童
+        suitableForChildren: 'Yes',
+
+        //是否前台可见
+        display: 'Yes',
+
+        //资审耗时
+        workdayConfirmCost: 3,
+        ConfirmCostUnit: 'Hours',
+
+        //是否提高接送
+        pickup: '提供接送',
+
+        //集合信息
+        venues: ['skjadsdjksakjdasas','bbbbbbbbbbbbb'],
+        recommendedReason:'推荐理由',
+        highlights:'asssssssssssssssssssss',
+        notice:'aaaaaaaaaaaaaaaaaa'
+
       }
       
 
@@ -209,6 +356,8 @@ export default {
       
     }
 
+
+    
   },
   methods:{
     changeImg(e){
@@ -216,25 +365,43 @@ export default {
     },
     addDestination(){
       this.destinationDialogShow =true;
+      this.destinationDialogChange = this.pageData.destinations;
     },
     destination_change(){
       this.pageData.destinations = this.destinationDialogChange;
       this.destinationDialogShow = false;
     },
+
     addAttractions(){
       this.attractionsDialogShow =true;
+      //this.attractionsDialogChange = this.pageData.attractions[this.attractionsCityValue];
     },
     attractions_change(){
       this.pageData.attractions[this.attractionsCityValue] = this.attractionsDialogChange;
       this.attractionsDialogChange = [];
       this.attractionsDialogShow = false;
     },
+
+    addDepartures(){
+      this.departuresDialogShow =true;
+      this.departuresDialogChange = this.pageData.departures;
+    },
+    departures_change(){
+      this.pageData.departures = this.departuresDialogChange;
+      this.departuresDialogShow = false;
+    },
+
     submitForm(){
 
     }
   },
   watch:{
-    
+    // 'pageData.venues':function (val, oldVal) { 
+    //   for(var i=0;i<val.length;i++){
+    //     var thisData = val[i];
+    //     this.venuesList['list'+i] = thisData;
+    //   }
+    // }
   },
   head(){
     return {
@@ -250,6 +417,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+  .el-input{
+    width: auto;
+  }
   .cms-main{
     .change_type_list{
       margin-top: 10px;
@@ -260,6 +430,17 @@ export default {
       p{
         font-size: 14px;
         span{ margin-right: 20px;}
+      }
+    }
+    .jihe_info{
+      .el-textarea{
+        float: left;
+        width: 70%;
+      }
+      .el-button{
+        margin-left: 20px;
+        padding: 6px 20px;
+        vertical-align: top;
       }
     }
   }
