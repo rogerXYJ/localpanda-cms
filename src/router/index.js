@@ -27,7 +27,11 @@ let routers = [
   {path:'/grade/addreview',name: 'addreview', title:'自添加点评'},
 
 
-  {path:'/activity/info',name: 'info', title:'产品基本信息'}
+  {path:'/activity/info',name: 'info', title:'产品基本信息'},
+  {path:'/activity/content',name: 'content', title:'产品内容信息'},
+  {path:'/activity/price',name: 'price', title:'产品价格信息'},
+  {path:'/activity/setPrice',name: 'setPrice', title:'设置价格信息'}
+  
 
 ];
 

@@ -1,0 +1,235 @@
+<template>
+  <div class="cms-page">
+    <!-- 侧边栏导航，activeTitle传入1-1的格式，即可展开并高亮对应的导航 -->
+    <cmsAside :activeTitle="activeTitle"></cmsAside>
+
+    <div class="cms-main">
+      <h3 class="text_c">内容信息</h3>
+	  <el-form :model="formData" class="mt40">
+	  	<el-form-item  label="活动包含Inclusions: " label-width="200px">
+	  		<div class="item fl wb90 mt20" v-for="(item,index) in formData.Inclusions">
+	  			<el-input class="wb60" v-model="item.title"></el-input>
+	  			<el-button type="success" class="ml20" v-if="!item.newItem">Updata</el-button>
+	  			<el-button type="primary" class="ml20" @click="commit(formData.Inclusions,index,'ITEMS_INCLUDED')" v-else>Commit</el-button>
+	  			<el-button type="danger" v-if="index>0" @click="del(formData.Inclusions,index)">Del</el-button>
+	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  		</div>
+	  		<div class="text_c wb60">
+	  			<el-button type="primary" @click="add(formData.Inclusions)" plain class="mt30">Add</el-button>
+	  		</div>
+	  	</el-form-item>
+	  	<el-form-item  label="活动不包含Exclusions:" label-width="200px">
+	  		<div class="item fl wb90" v-for="(item,index) in formData.Exclusions">
+	  			<el-input class="wb60" v-model="item.title"></el-input><el-button class="ml20">Updata</el-button><el-button v-if="index>0">Del</el-button>
+	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  		</div>
+	  		<div class="text_c wb60">
+	  			<el-button class="mt30">Add</el-button>
+	  		</div>
+	  	</el-form-item>
+	  	<el-form-item  label="注意事项Additional Info: " label-width="200px">
+	  		<div class="item fl wb90" v-for="(item,index) in formData.AdditionalInfo">
+	  			<el-input class="wb60" v-model="item.title"></el-input><el-button class="ml20">Updata</el-button><el-button v-if="index>0">Del</el-button>
+	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  		</div>
+	  		<div class="text_c wb60">
+	  			<el-button class="mt30">Add</el-button>
+	  		</div>
+	  	</el-form-item>
+	  </el-form>
+    </div>
+
+  </div>
+</template>
+
+<script>
+import cmsAside from '@/components/common/cmsAside.vue';
+  
+
+export default {
+  name: 'cms-content',
+  components: {
+    cmsAside
+  },
+  data () {
+  	let id=this.$route.query.activityId;
+    return{
+    	//ITEMS_INCLUDED,ITEMS_EXCLUDED,NOTICE
+    	activeTitle: '4-3',
+    	activityId:id,
+    	formData:{
+    		Inclusions:[
+    		{
+    			titile:'',
+    			content:''
+    			
+    		}],
+    		Exclusions:[
+    		{
+    			title:'',
+    			content:''
+    		}
+    		],
+    		AdditionalInfo:[
+    			{
+    				title:'',
+    				content:''
+    			}
+    		]
+    		
+    	}
+    }
+	
+ },
+  
+  mounted(){
+  		this.getdata()
+  },
+  methods:{
+  	getdata(){
+  		let self=this
+   		$.ajax({
+   			url:"https://api.localpanda.com/cms/product/activity/content/"+self.activityId+"/ITEMS_INCLUDED",
+   			 dataType: 'json',
+   			 method: 'GET',
+   			 success:function(data){
+   			 	console.log(data)
+   			 	self.formData.Inclusions=data
+   			 },
+   			 error:function(data){
+   			 		
+   			 }
+   		})
+   		$.ajax({
+   			url:"https://api.localpanda.com/cms/product/activity/content/"+self.activityId+"/ITEMS_EXCLUDED",
+   			 dataType: 'json',
+   			 method: 'GET',
+   			 success:function(data){
+   			 	console.log(data)
+   			 	self.formData.Exclusions=data
+   			 },
+   			 error:function(data){
+   			 		
+   			 }
+   		})
+   		$.ajax({
+   			url:"https://api.localpanda.com/cms/product/activity/content/"+self.activityId+"/NOTICE",
+   			 dataType: 'json',
+   			 method: 'GET',
+   			 success:function(data){
+   			 	console.log(data)
+   			 	self.formData.AdditionalInfo=data
+   			 },
+   			 error:function(data){
+   			 		
+   			 }
+   		})
+  	},
+  	add(arr){
+  			let self=this
+  			arr.push({
+  				title:'',
+  				content:'',
+  				newItem:true,
+  			})
+  			
+  		},
+  		del(arr,index){
+  			if(arr[index].title&&arr[index].content){
+  				self.$confirm('请确定是否进行删除？', {
+	          confirmButtonText: '确定',
+	          cancelButtonText: '取消',
+	          type: 'warning', 
+	       }).then(()=>{
+	       		$.ajax({
+		  				method: 'DELETE',
+		  				url:"https://api.localpanda.com/cms/product/activity/content/"+arr[index].id,
+		  				dataType:'json',
+		  				success:function(data){
+		  					console.log(data)
+		  					if(data.succeed){
+		  						arr=arr.splice(index,1)
+		  						 self.$message({
+					            type: 'success',
+					            message: '删除成功!'
+					          });
+		  					}else{
+		  						self.$message({
+				             type: 'info',
+				            	message: '删除失败!'
+				          });
+		  					}
+		  					
+		  				},
+		  				error:function(data){
+		  					
+		  				}
+		  				
+		  			});
+	       	
+	       }).catch(() => {
+          self.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+  			
+  		}else{
+  				arr=arr.splice(index,1)
+  		}
+  			
+  			
+  			
+  		},
+  		updata(){
+  			
+  		},
+  		commit(arr,index,type){
+  			let self=this;
+  			let formData={
+  				activityId:self.activityId,
+  				objectType:type,
+  				title:arr[index].title,
+  				content:arr[index].content
+  			}
+  			$.ajax({
+  				method: 'PUT',
+  				url:"https://api.localpanda.com/cms/product/activity/content",
+  				dataType:'json',
+  				data:JSON.stringify(formData),
+  				contentType:'application/json',
+  				success:function(data){
+  					 self.$alert('您已提交成功！', {
+			          confirmButtonText: '确定',
+			          callback: action => {
+			            self.getdata()
+			          }
+			       });
+  				},
+  				error:function(data){
+  					
+  				}
+  				
+  			});
+  		}
+  },
+  watch:{
+    
+  },
+  head(){
+    return {
+      title: this.title
+    }
+  }
+}
+
+</script>
+
+
+
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss">
+ 
+  
+</style>
