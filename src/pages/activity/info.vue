@@ -191,7 +191,7 @@ export default {
     if(this.pageId){
 
       $.ajax({
-        url: 'https://api.localpanda.com/api/content/landingpage/info/'+this.pageId,
+        url: 'https://api.localpanda.com/cms/content/landingpage/info/'+this.pageId,
         type: 'GET',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'multipart/form-data',

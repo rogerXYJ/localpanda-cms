@@ -279,7 +279,7 @@ export default {
       
 
       $.ajax({
-        url: 'https://api.localpanda.com/api/content/landingpage/binding/delete/'+row.binding.id,
+        url: 'https://api.localpanda.com/cms/content/landingpage/binding/delete/'+row.binding.id,
         type: 'DELETE',
         contentType: 'application/json', //如果跨域用jsonp
         success:function(data){
@@ -300,7 +300,7 @@ export default {
     },
     rankingBlur(){
       //设置优先级
-      // this.axios.post('https://api.localpanda.com/api/content/landingpage/binding/commit',param,{
+      // this.axios.post('https://api.localpanda.com/cms/content/landingpage/binding/commit',param,{
       //   headers: {
       //     'Content-Type': 'application/x-www-form-urlencoded;'
       //   }
@@ -351,7 +351,7 @@ export default {
       }
       //绑定子模版
       $.ajax({
-        url: 'https://api.localpanda.com/api/content/landingpage/binding/commit',
+        url: 'https://api.localpanda.com/cms/content/landingpage/binding/commit',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType: false,
@@ -382,7 +382,7 @@ export default {
 
       //请求基本信息
       $.ajax({
-        url: 'https://api.localpanda.com/api/content/landingpage/info/'+this.pageId,
+        url: 'https://api.localpanda.com/cms/content/landingpage/info/'+this.pageId,
         type: 'GET',
         dataType: 'json', //如果跨域用jsonp
         success:function(data){
@@ -406,7 +406,7 @@ export default {
       var self = this;
       //请求关联列表
       $.ajax({
-        url: 'https://api.localpanda.com/api/content/landingpage/children/'+this.pageId,
+        url: 'https://api.localpanda.com/cms/content/landingpage/children/'+this.pageId,
         type: 'GET',
         dataType: 'json', //如果跨域用jsonp
         success:function(data){
@@ -433,7 +433,7 @@ export default {
       }
 
       $.ajax({
-        url: 'https://api.localpanda.com/api/content/landingpage/info',
+        url: 'https://api.localpanda.com/cms/content/landingpage/info',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(searchData),
