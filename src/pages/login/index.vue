@@ -66,7 +66,7 @@ export default {
         success:function(data){
           console.log(data);
           if(data.succeed){
-            //location.href = '/';
+            location.href = '/';
           }else{
             self.errorTip = '账号或密码错误！';
           }

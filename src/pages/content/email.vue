@@ -126,7 +126,7 @@ export default {
       
       
       $.ajax({
-          url: 'https://api.localpanda.com/cms/public/template/update',//https://api.localpanda.com/cms/travel/article/commit
+          url: 'https://api.localpanda.com/cms/public/template',//https://api.localpanda.com/cms/travel/article/commit
           type: 'POST',
           contentType: 'application/json',
           data: JSON.stringify({
