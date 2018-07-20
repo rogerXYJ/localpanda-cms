@@ -27,7 +27,9 @@ let routers = [
   {path:'/grade/addreview',name: 'addreview', title:'自添加点评'},
 
 
-  {path:'/activity/info',name: 'info', title:'产品基本信息'}
+  {path:'/activity/add',name: 'add', title:'新增产品'},
+  {path:'/activity/info',name: 'info', title:'基本信息'},
+  {path:'/activity/itinerary',name: 'itinerary', title:'产品行程'}
 
 ];
 

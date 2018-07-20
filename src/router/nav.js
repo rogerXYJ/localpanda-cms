@@ -29,7 +29,7 @@ var cmsNav = [
     title:'活动产品管理',
     icon: 'el-icon-menu',
     list:[
-      {'title':'产品基本信息','url':'/activity/info'},
+      {'title':'新增产品','url':'/activity/add'},
       
     ]
   }
