@@ -1,7 +1,7 @@
 <template>
 	<div class="cms-page">
 		<!-- 侧边栏导航，activeTitle传入1-1的格式，即可展开并高亮对应的导航 -->
-		<cmsAside :activeTitle="activeTitle"></cmsAside>
+		<activityAside :activeTitle="'1-5'"></activityAside>
 
 		<div class="cms-main">
 			<h3 class="text_c">配置价格</h3>
@@ -47,12 +47,12 @@
 </template>
 
 <script>
-	import cmsAside from '@/components/common/cmsAside.vue';
+	import activityAside from '@/components/common/activityAside.vue';
 
 	export default {
 		name: 'cms-setPrice',
 		components: {
-			cmsAside
+			activityAside
 		},
 		data() {
 			let id = this.$route.query.activityId,
@@ -251,6 +251,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+	.cms-main{
+		overflow-x: hidden!important;
+	}
 	.box {
 		padding: 20px;
 		background: #f2f2f2;

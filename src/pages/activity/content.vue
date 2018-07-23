@@ -1,7 +1,8 @@
 <template>
   <div class="cms-page">
     <!-- 侧边栏导航，activeTitle传入1-1的格式，即可展开并高亮对应的导航 -->
-    <cmsAside :activeTitle="activeTitle"></cmsAside>
+   <!-- <cmsAside :activeTitle="activeTitle"></cmsAside>-->
+    <activityAside :activeTitle="'1-4'"></activityAside>
 
     <div class="cms-main">
       <h3 class="text_c">内容信息</h3>
@@ -49,16 +50,16 @@
 </template>
 
 <script>
-import cmsAside from '@/components/common/cmsAside.vue';
+import activityAside from '@/components/common/activityAside.vue';
   
 
 export default {
   name: 'cms-content',
   components: {
-    cmsAside
+    activityAside
   },
   data () {
-  	let id=this.$route.query.activityId;
+  	let id=this.$route.query.id;
     return{
     	//ITEMS_INCLUDED,ITEMS_EXCLUDED,NOTICE
     	activeTitle: '4-3',

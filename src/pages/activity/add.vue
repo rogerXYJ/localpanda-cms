@@ -502,7 +502,7 @@ export default {
             success:function(data){
               
               if(data.succeed){
-                location.href =  '/activity/edit?id='+data.response;
+                location.href =  '/activity/info?id='+data.response;
               }
               
             },

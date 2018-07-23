@@ -1,7 +1,7 @@
 <template>
   <div class="cms-page">
     <!-- 侧边栏导航，activeTitle传入1-1的格式，即可展开并高亮对应的导航 -->
-    <cmsAside :activeTitle="activeTitle"></cmsAside>
+    <activityAside :activeTitle="'1-5'"></activityAside>
 
     <div class="cms-main">
       <h3 class="text_c">价格信息</h3>
@@ -16,7 +16,7 @@
 		      <el-option label="CAD" value="CAD"></el-option>
 		      <el-option label="JPY" value="JPY"></el-option>
 		    </el-select>
-		    <a class="el-button el-button--primary fr" :href="'/activity/setPrice?activityId='+formData.activityId+'&currency='+formData.currency">价格设置</a>
+		    <a class="el-button el-button--primary fr" :href="'/activity/setPrice?id='+formData.activityId+'&currency='+formData.currency">价格设置</a>
 		    <!--<el-button type="primary" class="fr"></el-button>-->
 	  	</el-form-item>
 	  	<div class="box">
@@ -99,16 +99,16 @@
 </template>
 
 <script>
-import cmsAside from '@/components/common/cmsAside.vue';
+import activityAside from '@/components/common/activityAside.vue';
   
 
 export default {
   name: 'cms-price',
   components: {
-    cmsAside
+    activityAside
   },
   data () {
-  	let id=this.$route.query.activityId
+  	let id=this.$route.query.id
     return{
     	activeTitle: '4-4',
     	radio:0,
