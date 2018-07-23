@@ -7,10 +7,10 @@
           <!-- 内容管理 -->
 
           <!-- 导航渲染 -->
-            <el-submenu :index="''+(titleIndex+1)" :key="item.title" v-for="(item,titleIndex) in cmsNav">
+            <el-submenu :index="''+(titleIndex+1)" :key="titleIndex" v-for="(item,titleIndex) in cmsNav">
                 <template slot="title"><i :class="item.icon"></i>{{item.title}}</template>
                 <el-menu-item-group>
-                    <el-menu-item  :key="nav.url" v-for="(nav,navIndex) in item.list" :index="(titleIndex+1)+'-'+(navIndex+1)" @click="jump(nav.url)">{{nav.title}}</el-menu-item>
+                    <el-menu-item  :key="navIndex" v-for="(nav,navIndex) in item.list" :index="(titleIndex+1)+'-'+(navIndex+1)" @click="jump(nav.url)">{{nav.title}}</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
 
@@ -24,15 +24,32 @@
 </template>
 
 <script>
-//导航配置文件
-import cmsNav from '@/router/nav.js';
+
 
 export default {
-  name: 'cmsAside',
+  name: 'activityAside',
   props:{
     activeTitle : ''
   },
   data () {
+    
+    let urlQuery = this.$route.query.id;
+    var urlId = urlQuery?('?id='+urlQuery):'';
+    //导航配置文件
+    var cmsNav = [
+      
+      {
+        title:'活动产品管理',
+        icon: 'el-icon-menu',
+        list:[
+          {'title':'基本信息','url':'/activity/info'+urlId},
+          {'title':'预定信息','url':'/activity/yuding'+urlId},
+          {'title':'行程信息','url':'/activity/itinerary'+urlId}
+        ]
+      }
+    ];
+
+
     return {
       cmsNav : cmsNav,//导航结束
     }
@@ -67,7 +84,6 @@ export default {
     overflow: hidden; 
     height: 100vh;
     position: fixed; left: 0; top: 0;
-    z-index: 99;
   }
   .cms-aside .logo a{ color: #fff;
     display: block;

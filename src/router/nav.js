@@ -29,9 +29,14 @@ var cmsNav = [
     title:'活动产品管理',
     icon: 'el-icon-menu',
     list:[
-      {'title':'产品基本信息','url':'/activity/info'},
-      {'title':'产品内容信息','url':'/activity/content'},
-      {'title':'产品价格信息','url':'/activity/price'}
+//
+//    {'title':'产品基本信息','url':'/activity/info'},
+//    {'title':'产品内容信息','url':'/activity/content'},
+//    {'title':'产品价格信息','url':'/activity/price'}
+
+      {'title':'新增产品','url':'/activity/add'},
+      
+
     ]
   }
 ]

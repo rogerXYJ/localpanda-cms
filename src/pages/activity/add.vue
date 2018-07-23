@@ -1,7 +1,7 @@
 <template>
   <div class="cms-page">
     <!-- 侧边栏导航，activeTitle传入1-1的格式，即可展开并高亮对应的导航 -->
-    <activityAside :activeTitle="'1-1'"></activityAside>
+    <cmsAside :activeTitle="activeTitle"></cmsAside>
 
     <div class="cms-main">
       <h3 class="text_c">基本信息</h3>
@@ -11,7 +11,7 @@
         
         <el-form :model="pageData" :rules="rules" ref="pageData" label-width="150px">
           <el-form-item label="产品ID：" v-if="pageId">
-            <span>{{pageId}}</span>
+            <span>123132</span>
           </el-form-item>
 
 
@@ -255,19 +255,24 @@
 </template>
 
 <script>
-import activityAside from '@/components/common/activityAside.vue';
+import cmsAside from '@/components/common/cmsAside.vue';
 import Validate from '@/assets/js/plugin/validate/';
   
 
 export default {
   name: 'tpl1',
   components: {
-    activityAside
+    cmsAside
   },
   data () {
     let urlQuery = this.$route.query;
 
     return {
+      //页面配置
+      title : 'LP管理-新增/编辑关键词',
+      keywords: '',
+      description: '',
+      activeTitle: '4-1',
 
       showPageTip : false,
       dialogTip : '',
@@ -328,7 +333,7 @@ export default {
         suitableForChildren: 1,
 
         //是否前台可见
-        display: 1,
+        //display: 1,
 
         //资审耗时
         workdayConfirmCost: 3,
@@ -486,6 +491,8 @@ export default {
           newPostData.attractions = attractions;
 
 
+          console.log(JSON.stringify(newPostData));
+
           $.ajax({
             url: submitUrl,
             type: this.pageId?'POST':'PUT',
@@ -494,7 +501,9 @@ export default {
             data: JSON.stringify(newPostData),
             success:function(data){
               
-              console.log(data);
+              if(data.succeed){
+                location.href =  '/activity/edit?id='+data.response;
+              }
               
             },
             error:function(){
@@ -545,36 +554,14 @@ export default {
       dataType: 'json', //如果跨域用jsonp
       contentType: 'application/json',
       success:function(data){
+        console.log(data);
         self.attractionsAll = data;
+        
       },
       error:function(){
         
       }
     });	
-    
-    //请求编辑数据
-    if(this.pageId){
-
-      $.ajax({
-        url: 'https://api.localpanda.com/cms/product/activity/'+this.pageId,
-        type: 'GET',
-        dataType: 'json', //如果跨域用jsonp
-        contentType: 'application/json',
-        success:function(data){
-          
-          console.log(data);
-          self.pageData = data;
-         
-        },
-        error:function(){
-          
-        }
-      });	
-
-      
-    }else{
-      
-    }
 
 
     
@@ -604,7 +591,7 @@ export default {
   },
   head(){
     return {
-      title: '基本信息'
+      title: this.title
     }
   }
 }
