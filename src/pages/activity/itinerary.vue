@@ -34,14 +34,14 @@
           <template slot-scope="scope">
             <a class="btn_view" target="_blank" :href="scope.row.photo.url">View</a>
             <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url == coverPhotoUrl">Banner photo</span>
-            <el-button type="text" size="small" v-else>Set as Cover</el-button>
+            <el-button type="text" size="small" v-else @click="setCover(scope.row)">Set as Cover</el-button>
           </template>
         </el-table-column>
         <el-table-column header-align="center" label="操作" width="220" align="center" >
           <template slot-scope="scope">
-            <el-button type="text" size="small">Edit</el-button>
-            <el-button type="text" size="small">Del</el-button>
-            <el-button type="text" size="small">Add Below</el-button>
+            <el-button type="text" size="small" @click="edit">Edit</el-button>
+            <el-button type="text" size="small" @click="del">Del</el-button>
+            <el-button type="text" size="small" @click="add">Add Below</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -85,7 +85,7 @@ export default {
 
       coverPhotoUrl:'https://resource.localpanda.cn/activity/itineraries/40_U5837627.jpg',
       tableData:[
-        {
+        /*{
           "id": 39,
           "activityId": 11015,
           "title": "Pick-up",
@@ -106,7 +106,7 @@ export default {
             "photoId": 2254,
             "url": "https://resource.localpanda.cn/activity/itineraries/40_U5837627.jpg"
           }
-        }
+        }*/
       ]
     }
 
@@ -117,6 +117,36 @@ export default {
   },
   
   methods:{
+    setCover(thisData){
+      $.ajax({
+        url: 'https://api.localpanda.com/cms/content/photo/update',
+        type: 'GET',
+        dataType: 'json', //如果跨域用jsonp
+        contentType: 'application/json',
+        data: JSON.stringify({
+          "objectId": thisData.activityId,
+          "objectType": "ACTIVITY_COVER",
+          "url": thisData.photo.url
+        }),
+        success:function(data){
+          
+          console.log(data);
+         
+        },
+        error:function(){
+          
+        }
+      });
+    },
+    add(){
+      
+    },
+    edit(){
+      
+    },
+    del(){
+      
+    },
     addDestination(){
 
     },
