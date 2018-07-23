@@ -9,7 +9,7 @@
 	  	<el-form-item  label="活动包含Inclusions: " label-width="200px">
 	  		<div class="item fl wb90 mt20" v-for="(item,index) in formData.Inclusions">
 	  			<el-input class="wb60" v-model="item.title"></el-input>
-	  			<el-button type="success" class="ml20" v-if="!item.newItem">Updata</el-button>
+	  			<el-button type="success" class="ml20" v-if="!item.newItem&&item.title&&item.content" @click="updata(formData.Inclusions,index)">Updata</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Inclusions,index,'ITEMS_INCLUDED')" v-else>Commit</el-button>
 	  			<el-button type="danger" v-if="index>0" @click="del(formData.Inclusions,index)">Del</el-button>
 	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
@@ -20,20 +20,26 @@
 	  	</el-form-item>
 	  	<el-form-item  label="活动不包含Exclusions:" label-width="200px">
 	  		<div class="item fl wb90" v-for="(item,index) in formData.Exclusions">
-	  			<el-input class="wb60" v-model="item.title"></el-input><el-button class="ml20">Updata</el-button><el-button v-if="index>0">Del</el-button>
+	  			<el-input class="wb60" v-model="item.title"></el-input>
+	  			<el-button type="success" class="ml20" v-if="!item.newItem&&item.title&&item.content" @click="updata(formData.Exclusions,index)">Updata</el-button>
+	  			<el-button type="primary" class="ml20" @click="commit(formData.Exclusions,index,'ITEMS_EXCLUDED')" v-else>Commit</el-button>
+	  			<el-button type="danger" v-if="index>0" @click="del(formData.Exclusions,index)">Del</el-button>
 	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
 	  		</div>
 	  		<div class="text_c wb60">
-	  			<el-button class="mt30">Add</el-button>
+	  			<el-button type="primary" plain class="mt30" @click="add(formData.Exclusions)">Add</el-button>
 	  		</div>
 	  	</el-form-item>
 	  	<el-form-item  label="注意事项Additional Info: " label-width="200px">
 	  		<div class="item fl wb90" v-for="(item,index) in formData.AdditionalInfo">
-	  			<el-input class="wb60" v-model="item.title"></el-input><el-button class="ml20">Updata</el-button><el-button v-if="index>0">Del</el-button>
+	  			<el-input class="wb60" v-model="item.title"></el-input>
+	  			<el-button type="success" class="ml20" v-if="!item.newItem&&item.title&&item.content" @click="updata(formData.AdditionalInfo,index)">Updata</el-button>
+	  			<el-button type="primary" class="ml20" @click="commit(formData.AdditionalInfo,index,'NOTICE')" v-else>Commit</el-button>
+	  			<el-button type="danger" v-if="index>0" @click="del(formData.AdditionalInfo,index)">Del</el-button>
 	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
 	  		</div>
 	  		<div class="text_c wb60">
-	  			<el-button class="mt30">Add</el-button>
+	  			<el-button type="primary" plain class="mt30" @click="add(formData.AdditionalInfo)">Add</el-button>
 	  		</div>
 	  	</el-form-item>
 	  </el-form>
@@ -89,36 +95,56 @@ export default {
   	getdata(){
   		let self=this
    		$.ajax({
-   			url:"https://api.localpanda.com/cms/product/activity/content/"+self.activityId+"/ITEMS_INCLUDED",
+   			//https://api.localpanda.com/cms/product/activity/{activityId}/{objectType}/content/list
+   			url:"https://api.localpanda.com/cms/product/activity/"+self.activityId+"/ITEMS_INCLUDED/content/list",
    			 dataType: 'json',
    			 method: 'GET',
    			 success:function(data){
    			 	console.log(data)
    			 	self.formData.Inclusions=data
+   			 	if(self.formData.Inclusions.length<1){
+   			 			self.formData.Inclusions.push({
+   			 				title:'',
+   			 				content:'',
+   			 			})
+   			 	}
    			 },
    			 error:function(data){
    			 		
    			 }
    		})
    		$.ajax({
-   			url:"https://api.localpanda.com/cms/product/activity/content/"+self.activityId+"/ITEMS_EXCLUDED",
+   			url:"https://api.localpanda.com/cms/product/activity/"+self.activityId+"/ITEMS_EXCLUDED/content/list",
    			 dataType: 'json',
    			 method: 'GET',
    			 success:function(data){
    			 	console.log(data)
    			 	self.formData.Exclusions=data
+   			 	if(self.formData.Exclusions.length<1){
+   			 		self.formData.Exclusions.push({
+   			 				title:'',
+   			 				content:'',
+   			 				
+   			 		})
+   			 	}
    			 },
    			 error:function(data){
    			 		
    			 }
    		})
    		$.ajax({
-   			url:"https://api.localpanda.com/cms/product/activity/content/"+self.activityId+"/NOTICE",
+   			url:"https://api.localpanda.com/cms/product/activity/"+self.activityId+"/NOTICE/content/list",
    			 dataType: 'json',
    			 method: 'GET',
    			 success:function(data){
    			 	console.log(data)
    			 	self.formData.AdditionalInfo=data
+   			 	if(self.formData.AdditionalInfo.length<1){
+   			 		self.formData.AdditionalInfo.push({
+   			 				title:'',
+   			 				content:''
+   			 		})
+   			 	}
    			 },
    			 error:function(data){
    			 		
@@ -135,6 +161,7 @@ export default {
   			
   		},
   		del(arr,index){
+  			let self=this
   			if(arr[index].title&&arr[index].content){
   				self.$confirm('请确定是否进行删除？', {
 	          confirmButtonText: '确定',
@@ -181,8 +208,33 @@ export default {
   			
   			
   		},
-  		updata(){
-  			
+  		updata(arr,index){
+  				let self=this
+  				let formData={
+  					id:arr[index].id,
+  					title:arr[index].title,
+  					content:arr[index].content
+  				}
+  				$.ajax({
+  				method: 'POST',
+	  				url:"https://api.localpanda.com/cms/product/activity/content",
+	  				dataType:'json',
+	  				data:JSON.stringify(formData),
+	  				contentType:'application/json',
+	  				success:function(data){
+	  					 self.$alert('您已更新成功！', {
+				          confirmButtonText: '确定',
+				          callback: action => {
+				            self.getdata()
+				          }
+				       });
+	  				},
+	  				error:function(data){
+	  						
+	  				}
+	  				
+	  			});
+	
   		},
   		commit(arr,index,type){
   			let self=this;
