@@ -20,7 +20,7 @@
           </el-form-item>
           
 
-          <el-form-item label="产品类型：" required prop="category">
+          <el-form-item label="产品类型：" prop="category">
             <el-select v-model="pageData.category" placeholder="请选择交通类型">
               <el-option :label="item" :value="item" v-for="item in categoryAll" :key="item">{{item}}</el-option>
             </el-select>
@@ -42,7 +42,7 @@
 
           <!-- <div class="hr"></div> -->
 
-          <el-form-item label="活动主题：" required prop="tourType">
+          <el-form-item label="活动主题：" prop="tourType">
             
             <el-checkbox-group v-model="pageData.tourType">
               <el-checkbox v-for="items in tourTypeArr" :label="items" :key="items">{{items}}</el-checkbox>
@@ -50,7 +50,7 @@
           </el-form-item>
 
 
-          <el-form-item label="活动地点：" required prop="destinations">
+          <el-form-item label="活动地点：" prop="destinations">
             <el-button type="primary" plain @click="addDestination">添加</el-button>
             <dl class="change_type_list">
               <dd>
@@ -563,7 +563,26 @@ export default {
         success:function(data){
           
           console.log(data);
-          self.pageData = data;
+          
+      
+          
+
+          $.ajax({
+            url: 'https://api.localpanda.com/cms/product/activity/attraction/structure',
+            type: 'POST',
+            dataType: 'json', //如果跨域用jsonp
+            contentType: 'application/json',
+            data:JSON.stringify(data.attractions),
+            success:function(data2){
+
+              data.attractions = data2;
+              self.pageData = data;
+            
+            },
+            error:function(){
+              
+            }
+          });	
          
         },
         error:function(){
