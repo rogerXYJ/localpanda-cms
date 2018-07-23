@@ -34,7 +34,7 @@
 						</el-row>
 					</div>
 				
-						<el-form-item class="text_c mt100">
+						<el-form-item class="text_c mt100" v-if="showBtn">
 							<el-button type="primary" class="w120" @click="commit('formData')">提交</el-button>
 						</el-form-item>
 				
@@ -62,6 +62,7 @@
 				activeTitle: '4-4',
 				activityId: id,
 				currency: currency,
+				showBtn:false,
 				formData: {
 					records: [
 						{
@@ -96,6 +97,12 @@
 							if(data&&data.length>0){
 								//console.log(self.formData)
 								that.formData.records=data
+								
+							}
+							for(var i=0;i<that.formData.records.length;i++){
+								if(that.formData.records[i].newItem){
+									that.showBtn=true
+								}
 							}
 					},
 					error: function(data) {
@@ -111,6 +118,7 @@
 							price:'',
 							newItem:true,
 					})
+					this.showBtn=true
 			},
 			del(arr,index){
 					let self=this
@@ -162,7 +170,8 @@
 					let postData={
 						id:arr[index].id,
 						capacity:arr[index].capacity,
-						price:arr[index].price
+						price:arr[index].price,
+						activityId:arr[index].activityId
 					}
 					$.ajax({
 						method: 'POST',
@@ -171,7 +180,14 @@
 	  				data:JSON.stringify(postData),
 	  				contentType:'application/json',
 	  				success:function(data){
-	  						console.log(data)
+	  						if(data.succeed){
+	  								self.$alert('您已提交成功！', {
+							          confirmButtonText: '确定',
+							          callback: action => {
+							            self.getData()
+							          }
+							       });
+	  						}
 	  				},
 	  				error:function(data){
 	  					
@@ -190,7 +206,6 @@
 					}
 					self.$refs[formName].validate((valid) =>{
 						if(valid){
-							
 							if(hasAdd){
 								let postData={
 									records:arr
