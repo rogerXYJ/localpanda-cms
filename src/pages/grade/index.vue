@@ -70,7 +70,7 @@
 		    	<el-button @click="sumbitFn" type="primary">查询</el-button>
 		 </el-form-item>
       </el-form> 
-    </div>
+    
     <div class="hr"></div>
 	<!-- 列表 -->
 	<div class="keyword-table-box pb40" v-show="showlist">
@@ -105,7 +105,7 @@
 		   class="mt30">
 		</el-pagination>
 	</div>
-   
+   </div>
 
   </div>
 </template>

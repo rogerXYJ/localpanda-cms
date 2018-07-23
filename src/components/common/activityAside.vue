@@ -44,7 +44,9 @@ export default {
         list:[
           {'title':'基本信息','url':'/activity/info'+urlId},
           {'title':'预定信息','url':'/activity/yuding'+urlId},
-          {'title':'行程信息','url':'/activity/itinerary'+urlId}
+          {'title':'行程信息','url':'/activity/itinerary'+urlId},
+          {'title':'产品内容信息','url':'/activity/content'+urlId},
+          {'title':'产品价格信息','url':'/activity/price'+urlId}
         ]
       }
     ];
