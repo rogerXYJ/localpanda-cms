@@ -42,6 +42,7 @@ h4{ font-size: 16px;}
 .mt10{ margin-top:10px !important;}
 .mt20{ margin-top:20px !important;}
 .mt30{ margin-top:30px !important;}
+.ml5{ margin-left:5px !important;}
 .ml10{ margin-left:10px !important;}
 .ml20{ margin-left:20px !important;}
 .ml30{ margin-left:30px !important;}
@@ -92,7 +93,7 @@ h4{ font-size: 16px;}
 /* 导航部分 */
 /* .cms-aside{ float: left; width: 200px; margin-left: -220px;} */
 .cms-page{ padding-left: 220px;}
-.cms-main{ width: 100%;}
+.cms-main{ width: 100%; min-width: 800px; overflow-x: auto;}
 
 
 /* 评分 */

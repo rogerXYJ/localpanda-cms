@@ -4,11 +4,50 @@
     <activityAside :activeTitle="'1-3'"></activityAside>
 
     <div class="cms-main">
+
       <h3 class="text_c">行程信息</h3>
 
       <div class="">
         <el-button type="primary" @click="addDestination">添加行程</el-button>
       </div>
+
+      <el-table
+        :data="tableData"
+        class="itinerary_list"
+        border
+        style="width: 100%; max-width:1200px;">
+        <el-table-column
+          type="index"
+          label="行程排列"
+          header-align="center" 
+          align="center" 
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="title"
+          label="行程标题"
+          header-align="center" 
+          align="center" 
+          >
+        </el-table-column>
+        <el-table-column header-align="center" label="图片" width="200"  align="center">
+          <template slot-scope="scope">
+            <a class="btn_view" target="_blank" :href="scope.row.photo.url">View</a>
+            <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url == coverPhotoUrl">Banner photo</span>
+            <el-button type="text" size="small" v-else>Set as Cover</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column header-align="center" label="操作" width="220" align="center" >
+          <template slot-scope="scope">
+            <el-button type="text" size="small">Edit</el-button>
+            <el-button type="text" size="small">Del</el-button>
+            <el-button type="text" size="small">Add Below</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+
+
     </div>
 
 
@@ -17,7 +56,7 @@
       
 
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="departures_change">确 定</el-button>
+        <el-button type="primary" @click="new_itinerary">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -42,7 +81,33 @@ export default {
 
     return {
       //页面配置
-      dialogShow:true
+      dialogShow:false,
+
+      coverPhotoUrl:'https://resource.localpanda.cn/activity/itineraries/40_U5837627.jpg',
+      tableData:[
+        {
+          "id": 39,
+          "activityId": 11015,
+          "title": "Pick-up",
+          "description": "After being picked up by your private car and an experienced driver, start the tour in a nice, private vehicle.",
+          "ranking": 1,
+          "photo": {
+            "photoId": 505290,
+            "url": "https://resource.localpanda.cn/testing/activity/itineraries/39.jpg"
+          }
+        },
+        {
+          "id": 40,
+          "activityId": 11015,
+          "title": "T-sqaure",
+          "description": "The first stop of the tour will be Tiananmen Square. Throughout the history, Tiananmen Square has been the site of a number of important events.",
+          "ranking": 1,
+          "photo": {
+            "photoId": 2254,
+            "url": "https://resource.localpanda.cn/activity/itineraries/40_U5837627.jpg"
+          }
+        }
+      ]
     }
 
 
@@ -52,8 +117,12 @@ export default {
   },
   
   methods:{
-    
+    addDestination(){
 
+    },
+    new_itinerary(){
+
+    },
     submitForm(pageData){
       this.$refs[pageData].validate((valid) => {
 
@@ -144,6 +213,18 @@ export default {
     width: auto;
   }
   .cms-main{
+    .itinerary_list{
+      .btn_view{
+        margin-right: 20px;
+        color: #409EFF;
+        &:hover{
+          color: #f60;
+        }
+      }  
+      .el-button{
+        padding: 9px 5px;
+      }
+    }
     
   }
   
