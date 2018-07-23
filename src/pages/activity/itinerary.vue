@@ -31,7 +31,7 @@
         <el-table-column header-align="center" label="图片" width="200"  align="center">
           <template slot-scope="scope">
             <a class="btn_view" target="_blank" :href="scope.row.photo && scope.row.photo.url">View</a>
-            <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url">Banner photo</span>
+            <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url==coverPhotoUrl">Banner photo</span>
             <el-button type="text" size="small" v-else @click="setCover(scope.row)">Set as Cover</el-button>
           </template>
         </el-table-column>
@@ -118,7 +118,7 @@ export default {
 
 
       //页面配置
-      dialogShow:true,
+      dialogShow:false,
       dialogType: 'add',
       dialogData: {
         activityId: activityId,
@@ -287,7 +287,7 @@ export default {
       var formData = {
         objectId : objectId,
         objectType : 'ACTIVITY_ITINERARY',
-        file : this.file
+        files : this.file
       };
       let param = new FormData()  // 创建form对象
       for(let key in formData){
@@ -305,6 +305,7 @@ export default {
           
           if(data.succeed){
             self.dialogTxt('修改成功！');
+            this.dialogShow = false;
           }else{
             self.dialogTxt('更新失败，请确认是否选择图片!');
           }
