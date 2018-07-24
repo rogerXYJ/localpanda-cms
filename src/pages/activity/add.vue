@@ -16,12 +16,12 @@
 
 
           <el-form-item label="产品标题：" required prop="title">
-            <el-input v-model="pageData.title"></el-input>
+            <el-input v-model="pageData.title" placeholder="请输入产品标题"></el-input>
           </el-form-item>
           
 
           <el-form-item label="产品类型：" required prop="category">
-            <el-select v-model="pageData.category" placeholder="请选择交通类型">
+            <el-select v-model="pageData.category" placeholder="请选择产品类型">
               <el-option :label="item" :value="item" v-for="item in categoryAll" :key="item">{{item}}</el-option>
             </el-select>
           </el-form-item>
@@ -80,16 +80,19 @@
           </el-form-item>
 
 
-          <el-form-item label="活动时长：" required prop="duration">
-            <el-input v-model="pageData.duration"></el-input>
-            <el-select v-model="pageData.durationUnit" placeholder="请选择交通类型">
+          <el-form-item class="shichang_box" label="活动时长：" required prop="duration">
+            <el-input v-model="pageData.duration" @blur="hideError"></el-input>
+            <el-select v-model="pageData.durationUnit" placeholder="请选择活动时长">
               <el-option label="HOURS" value="HOURS">HOURS</el-option>
               <el-option label="DAY" value="DAY">DAY</el-option>
             </el-select>　超过12小时请选择按天计算
           </el-form-item>
 
           <el-form-item label="排序顺序：" required prop="ranking">
-            <el-input v-model="pageData.ranking"></el-input>　数值越小，排序权重越大！
+            <el-select v-model="pageData.ranking" placeholder="请选择排序值">
+              <el-option :label="item" :value="item" v-for="item in 10">{{item}}</el-option>
+            </el-select>
+            数值越小，排序权重越大！
           </el-form-item>
 
           <el-form-item label="适合儿童：" required prop="suitableForChildren">
@@ -105,9 +108,9 @@
 
           <div class="hr"></div>
 
-          <el-form-item label="资审时效：" required prop="workdayConfirmCost">
-            <el-input v-model="pageData.workdayConfirmCost"></el-input>　工作日资审时间　
-            <el-select v-model="pageData.ConfirmCostUnit" placeholder="请选择交通类型">
+          <el-form-item class="shenzi_box" label="资审时效：" required prop="workdayConfirmCost">
+            <el-input v-model="pageData.workdayConfirmCost" @blur="hideError"></el-input>　工作日资审时间　
+            <el-select v-model="pageData.confirmCostUnit" placeholder="请选择资审时效">
               <el-option label="HOURS" value="HOURS">HOURS</el-option>
               <el-option label="DAY" value="DAY">DAY</el-option>
             </el-select>　超过10小时请选择按天计算
@@ -117,7 +120,7 @@
           <el-form-item label="集合方式：" required>
             <el-radio v-model="pageData.pickup" :value="0" :label="0">提供接送</el-radio>
             <el-radio v-model="pageData.pickup" :value="1" :label="1">自行前往</el-radio>
-            <div class="jihe_info" v-if="pageData.pickup=='自行前往'">
+            <div class="jihe_info" v-if="pageData.pickup==1">
               <ul>
                 <li v-for="(item,index) in pageData.venues" class="clearfix">
                   
@@ -306,24 +309,24 @@ export default {
       //venuesList: {},
 
       pageData:{
-        title: 'aaaaaa',
-        category: 'Day Trips',
+        title: '',
+        category: '',
         groupType: 'Private',
-        trafficType: 'Walking',
+        trafficType: '',
 
-        tourType: ['Landmarks'],
+        tourType: [],
         
 
-        destinations: ['Shanghai'],
+        destinations: [],
 
         attractions: {
-          Shanghai:['Disney Land'],
-          Beijing:['Badachu Park'],
+          // Shanghai:['Disney Land'],
+          // Beijing:['Badachu Park'],
         },
-        departures: ['Shanghai'],
+        departures: [],
         
         // 活动时长
-        duration:3,
+        duration:'',
         durationUnit: 'HOURS',
 
         //权重
@@ -336,19 +339,19 @@ export default {
         //display: 1,
 
         //资审耗时
-        workdayConfirmCost: 3,
+        workdayConfirmCost: '',
         confirmCostUnit: 'HOURS',
 
         //是否提高接送
         pickup: 0,
 
         //集合信息
-        //venues: [''],
-        recommendedReason:'推荐理由',
-        highlights:'asssssssssssssssssssss',
-        notice:'aaaaaaaaaaaaaaaaaa',
-        introduction:'aaaaa',
-        remark: 'aaaaa',
+        venues: [''],
+        recommendedReason:'',
+        highlights:'',
+        notice:'',
+        introduction:'',
+        remark: '',
 
       },
       
@@ -454,7 +457,9 @@ export default {
     jiheAdd(){
       this.pageData.venues.push('');
     },
-
+    hideError(e){
+      $(e.target).parents('.el-form-item').addClass('is-success').removeClass('is-error');
+    },
     submitForm(pageData){
       this.$refs[pageData].validate((valid) => {
 
@@ -462,11 +467,19 @@ export default {
 
           if(this.pageData.duration > 12 && this.pageData.durationUnit == 'HOURS'){
             alert('活动时长，超过12小时请按天计算!');
+            setTimeout(function(){
+              document.querySelector('.shichang_box').scrollIntoViewIfNeeded();
+              $('.shichang_box').removeClass('is-success').addClass('is-error');
+            },300);
             return;
           }
 
-          if(this.pageData.workdayConfirmCost > 12 && this.pageData.ConfirmCostUnit == 'HOURS'){
+          if(this.pageData.workdayConfirmCost > 12 && this.pageData.confirmCostUnit == 'HOURS'){
             alert('资审时效，超过10小时请按天计算!');
+            setTimeout(function(){
+              document.querySelector('.shenzi_box').scrollIntoViewIfNeeded();
+              $('.shenzi_box').removeClass('is-success').addClass('is-error');
+            },300);
             return;
           }
 

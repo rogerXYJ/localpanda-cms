@@ -30,23 +30,25 @@
         </el-table-column>
         <el-table-column header-align="center" label="图片" width="200"  align="center">
           <template slot-scope="scope">
-            <a class="btn_view" target="_blank" :href="scope.row.photo && scope.row.photo.url">View</a>
+            <a class="btn_view" target="_blank" :href="scope.row.photo && scope.row.photo.url" v-if="scope.row.photo">View</a>
             <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url==coverPhotoUrl">Banner photo</span>
-            <el-button type="text" size="small" v-else @click="setCover(scope.row)">Set as Cover</el-button>
+            <el-button type="text" size="small" v-else-if="scope.row.photo" @click="setCover(scope.row)">Set as Cover</el-button>
+            <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column header-align="center" label="操作" width="220" align="center" >
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="editItinerary(scope.row)">Edit</el-button>
-            <el-button type="text" size="small" @click="del">Del</el-button>
+            <el-button type="text" size="small" @click="del(scope)">Del</el-button>
             <el-button type="text" size="small" @click="addItinerary(scope.$index)">Add Below</el-button>
           </template>
         </el-table-column>
       </el-table>
 
-      <div class="add_itinerary" v-if="!tableData.length">
+      <div class="add_itinerary" v-if="!hasItinerary">
         <el-button type="primary" @click="addItinerary(1)">添加行程</el-button>
       </div>
+      <div class="load_table" v-if="tabLoading">加载中...</div>
 
 
 
@@ -72,6 +74,7 @@
           </a>
           <span class="vat">{{file.name}}</span>
           <el-button class="vat mt10 ml10" type="text" size="small" @click="file=''" v-if="file">取消</el-button>
+
           <div v-if="dialogData.photo">
             <img :src="dialogData.photo.url" width="300" alt="">
           </div>
@@ -112,7 +115,10 @@ export default {
     let activityId = this.$route.query.id;
 
     return {
-
+      
+      hasItinerary: true,
+      tabLoading:true,
+      
       showDialogTip : false,
       dialogTipTxt : '',
 
@@ -136,38 +142,12 @@ export default {
 
       activityId: activityId,
 
-      // addData:{
-      //   activityId: activityId,
-      //   title:'',
-      //   description:'',
-      //   ranking: 1
-      // },
-
-      // editData: '',
-
       file: '',
-      //{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}
-      // addImgData:{
-      //   objectId: '',
-      //   objectType: 'ACTIVITY_ITINERARY'
-      // },
 
       objectId:'',
 
-      coverPhotoUrl:'https://resource.localpanda.cn/activity/itineraries/40_U5837627.jpg',
-      tableData:[
-        /*{
-          "id": 39,
-          "activityId": 11015,
-          "title": "Pick-up",
-          "description": "After being picked up by your private car and an experienced driver, start the tour in a nice, private vehicle.",
-          "ranking": 1,
-          "photo": {
-            "photoId": 505290,
-            "url": "https://resource.localpanda.cn/testing/activity/itineraries/39.jpg"
-          }
-        }*/
-      ]
+      coverPhotoUrl:'',
+      tableData:[]
     }
 
 
@@ -188,19 +168,34 @@ export default {
       return false;
     },
     setCover(thisData){
+      var self = this;
+
+      var formData = {
+        "objectId": thisData.activityId,
+        "objectType": "ACTIVITY_COVER",
+        "url": thisData.photo.url
+      };
+      let param = new FormData()  // 创建form对象
+      for(let key in formData){
+        param.append(key, formData[key])  // 通过append向form对象添加数据
+      }
+
       $.ajax({
-        url: 'https://api.localpanda.com/cms/content/photo/update',
-        type: 'GET',
+        url: 'https://api.localpanda.com/cms/public/photo/update',
+        type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'application/json',
-        data: JSON.stringify({
-          "objectId": thisData.activityId,
-          "objectType": "ACTIVITY_COVER",
-          "url": thisData.photo.url
-        }),
+        contentType: false,
+        data: param,
+        processData: false,
         success:function(data){
           
-          console.log(data);
+          if(data.succeed){
+            self.dialogTxt('设置成功！');
+            self.coverPhotoUrl = thisData.photo.url;
+          }else{
+            self.dialogTxt('设置失败，请重试!!');
+          }
          
         },
         error:function(){
@@ -223,20 +218,39 @@ export default {
     editItinerary(data){
       this.dialogShow = true;
       this.dialogType = 'edit';
+
       
-      this.dialogData = {
-        id: data.id,
-        activityId: data.activityId,
-        title: data.title,
-        description: data.description,
-        ranking: data.ranking
-      };
+      this.dialogData = data;
 
       this.objectId = data.photo?data.photo.photoId:'';
 
     },
-    del(){
-      
+    del(thisData){
+      var self = this;
+
+      if(!confirm("你确定要删除 行程"+(thisData.$index+1)+" 吗？")){
+        return;
+      }
+
+      $.ajax({
+        url: 'https://api.localpanda.com/cms/product/activity/itinerary/'+thisData.row.id,
+        type: 'DELETE',
+        dataType: 'json', //如果跨域用jsonp
+        contentType: 'application/json',
+        success:function(data){
+          
+          if(data.succeed){
+            self.dialogTxt('删除成功！');
+            self.tableData.splice(thisData.$index,1);
+          }else{
+            self.dialogTxt('删除失败，请重试!');
+          }
+         
+        },
+        error:function(){
+          
+        }
+      });
     },
     new_itinerary(){
       var self = this;
@@ -305,7 +319,6 @@ export default {
           
           if(data.succeed){
             self.dialogTxt('修改成功！');
-            this.dialogShow = false;
           }else{
             self.dialogTxt('更新失败，请确认是否选择图片!');
           }
@@ -339,7 +352,13 @@ export default {
           var list = data.activityItineraryList;
           if(list.length){
             self.tableData = list;
+            self.hasItinerary = true;
+            self.coverPhotoUrl = data.coverPhotoUrl?data.coverPhotoUrl:'';
+          }else{
+            self.hasItinerary = false;
           }
+
+          self.tabLoading = false;
          
         },
         error:function(){
@@ -391,11 +410,20 @@ export default {
         padding: 9px 5px;
       }
     }
-    .add_itinerary{
+    .add_itinerary,.load_table{
       margin-top: -50px;
       text-align: center;
       position: relative;
       z-index: 3;
+    }
+    .load_table{
+      width: 50%;
+      margin: -50px auto 0;
+      background-color: #fff;
+      font-size: 14px;
+      color: #333;
+      height: 40px;
+      line-height: 40px;
     }
     
     
