@@ -199,7 +199,7 @@ export default {
          
         },
         error:function(){
-          
+          self.dialogTxt('设置失败，请重试!!');
         }
       });
     },
@@ -248,7 +248,7 @@ export default {
          
         },
         error:function(){
-          
+          self.dialogTxt('删除失败，请重试!');
         }
       });
     },
@@ -362,7 +362,7 @@ export default {
          
         },
         error:function(){
-          
+          self.tabLoading = false;
         }
       });	
 
