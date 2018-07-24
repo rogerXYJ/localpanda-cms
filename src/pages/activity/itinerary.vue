@@ -7,9 +7,7 @@
 
       <h3 class="text_c">行程信息</h3>
 
-      <div class="">
-        <el-button type="primary" @click="addDestination">添加行程</el-button>
-      </div>
+      
 
       <el-table
         :data="tableData"
@@ -32,34 +30,71 @@
         </el-table-column>
         <el-table-column header-align="center" label="图片" width="200"  align="center">
           <template slot-scope="scope">
-            <a class="btn_view" target="_blank" :href="scope.row.photo.url">View</a>
-            <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url == coverPhotoUrl">Banner photo</span>
-            <el-button type="text" size="small" v-else>Set as Cover</el-button>
+            <a class="btn_view" target="_blank" :href="scope.row.photo && scope.row.photo.url" v-if="scope.row.photo">View</a>
+            <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url==coverPhotoUrl">Banner photo</span>
+            <el-button type="text" size="small" v-else-if="scope.row.photo" @click="setCover(scope.row)">Set as Cover</el-button>
+            <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column header-align="center" label="操作" width="220" align="center" >
           <template slot-scope="scope">
-            <el-button type="text" size="small">Edit</el-button>
-            <el-button type="text" size="small">Del</el-button>
-            <el-button type="text" size="small">Add Below</el-button>
+            <el-button type="text" size="small" @click="editItinerary(scope.row)">Edit</el-button>
+            <el-button type="text" size="small" @click="del(scope)">Del</el-button>
+            <el-button type="text" size="small" @click="addItinerary(scope.$index)">Add Below</el-button>
           </template>
         </el-table-column>
       </el-table>
+
+      <div class="add_itinerary" v-if="!hasItinerary">
+        <el-button type="primary" @click="addItinerary(1)">添加行程</el-button>
+      </div>
+      <div class="load_table" v-if="tabLoading">加载中...</div>
 
 
 
     </div>
 
 
-    <!-- 选择出发地弹窗 -->
-    <el-dialog title="选择出发地" :visible.sync="dialogShow" width="800px" class="destination_dialog">
+    <!-- 添加行程弹窗 -->
+    <el-dialog :title="dialogType=='add'?'添加行程':'修改行程'" :visible.sync="dialogShow" width="800px" class="destination_dialog">
       
+      <el-form :model="dialogData" :rules="rules" ref="dialogData" label-width="100px">
+        <el-form-item label="标题：" prop="title">
+          <el-input v-model="dialogData.title"></el-input>
+        </el-form-item>
+        <el-form-item label="描述：">
+          <el-input type="textarea" v-model="dialogData.description"></el-input>
+          <p class="c_999">注：对应内容前台若需换行，请在描述中用“回车”</p>
+        </el-form-item>
+
+        <el-form-item label="图片：">
+          <a class="btn_upload">
+            <el-button size="small" type="primary">上传图片</el-button>
+            <input id="upload" @change="uploadChange" accept="image/*" type="file">
+          </a>
+          <span class="vat">{{file.name}}</span>
+          <el-button class="vat mt10 ml10" type="text" size="small" @click="file=''" v-if="file">取消</el-button>
+
+          <div v-if="dialogData.photo">
+            <img :src="dialogData.photo.url" width="300" alt="">
+          </div>
+        </el-form-item>
+        
+      </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="new_itinerary">确 定</el-button>
       </span>
     </el-dialog>
 
+
+    <!-- 文字提示 -->
+    <el-dialog title="温馨提示" :visible.sync="showDialogTip" width="500px" class="bind_dialog">
+      <p>{{dialogTipTxt}}</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="showDialogTip = false">确 定</el-button>
+      </span>
+    </el-dialog>
 
     
 
@@ -77,37 +112,42 @@ export default {
     activityAside
   },
   data () {
-    let urlQuery = this.$route.query;
+    let activityId = this.$route.query.id;
 
     return {
+      
+      hasItinerary: true,
+      tabLoading:true,
+      
+      showDialogTip : false,
+      dialogTipTxt : '',
+
+
       //页面配置
       dialogShow:false,
+      dialogType: 'add',
+      dialogData: {
+        activityId: activityId,
+        title:'',
+        description:'',
+        ranking: 1
+      },
 
-      coverPhotoUrl:'https://resource.localpanda.cn/activity/itineraries/40_U5837627.jpg',
-      tableData:[
-        {
-          "id": 39,
-          "activityId": 11015,
-          "title": "Pick-up",
-          "description": "After being picked up by your private car and an experienced driver, start the tour in a nice, private vehicle.",
-          "ranking": 1,
-          "photo": {
-            "photoId": 505290,
-            "url": "https://resource.localpanda.cn/testing/activity/itineraries/39.jpg"
-          }
-        },
-        {
-          "id": 40,
-          "activityId": 11015,
-          "title": "T-sqaure",
-          "description": "The first stop of the tour will be Tiananmen Square. Throughout the history, Tiananmen Square has been the site of a number of important events.",
-          "ranking": 1,
-          "photo": {
-            "photoId": 2254,
-            "url": "https://resource.localpanda.cn/activity/itineraries/40_U5837627.jpg"
-          }
-        }
-      ]
+      //校验规则
+      rules: {
+        title:[
+          { required: true, message: '请输入title', trigger: 'blur' }
+        ]
+      },
+
+      activityId: activityId,
+
+      file: '',
+
+      objectId:'',
+
+      coverPhotoUrl:'',
+      tableData:[]
     }
 
 
@@ -117,65 +157,212 @@ export default {
   },
   
   methods:{
-    addDestination(){
+    isCover(data){
+      if(data.photo){
+        if(data.photo.url == coverPhotoUrl){
+          return true;
+        }else{
+          return false;
+        };
+      }
+      return false;
+    },
+    setCover(thisData){
+      var self = this;
 
+      var formData = {
+        "objectId": thisData.activityId,
+        "objectType": "ACTIVITY_COVER",
+        "url": thisData.photo.url
+      };
+      let param = new FormData()  // 创建form对象
+      for(let key in formData){
+        param.append(key, formData[key])  // 通过append向form对象添加数据
+      }
+
+      $.ajax({
+        url: 'https://api.localpanda.com/cms/public/photo/update',
+        type: 'POST',
+        dataType: 'json', //如果跨域用jsonp
+        contentType: 'application/json',
+        contentType: false,
+        data: param,
+        processData: false,
+        success:function(data){
+          
+          if(data.succeed){
+            self.dialogTxt('设置成功！');
+            self.coverPhotoUrl = thisData.photo.url;
+          }else{
+            self.dialogTxt('设置失败，请重试!!');
+          }
+         
+        },
+        error:function(){
+          self.dialogTxt('设置失败，请重试!!');
+        }
+      });
+    },
+    addItinerary(index){
+      
+      this.dialogShow = true;
+      this.dialogType = 'add';
+      this.dialogData = {
+        activityId: this.activityId,
+        title:'',
+        description:'',
+        ranking: index
+      };
+
+    },
+    editItinerary(data){
+      this.dialogShow = true;
+      this.dialogType = 'edit';
+
+      
+      this.dialogData = data;
+
+      this.objectId = data.photo?data.photo.photoId:'';
+
+    },
+    del(thisData){
+      var self = this;
+
+      if(!confirm("你确定要删除 行程"+(thisData.$index+1)+" 吗？")){
+        return;
+      }
+
+      $.ajax({
+        url: 'https://api.localpanda.com/cms/product/activity/itinerary/'+thisData.row.id,
+        type: 'DELETE',
+        dataType: 'json', //如果跨域用jsonp
+        contentType: 'application/json',
+        success:function(data){
+          
+          if(data.succeed){
+            self.dialogTxt('删除成功！');
+            self.tableData.splice(thisData.$index,1);
+          }else{
+            self.dialogTxt('删除失败，请重试!');
+          }
+         
+        },
+        error:function(){
+          self.dialogTxt('删除失败，请重试!');
+        }
+      });
     },
     new_itinerary(){
+      var self = this;
+      this.$refs['dialogData'].validate((valid) => {
 
-    },
-    submitForm(pageData){
-      this.$refs[pageData].validate((valid) => {
+        if (valid) {
 
-        if (valid && this.fromValidate.validate()) {
-
-          // $.ajax({
-          //   url: submitUrl,
-          //   type: this.pageId?'POST':'PUT',
-          //   dataType: 'json', //如果跨域用jsonp
-          //   contentType: 'application/json',
-          //   data: JSON.stringify(newPostData),
-          //   success:function(data){
+          var postData = JSON.stringify(this.dialogData),
+            ajaxType = 'PUT';
+          if(this.dialogType == 'edit'){
+            ajaxType = 'POST';
+          }
+          $.ajax({
+            url: 'https://api.localpanda.com/cms/product/activity/itinerary',
+            type: ajaxType,
+            dataType: 'json', //如果跨域用jsonp
+            contentType: 'application/json',
+            data: postData,
+            success:function(data){
               
-          //     console.log(data);
+              if(data.succeed){
+                var objectId = data.response;
+                if(self.dialogType == 'edit' && !this.objectId){
+                  objectId = self.dialogData.id;
+                }
+                self.uploadImg(objectId);
+              }
+            
+            },
+            error:function(){
               
-          //   },
-          //   error:function(){
-              
-          //   }
-          // });	
-
-
-
+            }
+          });	
         } else {
-          console.log('error submit!!');
           return false;
         }
-
-
-
       });
-    }
+
+    },
+    uploadChange(e){
+      this.file = e.target.files.item(0);
+    },
+    uploadImg(objectId){
+      var self = this;
+      //没有图片不上传
+      if(!this.file){return false;}
+
+      var formData = {
+        objectId : objectId,
+        objectType : 'ACTIVITY_ITINERARY',
+        files : this.file
+      };
+      let param = new FormData()  // 创建form对象
+      for(let key in formData){
+        param.append(key, formData[key])  // 通过append向form对象添加数据
+      }
+      //编辑和新增
+      $.ajax({
+        url: 'https://api.localpanda.com/cms/public/photo/'+(self.objectId ? 'update' : 'commit'),
+        type: 'POST',
+        dataType: 'json', //如果跨域用jsonp
+        contentType: false,
+        data: param,
+        processData: false,
+        success:function(data){
+          
+          if(data.succeed){
+            self.dialogTxt('修改成功！');
+          }else{
+            self.dialogTxt('更新失败，请确认是否选择图片!');
+          }
+        },
+        error:function(){
+          self.dialogTxt('更新失败，请确认是否选择图片!');
+        }
+      });	
+    },
+
+    dialogTxt(txt){
+      this.showDialogTip = true;
+      this.dialogTipTxt = txt;
+    },
+
   },
   mounted(){
     var self = this;
 
-    
     //请求编辑数据
-    if(this.pageId){
+    if(this.activityId){
 
       $.ajax({
-        url: 'https://api.localpanda.com/cms/product/activity/'+this.pageId,
+        url: 'https://api.localpanda.com/cms/product/activity/'+this.activityId+'/itinerary/list',
         type: 'GET',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'application/json',
         success:function(data){
           
           console.log(data);
-          self.pageData = data;
+          var list = data.activityItineraryList;
+          if(list.length){
+            self.tableData = list;
+            self.hasItinerary = true;
+            self.coverPhotoUrl = data.coverPhotoUrl?data.coverPhotoUrl:'';
+          }else{
+            self.hasItinerary = false;
+          }
+
+          self.tabLoading = false;
          
         },
         error:function(){
-          
+          self.tabLoading = false;
         }
       });	
 
@@ -209,9 +396,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  .el-input{
-    width: auto;
-  }
+  
   .cms-main{
     .itinerary_list{
       .btn_view{
@@ -225,7 +410,41 @@ export default {
         padding: 9px 5px;
       }
     }
+    .add_itinerary,.load_table{
+      margin-top: -50px;
+      text-align: center;
+      position: relative;
+      z-index: 3;
+    }
+    .load_table{
+      width: 50%;
+      margin: -50px auto 0;
+      background-color: #fff;
+      font-size: 14px;
+      color: #333;
+      height: 40px;
+      line-height: 40px;
+    }
     
+    
+  }
+
+  .btn_upload{
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    input{
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 40px;
+      line-height: 40px;
+      display: block;
+      opacity: 0;
+    }
+  }
+  .vat{
+    vertical-align: top;
   }
   
 </style>
