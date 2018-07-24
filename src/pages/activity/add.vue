@@ -21,9 +21,7 @@
           
 
           <el-form-item label="产品类型：" required prop="category">
-            <el-select v-model="pageData.category" placeholder="请选择产品类型">
-              <el-option :label="item" :value="item" v-for="item in categoryAll" :key="item">{{item}}</el-option>
-            </el-select>
+            {{pageData.category}}
           </el-form-item>
           
 
@@ -40,7 +38,8 @@
           </el-form-item>
           
 
-          <!-- <div class="hr"></div> -->
+          <!--  -->
+          <div class="hr"></div>
 
           <el-form-item label="活动主题：" required prop="tourType">
             
@@ -48,6 +47,8 @@
               <el-checkbox v-for="items in tourTypeArr" :label="items" :key="items">{{items}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
+
+          <div class="hr"></div>
 
 
           <el-form-item label="活动地点：" required prop="destinations">
@@ -90,7 +91,7 @@
 
           <el-form-item label="排序顺序：" required prop="ranking">
             <el-select v-model="pageData.ranking" placeholder="请选择排序值">
-              <el-option :label="item" :value="item" v-for="item in 10">{{item}}</el-option>
+              <el-option :label="item" :value="item" v-for="item in 10" :key="item">{{item}}</el-option>
             </el-select>
             数值越小，排序权重越大！
           </el-form-item>
@@ -271,6 +272,8 @@ export default {
     let urlQuery = this.$route.query;
 
     return {
+      urlQuery:urlQuery,
+
       //页面配置
       title : 'LP管理-新增/编辑关键词',
       keywords: '',
@@ -286,7 +289,7 @@ export default {
 
       categoryAll: ['Day Trips','Trans-China Trips','Regional Multi-Day Trips','Transportation','Tickets'],
 
-      tourTypeArr: ['Landmarks','City Tour','Food','Old Neighborhood','Architecture'],
+      tourTypeArr: ["Landmarks","City tour","Food","Old Neighborhood","Architecture","History","Art","Cultural","Night","Nightlife","Performances & Shows","Family Friendly","Parks & Zoos","Outdoor","Wildlife","Short excursions","Shopping","Sightseeing","Nature & scenery","Layover tour","Multi-day tour","Popular & Classic Tours","Hiking","Watertown","Huangpu River Cruise"," Expat-friendly","Transfer"],
 
       //目的地
       destinationAll:['Shanghai','Beijing'],
@@ -310,7 +313,7 @@ export default {
 
       pageData:{
         title: '',
-        category: '',
+        category: urlQuery.category?urlQuery.category:'',
         groupType: 'Private',
         trafficType: '',
 
@@ -527,6 +530,9 @@ export default {
 
 
         } else {
+          setTimeout(function(){
+            document.querySelector('.el-form-item__error').scrollIntoViewIfNeeded();
+          },200);
           console.log('error submit!!');
           return false;
         }
@@ -538,6 +544,12 @@ export default {
   },
   mounted(){
     var self = this;
+
+
+    if(!this.urlQuery.category){
+      alert('url异常，请重新选择产品类型！');
+      location.href = '/activity/';
+    }
 
     //目的地 和 出发地
     $.ajax({
@@ -593,7 +605,9 @@ export default {
     },
     'pageData.pickup':function(){
       var self = this;
-      self.fromValidate.init();
+      setTimeout(function(){
+        self.fromValidate.init();
+      },100);
     }
     // 'pageData.venues':function (val, oldVal) { 
     //   for(var i=0;i<val.length;i++){
@@ -674,6 +688,13 @@ export default {
       top: 100%;
       line-height: 24px;
       font-size: 12px;
+    }
+
+    .el-checkbox-group{
+      .el-checkbox{
+        margin-left: 0;
+        margin-right: 30px;
+      }
     }
   }
   

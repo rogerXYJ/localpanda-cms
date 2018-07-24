@@ -34,7 +34,7 @@ var cmsNav = [
 //    {'title':'产品内容信息','url':'/activity/content'},
 //    {'title':'产品价格信息','url':'/activity/price'}
 
-      {'title':'新增产品','url':'/activity/add'},
+      {'title':'新增产品','url':'/activity/'}
       
 
     ]

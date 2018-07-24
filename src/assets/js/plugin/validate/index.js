@@ -34,8 +34,9 @@ var Validate = (function(){
 			var thisInput = allInput[i];
 			
 			thisInput.onblur = function(){
-				var isTrue = self.check(this.value,vType);
+				var parentNode = this.parentNode;
 				var vType = this.getAttribute('vType');
+				var isTrue = self.check(this.value,vType);
 				if(vType=='data'){
 					isTrue = self.check(this.getAttribute('data'),vType)
 				}
@@ -43,8 +44,8 @@ var Validate = (function(){
 				//失去焦点后如果正确则移除错误class
 				if(isTrue){
 					this.className = this.className.replace(options.errorClassName,'');
-					if(thisInput.parentNode.querySelector('.vTip')){
-						thisInput.parentNode.removeChild(thisInput.parentNode.querySelector('.vTip'));
+					if(parentNode.querySelector('.vTip')){
+						parentNode.removeChild(parentNode.querySelector('.vTip'));
 					}
 					
 				}else{
@@ -52,10 +53,13 @@ var Validate = (function(){
 						this.className = this.className + ' ' + options.errorClassName;
 						
 					}
-					var thisTip = document.createElement('div');
+					if(!parentNode.querySelectorAll('.vTip').length){
+						var thisTip = document.createElement('div');
 						thisTip.className = 'vTip';
 						thisTip.innerHTML = thisInput.getAttribute('vTip')?thisInput.getAttribute('vTip'):thisInput.getAttribute('placeholder');
-						thisInput.parentNode.appendChild(thisTip)
+						parentNode.appendChild(thisTip)
+					}
+					
 				}
 			}
 		}
@@ -91,6 +95,7 @@ var Validate = (function(){
 		//循环所有校验对象
 		for(var i=0;i<allInput.length;i++){
 			var thisInput = allInput[i];
+			var parentNode = thisInput.parentNode;
 			var vType = thisInput.getAttribute('vType');
 			//只校验显示的元素
 			if(thisInput.style.display != 'none'){
@@ -100,7 +105,6 @@ var Validate = (function(){
 					isTrue = this.check(thisInput.getAttribute('data'),vType)
 				}
 
-				console.log(isTrue);
 				//不正确
 				if(!isTrue){
 					//记录错误数量
@@ -118,14 +122,19 @@ var Validate = (function(){
 						focus = false;
 					}
 
-					var thisTip = document.createElement('div');
+					if(!parentNode.querySelectorAll('.vTip').length){
+						var thisTip = document.createElement('div');
 						thisTip.className = 'vTip';
 						thisTip.innerHTML = thisInput.getAttribute('vTip')?thisInput.getAttribute('vTip'):thisInput.getAttribute('placeholder');
-						thisInput.parentNode.appendChild(thisTip)
+						parentNode.appendChild(thisTip);
+					}
+					
+
+
 				}else{//正确移除class
 					thisInput.className = thisClass.replace(options.errorClassName,'');
-					if(thisInput.parentNode.querySelector('.vTip')){
-						thisInput.parentNode.removeChild(thisInput.parentNode.querySelector('.vTip'));
+					if(parentNode.querySelector('.vTip')){
+						parentNode.removeChild(parentNode.querySelector('.vTip'));
 					}
 					
 				}

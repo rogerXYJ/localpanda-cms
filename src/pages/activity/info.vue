@@ -21,9 +21,7 @@
           
 
           <el-form-item label="产品类型：" prop="category">
-            <el-select v-model="pageData.category" placeholder="请选择产品类型">
-              <el-option :label="item" :value="item" v-for="item in categoryAll" :key="item">{{item}}</el-option>
-            </el-select>
+            {{pageData.category}}
           </el-form-item>
           
 
@@ -42,7 +40,7 @@
 
           <!-- <div class="hr"></div> -->
 
-          <el-form-item label="活动主题：" prop="tourType">
+          <el-form-item label="活动主题：" prop="tourType" class="bg_f5f5f5">
             
             <el-checkbox-group v-model="pageData.tourType">
               <el-checkbox v-for="items in tourTypeArr" :label="items" :key="items">{{items}}</el-checkbox>
@@ -90,7 +88,7 @@
 
           <el-form-item label="排序顺序：" required prop="ranking">
             <el-select v-model="pageData.ranking" placeholder="请选择排序值">
-              <el-option :label="item" :value="item" v-for="item in 10">{{item}}</el-option>
+              <el-option :label="item" :value="item" v-for="item in 10" :key="item">{{item}}</el-option>
             </el-select>
             数值越小，排序权重越大！
           </el-form-item>
@@ -716,13 +714,15 @@ export default {
       line-height: 24px;
       font-size: 12px;
     }
-  }
 
-  .el-checkbox-group{
-    .el-checkbox{
-      margin-left: 0;
-      margin-right: 30px;
+    .el-checkbox-group{
+      .el-checkbox{
+        margin-left: 0;
+        margin-right: 30px;
+      }
     }
   }
+
+  
   
 </style>
