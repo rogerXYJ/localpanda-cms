@@ -37,6 +37,8 @@ h4{ font-size: 16px;}
 .bg_eee{ background-color: #eee;}
 .bg_f5f5f5{ background-color: #f5f5f5;}
 
+.opacity08{ opacity: 0.8;}
+
 .border_no{ border:none !important;}
 
 .pd0{ padding:0 !important;}
@@ -44,6 +46,7 @@ h4{ font-size: 16px;}
 .mg0{ margin:0 !important;}
 .mt5{ margin-top:5px !important;}
 .mt10{ margin-top:10px !important;}
+.mt15{ margin-top:15px !important;}
 .mt20{ margin-top:20px !important;}
 .mt30{ margin-top:30px !important;}
 .mt100{ margin-top:100px !important;}
