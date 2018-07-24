@@ -22,7 +22,7 @@
 							<el-col :span="10">
 								<el-form-item label="Total Price：" :key="item.key">
 									<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
-									<input class="el-input__inner wb60 js_validate" vType="text" type="text" v-model="item.price" vTip="请选择价格!!!"/>
+									<input class="el-input__inner wb60 js_validate" vType="text" type="text" v-model="item.price" />
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
@@ -260,7 +260,9 @@
 		padding: 20px;
 		background: #f2f2f2;
 	}
-	
+	.valError{
+		border: 1px solid red!important;	
+	}
 
 
 </style>
