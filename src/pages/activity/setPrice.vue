@@ -15,14 +15,15 @@
 					<div>
 						<el-row :gutter="24">
 							<el-col :span="10">
-								<el-form-item label="Number of People："  :key="item.key">
-									<el-input class="wb60" v-model="item.capacity"></el-input>
+								<el-form-item label="Number of People：" required :key="item.key">
+									<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
+									<input class="el-input__inner wb60 js_validate" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" />
 								</el-form-item>
 							</el-col>
 							<el-col :span="10">
-								<el-form-item label="Total Price：" :key="item.key">
+								<el-form-item label="Total Price：" required :key="item.key">
 									<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
-									<input class="el-input__inner wb60 js_validate" vType="text" type="text" v-model="item.price" />
+									<input class="el-input__inner wb60 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
@@ -34,13 +35,10 @@
 							</el-col>
 						</el-row>
 					</div>
-				
-						<el-form-item class="text_c mt100" v-if="showBtn">
-							<el-button type="primary" class="w120" @click="commit('formData')">提交</el-button>
-						</el-form-item>
-				
 				</div>
-				
+				<el-form-item class="text_c mt100" v-if="showBtn">
+					<el-button type="primary" class="w120" @click="commit('formData')">提交</el-button>
+				</el-form-item>
 			</el-form>
 		</div>
 	
@@ -114,13 +112,17 @@
 				})
 			},
 			add(arr){
-					arr.push({
-							activityId:this.activityId,
-							capacity:'',
-							price:'',
-							newItem:true,
-					})
-					this.showBtn=true
+				arr.push({
+						activityId:this.activityId,
+						capacity:'',
+						price:'',
+						newItem:true,
+				})
+				this.showBtn=true
+				setTimeout(()=>{
+					this.fromValidate.init()
+				},200)
+				
 			},
 			del(arr,index){
 					let self=this
@@ -263,6 +265,8 @@
 	.valError{
 		border: 1px solid red!important;	
 	}
-
+	.vTip{
+		color: red!important;
+	}
 
 </style>
