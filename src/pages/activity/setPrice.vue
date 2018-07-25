@@ -209,7 +209,7 @@
 						}
 					}
 					self.$refs[formName].validate((valid) =>{
-						if(valid){
+						if(valid&&this.fromValidate.validate()){
 							if(hasAdd){
 								let postData={
 									records:arr

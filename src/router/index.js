@@ -7,7 +7,8 @@ Vue.use(Router)
 let routers = [
 
   {path: '/', name: 'index', title:'CMS首页'},
-  {path: '/login/', name: 'index', title:'登录'},
+  {path: '/user/login/', name: 'index', title:'登录'},
+  {path: '/user/resetPassword/', name: 'index', title:'账号管理'},
 
   {path: '/content/addArticle', name: 'addArticle', title:'新增文章'},
   {path: '/content/editArticle', name: 'editArticle', title:'编辑文章'},

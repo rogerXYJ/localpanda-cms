@@ -49,8 +49,8 @@ export default {
   data () {
     return {
       form : {
-        userName: 'Tester1',
-        password: 'OnlyForTest'
+        userName: '',
+        password: ''
       },
       errorTip:'',
     }
@@ -65,8 +65,10 @@ export default {
         data:JSON.stringify(this.form),
         success:function(data){
           console.log(data);
-          if(data.succeed){
+          if(data){
+          	window.localStorage.setItem("data",JSON.stringify(data))
             location.href = '/';
+            
           }else{
             self.errorTip = '账号或密码错误！';
           }
