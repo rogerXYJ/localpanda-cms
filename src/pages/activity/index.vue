@@ -1,7 +1,7 @@
 <template>
   <div class="cms-page">
     <!-- 侧边栏导航，activeTitle传入1-1的格式，即可展开并高亮对应的导航 -->
-    <cmsAside :activeTitle="'1-1'"></cmsAside>
+    <cmsAside :activeTitle="'4-1'"></cmsAside>
 
     <div class="cms-main">
       <h3 class="text_c">活动产品查询</h3>
@@ -24,7 +24,7 @@
         </el-form-item>
 
         <el-form-item class="ml30">
-          <el-button @click="onAddActivityBtn" type="primary">新增产品</el-button>
+          <el-button @click="onAddActivityBtn" type="primary" plain>新增产品</el-button>
         </el-form-item>
 
         
@@ -53,8 +53,8 @@
         <el-form-item label="状态">
           <el-select v-model="formInline.valid" placeholder="请选择状态">
             <el-option label="不限" value=""></el-option>
-            <el-option label="有效" value="1"></el-option>
-            <el-option label="无效" value="0"></el-option>
+            <el-option label="有效" :value="1"></el-option>
+            <el-option label="无效" :value="0"></el-option>
           </el-select>
         </el-form-item>
 
@@ -69,7 +69,7 @@
         <br>
         
         <el-form-item label=" ">
-          <el-button @click="onSubmit" type="primary" plain>查询</el-button>
+          <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
 
         
@@ -88,13 +88,21 @@
           class="keyword-table">
           <el-table-column prop="activityId" label="ID" width="50"></el-table-column>
           <el-table-column prop="title" label="活动标题"></el-table-column>
-          <el-table-column prop="destination" label="目的地" width="120"></el-table-column>
-          <el-table-column prop="category" label="产品类型" width="120"></el-table-column>
-          <el-table-column prop="groupType" label="服务类型" width="120"></el-table-column>
-          <el-table-column label="状态" width="120">
-            <template slot-scope="scope"><span>{{scope.row.valid?'有效':'无效'}}</span></template>
+          <el-table-column prop="destinations" label="目的地" width="200">
+            <template slot-scope="scope">
+              {{scope.row.destinations.join('，')}}
+            </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width="200"></el-table-column>
+          <el-table-column prop="category" label="产品类型" width="180"></el-table-column>
+          <el-table-column prop="groupType" label="服务类型" width="80"></el-table-column>
+          <el-table-column label="状态" width="80">
+            <template slot-scope="scope"><span class="opacity08" :class="{green:scope.row.valid,red:!scope.row.valid}">{{scope.row.valid?'有效':'无效'}}</span></template>
+          </el-table-column>
+          <el-table-column prop="createTime" label="创建时间" width="160">
+            <template slot-scope="scope">
+              {{new Date(scope.row.createTime).toLocaleDateString()}}
+            </template>
+          </el-table-column>
           <el-table-column label="操作" width="140">
             <template slot-scope="scope">
               <a class="btn_text" :href="'/activity/info?id='+scope.row.activityId">编辑</a>
@@ -203,30 +211,30 @@ export default {
     
     setValid(row,index){
       var self = this;
-      var formData = {
-        id : row.id,
-        valid : row.valid?0:1
-      };
-      let param = new FormData()  // 创建form对象
-      for(let key in formData){
-        param.append(key, formData[key])  // 通过append向form对象添加数据
-      }
-      this.axios.post('https://api.localpanda.com/cms/content/landingpage/valid/update',param,{
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-      }).then(function(response) {
 
-        if(response.status == 200){
-          if(response.data.succeed){
+      $.ajax({
+        url: 'https://api.localpanda.com/cms/product/activity',
+        type: 'POST',
+        dataType: 'json', //如果跨域用jsonp
+        contentType:'application/json',
+        data: JSON.stringify({
+          activityId: row.activityId,
+          valid: row.valid?0:1
+        }),
+        success:function(data){
+          if(data){
             self.tableData.list[index].valid = self.tableData.list[index].valid==1 ? 0 : 1;
+          }else{
+            alert('设置失败');
           }
+          
+
+        },
+        error:function(){
+          alert('设置失败');
         }
-      
-        
-      }, function(response) {
-        //this.isSubmiting = false;
-      })
+      });	
+
       
       
     },
@@ -249,8 +257,9 @@ export default {
         data: JSON.stringify(postData),
         success:function(data){
           
+          
           self.searchTip = false;
-          self.tableData.list.push(data);
+          self.tableData.list = data; //self.tableData.list.concat(data);
           //设置数据条数
           self.tableShow = true;
           //self.setLevel();
@@ -263,7 +272,7 @@ export default {
     },
     onSubmit(){
       var self = this;
-      self.tableData.list = [];
+      //self.tableData.list = [];
       this.loadPage();
       
     },

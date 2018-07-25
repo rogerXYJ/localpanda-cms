@@ -362,6 +362,7 @@ export default {
          
         },
         error:function(){
+          self.hasItinerary = false;
           self.tabLoading = false;
         }
       });	
@@ -384,7 +385,7 @@ export default {
   },
   head(){
     return {
-      title: this.title
+      title: '产品行程信息'
     }
   }
 }

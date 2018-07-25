@@ -4,33 +4,33 @@
     <cmsAside :activeTitle="activeTitle"></cmsAside>
 
     <div class="cms-main">
-      <h3 class="text_c">基本信息</h3>
+      <h3 class="text_c">新增基本信息</h3>
 
       <p v-show="showPageTip">此ID暂无数据！</p>
       <div>
         
-        <el-form :model="pageData" :rules="rules" ref="pageData" label-width="150px">
+        <el-form :model="pageData" :rules="rules" ref="pageData" label-width="200px">
           <el-form-item label="产品ID：" v-if="pageId">
             <span>123132</span>
           </el-form-item>
 
 
-          <el-form-item label="产品标题：" required prop="title">
+          <el-form-item label="产品标题（title）：" required prop="title">
             <el-input v-model="pageData.title" placeholder="请输入产品标题"></el-input>
           </el-form-item>
           
 
-          <el-form-item label="产品类型：" required prop="category">
+          <el-form-item label="产品类型（category）：" required prop="category">
             {{pageData.category}}
           </el-form-item>
           
 
-          <el-form-item label="服务类型：" required prop="groupType">
+          <el-form-item label="服务类型（groupType）：" required prop="groupType">
             <el-radio v-model="pageData.groupType" label="Private">Private</el-radio>
             <el-radio v-model="pageData.groupType" label="Group">Group</el-radio>
           </el-form-item>
           
-          <el-form-item label="交通类型：" required prop="trafficType">
+          <el-form-item label="交通类型（trafficType）：" required prop="trafficType">
             <el-select v-model="pageData.trafficType" placeholder="请选择交通类型">
               <el-option label="Walking" value="Walking">Walking</el-option>
               <el-option label="Biking" value="Biking">Biking</el-option>
@@ -41,9 +41,9 @@
           <!--  -->
           <div class="hr"></div>
 
-          <el-form-item label="活动主题：" required prop="tourType">
+          <el-form-item label="活动主题（tourTypes）：" required prop="tourTypes">
             
-            <el-checkbox-group v-model="pageData.tourType">
+            <el-checkbox-group v-model="pageData.tourTypes">
               <el-checkbox v-for="items in tourTypeArr" :label="items" :key="items">{{items}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
@@ -51,7 +51,7 @@
           <div class="hr"></div>
 
 
-          <el-form-item label="活动地点：" required prop="destinations">
+          <el-form-item label="活动地点（destinations）：" required prop="destinations">
             <el-button type="primary" plain @click="addDestination">添加</el-button>
             <dl class="change_type_list">
               <dd>
@@ -60,7 +60,7 @@
             </dl>
           </el-form-item>
 
-          <el-form-item label="兴趣点：" class="poi_box" required prop="attractions">
+          <el-form-item label="兴趣点（attractions）：" class="poi_box" required prop="attractions">
             <el-button type="primary" class="js_validate" id="btn_attractions" vType="data" vTip="请选择兴趣点" :data="JSON.stringify(pageData.attractions)" plain @click="addAttractions">添加</el-button>
             <dl class="change_type_list" v-for="(item,key) in pageData.attractions">
               <!--  v-if="pageData.attractions[item] && pageData.attractions[item].length" -->
@@ -71,7 +71,7 @@
             </dl>
           </el-form-item>
 
-          <el-form-item label="出发地：" required prop="departures">
+          <el-form-item label="出发地（departures）：" required prop="departures">
             <el-button type="primary" plain @click="addDepartures">添加</el-button>
             <dl class="change_type_list">
               <dd>
@@ -81,7 +81,7 @@
           </el-form-item>
 
 
-          <el-form-item class="shichang_box" label="活动时长：" required prop="duration">
+          <el-form-item class="shichang_box" label="活动时长（duration）：" required prop="duration">
             <el-input v-model="pageData.duration" @blur="hideError"></el-input>
             <el-select v-model="pageData.durationUnit" placeholder="请选择活动时长">
               <el-option label="HOURS" value="HOURS">HOURS</el-option>
@@ -89,7 +89,7 @@
             </el-select>　超过12小时请选择按天计算
           </el-form-item>
 
-          <el-form-item label="排序顺序：" required prop="ranking">
+          <el-form-item label="排序顺序（ranking）：" required prop="ranking">
             <el-select v-model="pageData.ranking" placeholder="请选择排序值">
               <el-option :label="item" :value="item" v-for="item in 10" :key="item">{{item}}</el-option>
             </el-select>
@@ -101,7 +101,7 @@
             <el-radio v-model="pageData.suitableForChildren" :label="0" :value="0">No</el-radio>
           </el-form-item>
 
-          <el-form-item label="前台可见：" v-if="pageId">
+          <el-form-item label="是否在列表页显示：">
             <el-radio v-model="pageData.display" :label="1" :value="1">Yes</el-radio>
             <el-radio v-model="pageData.display" :label="0" :value="0">No</el-radio>
           </el-form-item>
@@ -317,7 +317,7 @@ export default {
         groupType: 'Private',
         trafficType: '',
 
-        tourType: [],
+        tourTypes: [],
         
 
         destinations: [],
@@ -338,8 +338,8 @@ export default {
         //是否适合儿童
         suitableForChildren: 1,
 
-        //是否前台可见
-        //display: 1,
+        //是否在列表页显示
+        display: 1,
 
         //资审耗时
         workdayConfirmCost: '',
@@ -369,7 +369,7 @@ export default {
         trafficType: [
           { required: true, message: '请选择交通类型', trigger: 'blur' }
         ],
-        tourType:[
+        tourTypes:[
           { required: true, message: '请选择活动主题', trigger: 'blur' }
         ],
         destinations:[
@@ -506,8 +506,6 @@ export default {
           }
           newPostData.attractions = attractions;
 
-
-          console.log(JSON.stringify(newPostData));
 
           $.ajax({
             url: submitUrl,
