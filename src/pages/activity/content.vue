@@ -8,9 +8,9 @@
       <h3 class="text_c">内容信息</h3>
 	  <el-form :model="formData" class="mt40">
 	  	<el-form-item  label="活动包含Inclusions: " label-width="200px">
-	  		<div class="item fl wb90 mt20" v-for="(item,index) in formData.Inclusions">
+	  		<div class="item fl wb90 pb30" v-for="(item,index) in formData.Inclusions">
 	  			<el-input class="wb60" v-model="item.title"></el-input>
-	  			<el-button type="success" class="ml20" v-if="!item.newItem&&item.title&&item.content" @click="updata(formData.Inclusions,index)">Updata</el-button>
+	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Inclusions,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Inclusions,index,'ITEMS_INCLUDED')" v-else>Commit</el-button>
 	  			<el-button type="danger" v-if="index>0" @click="del(formData.Inclusions,index)">Del</el-button>
 	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
@@ -20,9 +20,9 @@
 	  		</div>
 	  	</el-form-item>
 	  	<el-form-item  label="活动不包含Exclusions:" label-width="200px">
-	  		<div class="item fl wb90" v-for="(item,index) in formData.Exclusions">
+	  		<div class="item fl wb90 pb30" v-for="(item,index) in formData.Exclusions">
 	  			<el-input class="wb60" v-model="item.title"></el-input>
-	  			<el-button type="success" class="ml20" v-if="!item.newItem&&item.title&&item.content" @click="updata(formData.Exclusions,index)">Updata</el-button>
+	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Exclusions,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Exclusions,index,'ITEMS_EXCLUDED')" v-else>Commit</el-button>
 	  			<el-button type="danger" v-if="index>0" @click="del(formData.Exclusions,index)">Del</el-button>
 	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
@@ -32,7 +32,7 @@
 	  		</div>
 	  	</el-form-item>
 	  	<el-form-item  label="注意事项Additional Info: " label-width="200px">
-	  		<div class="item fl wb90" v-for="(item,index) in formData.AdditionalInfo">
+	  		<div class="item fl wb90 pb30" v-for="(item,index) in formData.AdditionalInfo">
 	  			<el-input class="wb60" v-model="item.title"></el-input>
 	  			<el-button type="success" class="ml20" v-if="!item.newItem&&item.title&&item.content" @click="updata(formData.AdditionalInfo,index)">Updata</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.AdditionalInfo,index,'NOTICE')" v-else>Commit</el-button>
@@ -107,6 +107,7 @@ export default {
    			 			self.formData.Inclusions.push({
    			 				title:'',
    			 				content:'',
+   			 				newItem:true,
    			 			})
    			 	}
    			 },
@@ -125,6 +126,7 @@ export default {
    			 		self.formData.Exclusions.push({
    			 				title:'',
    			 				content:'',
+   			 				newItem:true,
    			 				
    			 		})
    			 	}
@@ -143,7 +145,8 @@ export default {
    			 	if(self.formData.AdditionalInfo.length<1){
    			 		self.formData.AdditionalInfo.push({
    			 				title:'',
-   			 				content:''
+   			 				content:'',
+   			 				newItem:true,
    			 		})
    			 	}
    			 },
@@ -163,7 +166,7 @@ export default {
   		},
   		del(arr,index){
   			let self=this
-  			if(arr[index].title&&arr[index].content){
+  			if(!arr[index].newItem&&arr[index].title&&arr[index].content){
   				self.$confirm('请确定是否进行删除？', {
 	          confirmButtonText: '确定',
 	          cancelButtonText: '取消',

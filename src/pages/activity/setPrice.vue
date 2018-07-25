@@ -5,23 +5,25 @@
 
 		<div class="cms-main">
 			<h3 class="text_c">配置价格</h3>
-			<el-form :model="formData" :rules="rules" ref="formData">
+			<el-form :model="formData" ref="formData">
 				<el-form-item>
 					<span>当前货币单位：{{currency}}</span>
-					<a class="el-button el-button--primary fr" :href="'/activity/price?activityId='+activityId">返回价格信息维护</a>
+					<a class="el-button el-button--primary fr" :href="'/activity/price?id='+activityId">返回价格信息维护</a>
 				</el-form-item>
 				<div class="hr"></div>
-				<div class="setPice">
-					<div v-for="(item,index) in formData.records">
+				<div class="setPice" v-for="(item,index) in formData.records">
+					<div>
 						<el-row :gutter="24">
 							<el-col :span="10">
-								<el-form-item label="Number of People：" prop="capacity">
-									<el-input class="wb60" v-model="item.capacity"></el-input>
+								<el-form-item label="Number of People：" required :key="item.key">
+									<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
+									<input class="el-input__inner wb60 js_validate" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" />
 								</el-form-item>
 							</el-col>
 							<el-col :span="10">
-								<el-form-item label="Total Price：" prop="price">
-									<el-input class="wb60" v-model="item.price"></el-input>
+								<el-form-item label="Total Price：" required :key="item.key">
+									<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
+									<input class="el-input__inner wb60 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
@@ -33,13 +35,10 @@
 							</el-col>
 						</el-row>
 					</div>
-				
-						<el-form-item class="text_c mt100" v-if="showBtn">
-							<el-button type="primary" class="w120" @click="commit('formData')">提交</el-button>
-						</el-form-item>
-				
 				</div>
-				
+				<el-form-item class="text_c mt100" v-if="showBtn">
+					<el-button type="primary" class="w120" @click="commit('formData')">提交</el-button>
+				</el-form-item>
 			</el-form>
 		</div>
 	
@@ -48,16 +47,16 @@
 
 <script>
 	import activityAside from '@/components/common/activityAside.vue';
-
+	import Validate from '@/assets/js/plugin/validate/';
 	export default {
 		name: 'cms-setPrice',
 		components: {
-			activityAside
+			activityAside,
+			Validate
 		},
 		data() {
-			let id = this.$route.query.activityId,
+			let id = this.$route.query.id,
 				currency = this.$route.query.currency;
-
 			return {
 				activeTitle: '4-4',
 				activityId: id,
@@ -74,16 +73,17 @@
 						}
 					],
 				},
-				rules:{
-//					capacity:{required: true, message: '请填写人数！！！',trigger: 'blur'},
-//					price:{required: true, message: '请填写价格！！！',trigger: 'blur'}
-				}
+
 			}
 
 		},
 
 		mounted() {
-			this.getData()
+		   this.getData();
+		   this.fromValidate = new Validate({
+		      inputClassName:'js_validate', //需要校验的input的className
+		      errorClassName:'valError'  //报错时，会自动在input上添加的className
+		    });
 		},
 		methods: {
 			getData() {
@@ -112,13 +112,17 @@
 				})
 			},
 			add(arr){
-					arr.push({
-							activityId:this.activityId,
-							capacity:'',
-							price:'',
-							newItem:true,
-					})
-					this.showBtn=true
+				arr.push({
+						activityId:this.activityId,
+						capacity:'',
+						price:'',
+						newItem:true,
+				})
+				this.showBtn=true
+				setTimeout(()=>{
+					this.fromValidate.init()
+				},200)
+				
 			},
 			del(arr,index){
 					let self=this
@@ -205,7 +209,7 @@
 						}
 					}
 					self.$refs[formName].validate((valid) =>{
-						if(valid){
+						if(valid&&this.fromValidate.validate()){
 							if(hasAdd){
 								let postData={
 									records:arr
@@ -258,7 +262,11 @@
 		padding: 20px;
 		background: #f2f2f2;
 	}
-	
-
+	.valError{
+		border: 1px solid red!important;	
+	}
+	.vTip{
+		color: red!important;
+	}
 
 </style>
