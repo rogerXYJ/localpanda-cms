@@ -7,12 +7,12 @@
           <!-- 内容管理 -->
 
           <!-- 导航渲染 -->
-            <el-submenu :index="''+(titleIndex+1)" :key="titleIndex" v-for="(item,titleIndex) in cmsNav">
-                <template slot="title"><i :class="item.icon"></i>{{item.title}}</template>
-                <el-menu-item-group>
-                    <el-menu-item  :key="navIndex" v-for="(nav,navIndex) in item.list" :index="(titleIndex+1)+'-'+(navIndex+1)" @click="jump(nav.url)">{{nav.title}}</el-menu-item>
-                </el-menu-item-group>
-            </el-submenu>
+          <el-submenu :index="''+(titleIndex+1)" :key="titleIndex" v-for="(item,titleIndex) in cmsNav">
+            <template slot="title"><i :class="item.icon"></i>{{item.title}}</template>
+            <el-menu-item-group>
+                <el-menu-item  :key="navIndex" v-for="(nav,navIndex) in item.list" :index="(titleIndex+1)+'-'+(navIndex+1)" @click="jump(nav.url)">{{nav.title}}</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
 
           
 
@@ -48,7 +48,8 @@ export default {
           {'title':'内容信息','url':'/activity/content'+urlId},
           {'title':'价格信息','url':'/activity/price'+urlId},
           {'title':'产品图片','url':'/activity/product_pic'+urlId},
-          {'title':'游客图片','url':'/activity/visitor_pic'+urlId}
+          {'title':'游客图片','url':'/activity/visitor_pic'+urlId},
+          {'title':'供应商信息','url':'/activity/supplier'+urlId}
         ]
       }
     ];

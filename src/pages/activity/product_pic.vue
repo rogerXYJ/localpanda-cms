@@ -20,7 +20,7 @@
 
       <ul class="img_list">
         <li v-for="(items,index) in imgList" :key="index">
-          <img :src="items.src" width="100%" alt="">
+          <div class="img_list_img" :style="'background-image: url('+items.src+')'"></div>
           <div class="img_list_info">
             <div class="list_top">
               <el-button class="fr" type="text" size="small" @click="del(items,index)">删除</el-button>
@@ -251,11 +251,13 @@ export default {
         width: 370px;
         height: 145px;
         overflow: hidden;
-        img{
+        .img_list_img{
           float: left;
           width: 200px;
-          height: 140px;
           border: 1px solid #ddd;
+          height: 143px;
+          overflow: hidden;
+          background-size: cover;
         }
         .img_list_info{
           float: left;
