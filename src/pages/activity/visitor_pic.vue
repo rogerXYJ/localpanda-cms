@@ -5,10 +5,10 @@
 
     <div class="cms-main">
 
-      <h3 class="text_c">游客图片管理</h3>
+      <h3 class="text_c">游客图片管理 -- 功能暂时不做</h3>
       
 
-      <el-form label-width="150px">
+      <!-- <el-form label-width="150px">
         <el-form-item label="产品图片：">
           <el-button type="primary" @click="showDialogTip = false">添加图片<input class="upload_input" type="file" @change="imgChange"></el-button>
         </el-form-item>
@@ -40,7 +40,7 @@
             </div>
           </div>
         </li>
-      </ul>
+      </ul> -->
       
 
     </div>
@@ -104,6 +104,8 @@ export default {
     imgChange(e){
       var thisFile = e.target.files.item(0);
 
+      alert('游客照片功能，暂时不做！');
+      return;
       this.imgList.push({
         ranking: 7,
         isCover: false,

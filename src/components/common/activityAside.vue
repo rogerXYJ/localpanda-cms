@@ -48,19 +48,24 @@ export default {
           {'title':'内容信息','url':'/activity/content'+urlId},
           {'title':'价格信息','url':'/activity/price'+urlId},
           {'title':'产品图片','url':'/activity/product_pic'+urlId},
-          {'title':'游客图片','url':'/activity/visitor_pic'+urlId},
-          {'title':'供应商信息','url':'/activity/supplier'+urlId}
+          {'title':'游客图片（未开放）','url':'/activity/visitor_pic'+urlId},
+          {'title':'供应商信息','url':'/activity/supplier'+urlId},
+          {'title':'搜索信息管理','url':'/activity/search'+urlId}
         ]
       }
     ];
 
 
     return {
+      id: urlQuery,
       cmsNav : cmsNav,//导航结束
     }
   },
   mounted(){
-    
+    if(!this.id){
+      alert('不存在此产品，请从新查询！');
+      location.href = '/activity/';
+    }
   },
   computed:{
     activeDown(){      

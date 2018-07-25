@@ -18,7 +18,7 @@
 
       </el-form>
 
-      <div class="text_c">
+      <div class="text_c" v-if="supplierAll.length">
         <el-button type="primary" @click="submit">提交</el-button>
       </div>
       
