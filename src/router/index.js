@@ -36,10 +36,12 @@ let routers = [
 
 
   {path:'/activity/add',name: 'add', title:'新增产品'},
-  {path:'/activity/info',name: 'info', title:'基本信息'},
-  {path:'/activity/itinerary',name: 'itinerary', title:'产品行程'},
-  {path:'/activity/product_pic',name: 'product_pic', title:'产品图片'},
-  {path:'/activity/visitor_pic',name: 'visitor_pic', title:'游客图片'}
+  {path:'/activity/info',name: 'info', title:'基本信息管理'},
+  {path:'/activity/itinerary',name: 'itinerary', title:'产品行程管理'},
+  {path:'/activity/product_pic',name: 'product_pic', title:'产品图片管理'},
+  {path:'/activity/visitor_pic',name: 'visitor_pic', title:'游客图片管理'},
+  {path:'/activity/supplier',name: 'supplier', title:'供应商信息'},
+  {path:'/activity/search',name: 'search', title:'搜索信息管理'}
   
   
 

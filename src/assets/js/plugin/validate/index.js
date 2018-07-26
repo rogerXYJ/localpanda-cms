@@ -17,6 +17,13 @@ var Validate = (function(){
 		this.isMobile = /(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent);
 		//初始化事件
 		this.init();
+
+		var self = this;
+		document.onclick = function(e){
+			if((new RegExp(self.options.inputClassName)).test(e.target.className)){
+				self.init();
+			}
+		}
 	}
 	//原型对象
 	var _proto = Validate.prototype;
@@ -36,9 +43,9 @@ var Validate = (function(){
 			thisInput.onblur = function(){
 				var parentNode = this.parentNode;
 				var vType = this.getAttribute('vType');
-				var isTrue = self.check(this.value,vType);
+				var isTrue = self.check(this.value,this);
 				if(vType=='data'){
-					isTrue = self.check(this.getAttribute('data'),vType)
+					isTrue = self.check(this.getAttribute('data'),this)
 				}
 				
 				//失去焦点后如果正确则移除错误class
@@ -56,7 +63,7 @@ var Validate = (function(){
 					if(!parentNode.querySelectorAll('.vTip').length){
 						var thisTip = document.createElement('div');
 						thisTip.className = 'vTip';
-						thisTip.innerHTML = thisInput.getAttribute('vTip')?thisInput.getAttribute('vTip'):thisInput.getAttribute('placeholder');
+						thisTip.innerHTML = this.getAttribute('vTip')?this.getAttribute('vTip'):this.getAttribute('placeholder');
 						parentNode.appendChild(thisTip)
 					}
 					
@@ -66,7 +73,8 @@ var Validate = (function(){
 	}
 
 	//校验单个
-	_proto.check = function(value,type){
+	_proto.check = function(value,input){
+		var type = input.getAttribute('vType');
 		if(type=='enName'){
 			return /^[a-zA-Z\s]+$/.test(value);
 		}else if(type=='cnName'){
@@ -79,12 +87,29 @@ var Validate = (function(){
 			return value.length>0;
 		}else if(type == 'data'){
 			return value!='' && value!='{}' && value!='[]';
+		}else if(type == 'number'){  //数字类型校验
+			var isNum = /(^-?[0-9]\d*$)/.test(value);
+			if(!isNum){return false;};
+			var min = parseInt(input.getAttribute('min')),
+				max = parseInt(input.getAttribute('max')),
+				minTrue = min.toString() != 'NaN',
+				maxTrue = max.toString() != 'NaN';
+			if(minTrue && maxTrue){
+				return value>=min && value<=max;
+			}else if(maxTrue){
+				return value <= max;
+			}else if(minTrue){
+				return value >= min;
+			};
+			return true;
 		}
-		return false;
+		
 	}
 
 	//整体校验
 	_proto.validate = function(value,type){
+		//自动初始化
+		this.init();
 		//获取所有input
 		var options = this.options;
 		var inputClass = options.inputClassName;
@@ -100,9 +125,9 @@ var Validate = (function(){
 			//只校验显示的元素
 			if(thisInput.style.display != 'none'){
 				var thisClass = thisInput.className;
-				var isTrue = this.check(thisInput.value,vType);
+				var isTrue = this.check(thisInput.value,thisInput);
 				if(vType=='data'){
-					isTrue = this.check(thisInput.getAttribute('data'),vType)
+					isTrue = this.check(thisInput.getAttribute('data'),thisInput)
 				}
 
 				//不正确
