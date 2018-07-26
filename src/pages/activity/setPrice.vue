@@ -28,9 +28,9 @@
 							</el-col>
 							<el-col :span="4">
 								<el-form-item>
-									<el-button type="danger" v-if="index>0" @click="del(formData.records,index)">Del</el-button>
-									<el-button type="primary" v-if="index==0" @click="add(formData.records)">Add</el-button>
-									<el-button type="success" v-if="item.id" @click="upData(formData.records,index)">Updata</el-button>
+									<el-button type="danger" class="w70" v-if="index>0" @click="del(formData.records,index)">Del</el-button>
+									<el-button type="primary" class="w70" v-if="index==0" @click="add(formData.records)">Add</el-button>
+									<el-button type="success" v-if="item.id" @click="upData(formData.records,index)">Update</el-button>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -268,5 +268,7 @@
 	.vTip{
 		color: red!important;
 	}
-
+	.w70{
+		width: 70px!important;
+	}
 </style>

@@ -1,20 +1,20 @@
 <template>
   <div class="cms-page">
-    <cmsAside :activeTitle="'5-2'"></cmsAside>
+    <cmsAside :activeTitle="'5-1'"></cmsAside>
 		
 		<div class="box">
-			<h3 class="text-center">重置密码</h3>
-			<el-form :model="formData" status-icon ref="formData" :rules="rules" label-width="80px">
+			<h3>重置密码</h3>
+			<el-form :model="formData" class="mt40" status-icon ref="formData" :rules="rules" label-width="80px">
 			
-				 <el-form-item label="密码" prop="password">
-				    <el-input type="password" v-model="formData.password" auto-complete="off"></el-input>
+				 <el-form-item label="新密码" prop="password">
+				    <el-input type="password" v-model="formData.password" placeholder="密码长度为6~20个字符" auto-complete="off"></el-input>
 				  </el-form-item>
 				  <el-form-item label="确认密码" prop="checkPassword">
-				    <el-input type="password" v-model="formData.checkPassword" auto-complete="off"></el-input>
+				    <el-input type="password" v-model="formData.checkPassword" placeholder="密码长度为6~20个字符" auto-complete="off"></el-input>
 				  </el-form-item>
-				  <el-form-item class="text_c">
+				  <div class="text_c">
 				  	<el-button type="primary" @click="sumbitFn('formData')">提交</el-button>
-				  </el-form-item>
+				  </div>
 			</el-form>
 		</div>
   
@@ -31,8 +31,10 @@ export default {
   data () {
   	 var validatePass = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
+          callback(new Error('请输入您的新密码'));
+        } else if(value.length<6||value.length>20){
+        	callback(new Error('密码长度为6~20个字符'));
+        }else {
           if (this.formData.checkPassword !== '') {
             this.$refs.formData.validateField('checkPassword');
           }
@@ -41,7 +43,9 @@ export default {
       };
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请再次输入密码'));
+          callback(new Error('请再次输入您的新密码'));
+        }else if(value.length<6||value.length>20){
+        		callback(new Error('密码长度为6~20个字符'));
         } else if (value !== this.formData.password) {
           callback(new Error('两次输入密码不一致!'));
         } else {
@@ -122,12 +126,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
   .box{
+  		padding: 40px;
   		margin: 200px auto 0;
   		width: 350px;
+  		background: #f2f2f2;
   		h3{
-  			padding-left: 70px;
   			text-align: center;
   		};
+  		.margin0{
+  			margin-left: 0!important;
+  		}
   			
   }
   

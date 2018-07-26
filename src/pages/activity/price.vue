@@ -25,7 +25,8 @@
 		  		 	<el-input class="w220" v-model="formData.refundTimeLimit"></el-input> /天
 		  		</el-form-item>
 	  			<el-form-item label="细则说明:" label-width="100px" prop="refundInstructions">
-		  		 	<el-input class="wb60" v-model="formData.refundInstructions" type="textarea" :rows="7"></el-input>
+	  				<el-button type="primary" class="display" @click="replaceCont">自动套用模板</el-button>
+		  		 	<el-input class="wb60 mt20" v-model="formData.refundInstructions" type="textarea" :rows="7"></el-input>
 		  		</el-form-item>
 	  	</div>
 	  	<el-row :gutter="20">
@@ -43,13 +44,15 @@
 		
 		<el-row :gutter="20">
 		  <el-col :span="6">
-		  	<el-form-item label="原始价格Original Price：" class="mt40" prop="originalPrice">
+		  	<el-form-item label="原始价格Original Price：" class="mt40" v-if="formData.originalPrice!=''">
 		  		<el-input class="w220" v-model="formData.originalPrice"></el-input>
+		  		
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="6">
-		  	<el-form-item label="最低价格Bottom Price：" class="mt40" v-if="formData.bottomPrice">
-		  		<span>{{formData.bottomPrice}}</span>
+		  	<el-form-item label="最低价格Bottom Price：" class="mt40" v-if="formData.bottomPrice!=''">
+		  		<!--<span>{{formData.bottomPrice}}</span>-->
+		  		<el-input class="w220" v-model="formData.bottomPrice" :disabled="true"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		</el-row>
@@ -60,8 +63,9 @@
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="6">
-		  	<el-form-item label="最大接待人数maximum:" class="mt20" v-if="formData.maxParticipants">
-		  		<span>{{formData.maxParticipants}}</span>
+		  	<el-form-item label="最大接待人数maximum:" class="mt20" v-if="formData.maxParticipants!=''">
+		  		<!--<span>{{formData.maxParticipants}}</span>-->
+		  		<el-input class="w220" v-model="formData.maxParticipants" :disabled="true"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		</el-row>
@@ -75,8 +79,8 @@
 						<div v-for="(item,index) in departureTime" class="mt20">
 			  			<span class="ml115">时间{{index+1}}:</span>
 			  			<el-input placeholder="如：9:00" class="w220 ml10" v-model="departureTime[index]"></el-input>
-			  			<el-button type="primary" v-if="index==0" class="ml20" @click="addTime(departureTime)">Add</el-button>
-			  			<el-button type="danger" v-if="index>0" :class="index>0?'ml20':''" @click="delTime(departureTime,index)">DEL</el-button>
+			  			<el-button type="primary" v-if="index==0" class="ml20 w70" @click="addTime(departureTime)">Add</el-button>
+			  			<el-button type="danger" v-if="index>0" :class="index>0?'ml20 w70':''" @click="delTime(departureTime,index)">Del</el-button>
 		  			</div>
 		  	</el-form-item>
 		  	<el-form-item class="mt20" v-if="radio==1">
@@ -133,7 +137,7 @@ export default {
     		refundTimeLimit:{required: true, message: '请填写退改时间！！！',trigger: 'blur'},
     		refundInstructions:{required: true, message: '请填写退改细则说明！！！',trigger: 'blur'},
     		childStandard:{required: true, message: '请填写儿童年龄！！！',trigger: 'blur'},
-    		originalPrice:{required: true, message: '请填写原始价格！！！',trigger: 'blur'},
+    		//originalPrice:{required: true, message: '请填写原始价格！！！',trigger: 'blur'},
     		minParticipants:{required: true, message: '请填写最小成团人数！！！',trigger: 'blur'}
     	},
     }
@@ -151,6 +155,7 @@ export default {
 	   			 method: 'GET',
 	   			 success:function(data){
 	   			 		self.formData=data
+	   			 		console.log(self.formData)
 	   			 		if(data){
 	   			 			self.isType=true
 	   			 		}
@@ -167,6 +172,17 @@ export default {
 	   			
 	   			
 	   		})
+  		},
+  		replaceCont(){
+  			let time='';
+  			let refundTimeLimit=this.formData.refundTimeLimit;
+  			if(refundTimeLimit<=2){
+  				time=refundTimeLimit*24+" hours"
+  			}else{
+  				time=refundTimeLimit+" Days"
+  			}
+  			this.formData.refundInstructions="You can reschedule or cancel your trip at zero cost up to "+time+" before your travel date. We are unable to refund any cancellations made within "+ time +" of your trip's departure. If you want to make any adjustments (e.g. travel date, number of participants, activities plan etc.) to your itinerary, feel free to contact us."
+  			console.log(this.formData.refundInstructions)
   		},
   		addTime(arr){
   			arr.push('')
@@ -208,7 +224,7 @@ export default {
 							       });
 									}else{
 										 self.$alert("填写不正确，请重新填写！！", {
-							          confirmButtonText: '确定',
+							          		confirmButtonText: '确定',
 							          
 							       });
 									}
@@ -257,5 +273,8 @@ export default {
 	}
   .ml115{
   	margin-left: 115px;
+  }
+  .display{
+  	display: block!important;
   }
 </style>
