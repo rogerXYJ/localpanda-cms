@@ -31,22 +31,22 @@
         <el-table-column header-align="center" label="图片" width="200"  align="center">
           <template slot-scope="scope">
             <a class="btn_view" target="_blank" :href="scope.row.photo && scope.row.photo.url" v-if="scope.row.photo">View</a>
-            <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url==coverPhotoUrl">Banner photo</span>
+            <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url==coverPhotoUrl">Cover photo</span>
             <el-button type="text" size="small" v-else-if="scope.row.photo" @click="setCover(scope.row)">Set as Cover</el-button>
             <span v-else>-</span>
           </template>
         </el-table-column>
         <el-table-column header-align="center" label="操作" width="220" align="center" >
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="editItinerary(scope.row)">Edit</el-button>
+            <el-button type="text" size="small" @click="editItinerary(scope.row,scope.$index+1)">Edit</el-button>
             <el-button type="text" size="small" @click="del(scope)">Del</el-button>
-            <el-button type="text" size="small" @click="addItinerary(scope.$index)">Add Below</el-button>
+            <el-button type="text" size="small" @click="addItinerary(scope.$index+1,scope.row.ranking)">Add Below</el-button>
           </template>
         </el-table-column>
       </el-table>
 
       <div class="add_itinerary" v-if="!hasItinerary">
-        <el-button type="primary" @click="addItinerary(1)">添加行程</el-button>
+        <el-button type="primary" @click="addItinerary(1,1)">添加行程</el-button>
       </div>
       <div class="load_table" v-if="tabLoading">加载中...</div>
 
@@ -90,7 +90,7 @@
 
     <!-- 文字提示 -->
     <el-dialog title="温馨提示" :visible.sync="showDialogTip" width="500px" class="bind_dialog">
-      <p>{{dialogTipTxt}}</p>
+      <p v-html="dialogTipTxt"></p>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="showDialogTip = false">确 定</el-button>
       </span>
@@ -203,7 +203,7 @@ export default {
         }
       });
     },
-    addItinerary(index){
+    addItinerary(index,ranking){
       
       this.dialogShow = true;
       this.dialogType = 'add';
@@ -211,16 +211,16 @@ export default {
         activityId: this.activityId,
         title:'',
         description:'',
-        ranking: index
+        ranking: ranking
       };
-
+      this.editIndex = index;
     },
-    editItinerary(data){
+    editItinerary(data,index){
       this.dialogShow = true;
       this.dialogType = 'edit';
-
+      this.editIndex = index;
       
-      this.dialogData = data;
+      this.dialogData = JSON.parse(JSON.stringify(data));
 
       this.objectId = data.photo?data.photo.photoId:'';
 
@@ -242,13 +242,16 @@ export default {
           if(data.succeed){
             self.dialogTxt('删除成功！');
             self.tableData.splice(thisData.$index,1);
+            if(!self.tableData.length){
+              self.hasItinerary = false;
+            }
           }else{
-            self.dialogTxt('删除失败，请重试!');
+            self.dialogTxt('删除失败，请刷新页面后重试!');
           }
          
         },
         error:function(){
-          self.dialogTxt('删除失败，请重试!');
+          self.dialogTxt('删除失败，请刷新页面后重试!');
         }
       });
     },
@@ -274,14 +277,28 @@ export default {
               if(data.succeed){
                 var objectId = data.response;
                 if(self.dialogType == 'edit' && !this.objectId){
+
+                  self.tableData[self.editIndex] = self.dialogData;
+                  self.tableData.push('');
+                  self.tableData.length = self.tableData.length-1;
+                  
                   objectId = self.dialogData.id;
+                  
+                  
+                }else if(!this.objectId){
+                  self.tableData.splice(self.editIndex,0,self.dialogData);
+                  //self.tableData.push(self.dialogData);
                 }
-                self.uploadImg(objectId);
+                self.uploadImg(objectId,self.dialogData);
+
+                self.hasItinerary = true;
+              }else{
+                self.dialogTxt('<span class="red">失败!</span>');
               }
             
             },
             error:function(){
-              
+              self.dialogTxt('<span class="red">失败!</span>');
             }
           });	
         } else {
@@ -293,10 +310,20 @@ export default {
     uploadChange(e){
       this.file = e.target.files.item(0);
     },
-    uploadImg(objectId){
+    uploadImg(objectId,dialogData){
       var self = this;
       //没有图片不上传
-      if(!this.file){return false;}
+      if(!this.file){
+        //提示
+        if(self.dialogType == 'edit'){
+          self.dialogTxt('<span class="green">修改成功！</span>');
+        }else{
+          self.dialogTxt('<span class="green">新增成功！</span>');
+        }
+        
+        self.dialogShow = false;
+        return false;
+      }
 
       var formData = {
         objectId : objectId,
@@ -319,6 +346,8 @@ export default {
           
           if(data.succeed){
             self.dialogTxt('修改成功！');
+            self.dialogShow = false;
+            self.tableData.splice(self.editIndex,0,dialogData);
           }else{
             self.dialogTxt('更新失败，请确认是否选择图片!');
           }

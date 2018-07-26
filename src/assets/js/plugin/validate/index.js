@@ -143,7 +143,9 @@ var Validate = (function(){
 						thisInput.focus();
 						focus = false;
 					}else if(focus){
-						document.getElementsByTagName('html')[0].scrollTop = document.body.scrollTop = thisInput.offsetTop - 30;
+
+						thisInput.scrollIntoViewIfNeeded();
+						//document.getElementsByTagName('html')[0].scrollTop = document.body.scrollTop = thisInput.offsetTop - 30;
 						focus = false;
 					}
 
