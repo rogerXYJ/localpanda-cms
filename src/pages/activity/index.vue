@@ -74,7 +74,7 @@
 
         
 
-        <p class="red fs14" v-show="searchTip">请输入目的地或关键词！</p>
+        <p class="red fs14" v-show="searchTip">服务器链接错误！</p>
       </el-form>
 
       

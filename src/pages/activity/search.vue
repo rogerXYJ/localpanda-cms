@@ -171,6 +171,7 @@ export default {
         self.weight = data.weight;
         if(data.keywords){
           self.keywords = data.keywords;
+          self.destinationsDetail = data.destinationsDetail;
         }
         
       },

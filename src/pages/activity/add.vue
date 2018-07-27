@@ -25,15 +25,14 @@
           </el-form-item>
           
 
-          <el-form-item label="服务类型（groupType）：" required prop="groupType">
+          <el-form-item label="服务类型（groupType）：" required prop="groupType" v-if="pageData.category!='Transportation' && pageData.category!='Tickets'">
             <el-radio v-model="pageData.groupType" label="Private">Private</el-radio>
             <el-radio v-model="pageData.groupType" label="Group">Group</el-radio>
           </el-form-item>
           
           <el-form-item label="交通类型（trafficType）：" required prop="trafficType">
             <el-select v-model="pageData.trafficType" placeholder="请选择交通类型">
-              <el-option label="Walking" value="Walking">Walking</el-option>
-              <el-option label="Biking" value="Biking">Biking</el-option>
+              <el-option :label="item" :value="item" v-for="item in trafficTypeAll" :key="item">{{item}}</el-option>
             </el-select>
           </el-form-item>
           
@@ -71,7 +70,7 @@
             </dl>
           </el-form-item>
 
-          <el-form-item label="出发地（departures）：" required prop="departures">
+          <el-form-item label="出发地（departures）：" prop="departures">
             <el-button type="primary" plain @click="addDepartures">添加</el-button>
             <dl class="change_type_list">
               <dd>
@@ -118,7 +117,7 @@
           </el-form-item>
 
           
-          <el-form-item label="集合方式：" required>
+          <el-form-item label="集合方式（pickup）：" required>
             <el-radio v-model="pageData.pickup" :value="0" :label="0">提供接送</el-radio>
             <el-radio v-model="pageData.pickup" :value="1" :label="1">自行前往</el-radio>
             <div class="jihe_info" v-if="pageData.pickup==1">
@@ -143,7 +142,7 @@
           <div class="hr"></div>
           
 
-          <el-form-item label="推荐理由：" required prop="recommendedReason">
+          <el-form-item label="推荐理由（recommendedReason）：" required prop="recommendedReason">
             <el-input
               type="textarea"
               :rows="4"
@@ -152,7 +151,7 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item label="活动亮点：" required prop="highlights">
+          <el-form-item label="活动亮点（highlights）：" required prop="highlights">
             <el-input
               type="textarea"
               :rows="4"
@@ -161,7 +160,7 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item label="注意事项：">
+          <el-form-item label="注意事项（notice）：">
             <el-input
               type="textarea"
               :rows="6"
@@ -170,7 +169,7 @@
             </el-input>
           </el-form-item>
           
-          <el-form-item label="活动介绍：">
+          <el-form-item label="活动介绍（introduction）：">
             <el-input
               type="textarea"
               :rows="6"
@@ -179,7 +178,7 @@
             </el-input>
           </el-form-item>
           
-          <el-form-item label="备注说明：">
+          <el-form-item label="备注说明（remark）：">
             <el-input
               type="textarea"
               :rows="6"
@@ -287,12 +286,14 @@ export default {
 
       pageId: urlQuery.id?urlQuery.id:'',
 
+      trafficTypeAll: ['walking','bikeing','van','Coach','metro/taxi','Bullet Train','Flight','Others'],
+
       categoryAll: ['Day Trips','Trans-China Trips','Regional Multi-Day Trips','Transportation','Tickets'],
 
       tourTypeArr: ["Landmarks","City tour","Food","Old Neighborhood","Architecture","History","Art","Cultural","Night","Nightlife","Performances & Shows","Family Friendly","Parks & Zoos","Outdoor","Wildlife","Short excursions","Shopping","Sightseeing","Nature & scenery","Layover tour","Multi-day tour","Popular & Classic Tours","Hiking","Watertown","Huangpu River Cruise"," Expat-friendly","Transfer"],
 
       //目的地
-      destinationAll:['Shanghai','Beijing'],
+      destinationAll:[],
       destinationDialogChange:[],
       destinationDialogShow:false,
 
@@ -305,7 +306,7 @@ export default {
       attractionsDialogShow:false,
 
 
-      departuresAll:['Shanghai','Beijing'],
+      departuresAll:[],
       departuresDialogChange:[],
       departuresDialogShow:false,
 
@@ -379,7 +380,7 @@ export default {
           { required: true, message: '请选择活兴趣点', trigger: 'blur' }
         ],
         departures:[
-          { required: true, message: '请选择出发地', trigger: 'blur' }
+          { required: urlQuery.category!='Day Trips', message: '请选择出发地', trigger: 'blur' }
         ],
         duration:[
           { required: true, message: '请输入活动时长', trigger: 'blur' }
@@ -521,7 +522,7 @@ export default {
               
             },
             error:function(){
-              
+              alert('添加失败！');
             }
           });	
 
@@ -530,7 +531,7 @@ export default {
         } else {
           setTimeout(function(){
             document.querySelector('.el-form-item__error').scrollIntoViewIfNeeded();
-          },200);
+          },300);
           console.log('error submit!!');
           return false;
         }

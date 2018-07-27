@@ -3,38 +3,30 @@
     <h2>Localpanda CMS管理系统</h2>
     <div class="login_box">
       <h3>登录</h3>
-      <ul>
-        <li>
-          <el-form ref="form" :model="form" label-width="50px">
-            <el-form-item label="账号">
-              <el-input v-model="form.userName"></el-input>
-            </el-form-item>
-          </el-form>
-        </li>
-        <li>
-          <el-form ref="form" :model="form" label-width="50px">
-            <el-form-item label="密码">
-              <el-input type="password" v-model="form.password"></el-input>
-            </el-form-item>
-          </el-form>
-        </li>
-        <li>
-          <el-form ref="form" :model="form" label-width="50px">
-            <el-form-item label="">
-              <el-button class="btn" @click="login" type="primary">登录</el-button>
-            </el-form-item>
-          </el-form>
-          
-        </li>
-        <li>
-          <el-form ref="form" :model="form" label-width="50px">
-            <el-form-item label="">
-              <p>{{errorTip}}</p>
-            </el-form-item>
-          </el-form>
-          
-        </li>
-      </ul>
+      <el-form label-width="50px">
+        <ul>
+          <li>
+              <el-form-item label="账号">
+                <el-input v-model="form.userName"></el-input>
+              </el-form-item>
+          </li>
+          <li>
+              <el-form-item label="密码">
+                <el-input type="password" v-model="form.password" @keyup="enter"></el-input>
+              </el-form-item>
+          </li>
+          <li>
+              <el-form-item label="">
+                <el-button class="btn" @click="login" type="primary">登录</el-button>
+              </el-form-item>
+          </li>
+          <li>
+              <el-form-item label="">
+                <p>{{errorTip}}</p>
+              </el-form-item>
+          </li>
+        </ul>
+      </el-form>
     </div>
     <div class="login_bg" id="login_bg"></div>
   </div>
@@ -64,11 +56,9 @@ export default {
         contentType: 'application/json',
         data:JSON.stringify(this.form),
         success:function(data){
-          console.log(data);
-          if(data){
+          if(data.succeed){
           	window.localStorage.setItem("data",JSON.stringify(data))
             location.href = '/';
-            
           }else{
             self.errorTip = '账号或密码错误！';
           }
@@ -77,6 +67,13 @@ export default {
           
         }
       });	
+    },
+    enter(e){
+      if(e.keyCode == 13){
+        console.log(e.keyCode);
+        this.login();
+      }
+      
     }
     
   },
