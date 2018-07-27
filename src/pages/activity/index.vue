@@ -19,7 +19,7 @@
         <el-form-item label="产品品类">
           <el-select v-model="formInline.category" placeholder="请选择产品品类">
             <el-option label="不限" value=""></el-option>
-            <el-option label="Beijing" value="Beijing"></el-option>
+            <el-option :label="item" :value="item" v-for="item in addActivity.categoryAll" :key="item"></el-option>
           </el-select>
         </el-form-item>
 
@@ -45,8 +45,7 @@
         <el-form-item label="目的地">
           <el-select v-model="formInline.destination" placeholder="请选择目的地">
             <el-option label="不限" value=""></el-option>
-            <el-option label="Private" value="Private"></el-option>
-            <el-option label="Group" value="Group"></el-option>
+            <el-option :label="items.name" :value="items.name" v-for="(items,index) in destinationsAll" :key="index"></el-option>
           </el-select>
         </el-form-item>
         <br>
@@ -112,7 +111,7 @@
         </el-table>
 
         <!-- 分页 -->
-        <el-pagination class="mt20" background layout="prev, pager, next" :page-size="tableData.pageLength" :total="tableData.length"></el-pagination>
+        <el-pagination class="mt20" background layout="prev, pager, next" :page-size="formInline.pageSize" :total="tableData.pageLength" @current-change="handleCurrentChange"></el-pagination>
       </div>
 
       
@@ -182,12 +181,13 @@ export default {
         pageSize:10,
         pageNum:1,
       },
+      
+      destinationsAll:[],
 
       //表格数据
       tableData:{
         list : [],
-        pageLength : 20,
-        length: 1
+        pageLength : 200
       },
 
 
@@ -202,7 +202,27 @@ export default {
     self.showPage = true;
     
 
-    
+    $.ajax({
+      url: 'https://api.localpanda.com/cms/public/dest/list',
+      type: 'POST',
+      dataType: 'json', //如果跨域用jsonp
+      contentType:'application/json',
+      data: JSON.stringify({
+        "detail":false,
+        "valid":true
+      }),
+      success:function(data){
+
+        if(data.length){
+          self.destinationsAll = data;
+        }
+        
+
+      },
+      error:function(){
+        
+      }
+    });	
 
     
 
@@ -243,7 +263,7 @@ export default {
       var postData = {};
       for(var key in this.formInline){
         var thisData = this.formInline[key];
-        if(thisData){
+        if(thisData || thisData===0){
           postData[key] = thisData;
         }
       }
@@ -263,7 +283,7 @@ export default {
           //设置数据条数
           self.tableShow = true;
           //self.setLevel();
-          self.tableData.length = self.tableData.list.length;
+          //self.tableData.index = self.tableData.list.length;
         },
         error:function(){
           self.searchTip = true;
@@ -293,7 +313,8 @@ export default {
       location.href = '/activity/add?category='+keyData.resource;
     },
     handleCurrentChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.formInline.pageNum = val;
+      this.loadPage();
     },
   },
   watch:{
