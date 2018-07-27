@@ -7,7 +7,7 @@
     <div class="cms-main">
       <h3 class="text_c">内容信息</h3>
 	  <el-form :model="formData" class="mt40">
-	  	<el-form-item  label="活动包含Inclusions: " label-width="200px">
+	  	<el-form-item  label="活动包含 (Inclusions): " label-width="200px">
 	  		<div class="item fl wb90 pb30" v-for="(item,index) in formData.Inclusions">
 	  			<el-input class="wb60" v-model="item.title"></el-input>
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Inclusions,index)">Update</el-button>
@@ -19,7 +19,7 @@
 	  			<el-button type="primary" @click="add(formData.Inclusions)" plain class="mt30">Add</el-button>
 	  		</div>
 	  	</el-form-item>
-	  	<el-form-item  label="活动不包含Exclusions:" label-width="200px">
+	  	<el-form-item  label="活动不包含 (Exclusions):" label-width="200px">
 	  		<div class="item fl wb90 pb30" v-for="(item,index) in formData.Exclusions">
 	  			<el-input class="wb60" v-model="item.title"></el-input>
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Exclusions,index)">Update</el-button>
@@ -31,7 +31,7 @@
 	  			<el-button type="primary" plain class="mt30" @click="add(formData.Exclusions)">Add</el-button>
 	  		</div>
 	  	</el-form-item>
-	  	<el-form-item  label="注意事项Additional Info: " label-width="200px">
+	  	<el-form-item  label="注意事项 (Additional Info): " label-width="200px">
 	  		<div class="item fl wb90 pb30" v-for="(item,index) in formData.AdditionalInfo">
 	  			<el-input class="wb60" v-model="item.title"></el-input>
 	  			<el-button type="success" class="ml20" v-if="!item.newItem&&item.title&&item.content" @click="updata(formData.AdditionalInfo,index)">Updata</el-button>
@@ -219,25 +219,28 @@ export default {
   					title:arr[index].title,
   					content:arr[index].content
   				}
-  				$.ajax({
-  				method: 'POST',
-	  				url:"https://api.localpanda.com/cms/product/activity/content",
-	  				dataType:'json',
-	  				data:JSON.stringify(formData),
-	  				contentType:'application/json',
-	  				success:function(data){
-	  					 self.$alert('您已更新成功！', {
-				          confirmButtonText: '确定',
-				          callback: action => {
-				            self.getdata()
-				          }
-				       });
-	  				},
-	  				error:function(data){
-	  						
-	  				}
-	  				
-	  			});
+  				if(arr[index].title){
+  					$.ajax({
+		  				method: 'POST',
+			  				url:"https://api.localpanda.com/cms/product/activity/content",
+			  				dataType:'json',
+			  				data:JSON.stringify(formData),
+			  				contentType:'application/json',
+			  				success:function(data){
+			  					 self.$alert('您已更新成功！', {
+						          confirmButtonText: '确定',
+						          callback: action => {
+						            self.getdata()
+						          }
+						       });
+			  				},
+			  				error:function(data){
+			  						
+			  				}
+			  				
+			  			});
+  				}
+  				
 	
   		},
   		commit(arr,index,type){
@@ -248,25 +251,28 @@ export default {
   				title:arr[index].title,
   				content:arr[index].content
   			}
-  			$.ajax({
-  				method: 'PUT',
-  				url:"https://api.localpanda.com/cms/product/activity/content",
-  				dataType:'json',
-  				data:JSON.stringify(formData),
-  				contentType:'application/json',
-  				success:function(data){
-  					 self.$alert('您已提交成功！', {
-			          confirmButtonText: '确定',
-			          callback: action => {
-			            self.getdata()
-			          }
-			       });
-  				},
-  				error:function(data){
-  					
-  				}
-  				
-  			});
+  			if(arr[index].title){
+  					$.ajax({
+		  				method: 'PUT',
+		  				url:"https://api.localpanda.com/cms/product/activity/content",
+		  				dataType:'json',
+		  				data:JSON.stringify(formData),
+		  				contentType:'application/json',
+		  				success:function(data){
+		  					 self.$alert('您已提交成功！', {
+					          confirmButtonText: '确定',
+					          callback: action => {
+					            self.getdata()
+					          }
+					       });
+		  				},
+		  				error:function(data){
+		  					
+		  				}
+		  				
+		  			});
+  			}
+  		
   		}
   },
   watch:{

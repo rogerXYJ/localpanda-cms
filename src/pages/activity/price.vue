@@ -5,8 +5,8 @@
 
     <div class="cms-main">
       <h3 class="text_c">价格信息</h3>
-	  <el-form :model="formData" :rules="rules" ref="formData" class="mt40">
-	  	<el-form-item label="货币类型Currency:" prop="currency">
+	  <el-form :model="formData" :rules="rules" ref="formData"  class="mt40 paddingL40">
+	  	<el-form-item label="货币类型 (Currency):" prop="currency">
 	  		 <el-select v-model="formData.currency" placeholder="请选择币种">
 		      <el-option label="USD" value="USD"></el-option>
 		      <el-option label="CNY" value="CNY"></el-option>
@@ -31,12 +31,12 @@
 	  	</div>
 	  	<el-row :gutter="20">
 		  <el-col :span="6">
-		  	<el-form-item label="儿童年龄Child standard:" class="mt20" prop="childStandard">
+		  	<el-form-item label="儿童年龄 (Child Standard):" class="mt20" prop="childStandard">
 	  			<el-input class="w220" v-model="formData.childStandard"></el-input>
 	  		</el-form-item>
 		  </el-col>
 		  <el-col :span="6">
-		  	<el-form-item label="儿童差价Child discount：" class="mt20">
+		  	<el-form-item label="儿童差价 (Child Discount)：" class="mt20">
 		  		<el-input class="w220" v-model="formData.childDiscount"></el-input>
 		  	</el-form-item>
 		  </el-col>
@@ -44,13 +44,13 @@
 		
 		<el-row :gutter="20">
 		  <el-col :span="6">
-		  	<el-form-item label="原始价格Original Price：" class="mt40" v-if="formData.originalPrice!=''">
+		  	<el-form-item label="原始价格 (Original Price)：" class="mt40" v-if="formData.originalPrice">
 		  		<el-input class="w220" v-model="formData.originalPrice"></el-input>
 		  		
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="6">
-		  	<el-form-item label="最低价格Bottom Price：" class="mt40" v-if="formData.bottomPrice!=''">
+		  	<el-form-item label="最低价格Bottom Price：" class="mt40" v-if="formData.bottomPrice">
 		  		<!--<span>{{formData.bottomPrice}}</span>-->
 		  		<el-input class="w220" v-model="formData.bottomPrice" :disabled="true"></el-input>
 		  	</el-form-item>
@@ -63,7 +63,7 @@
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="6">
-		  	<el-form-item label="最大接待人数maximum:" class="mt20" v-if="formData.maxParticipants!=''">
+		  	<el-form-item label="最大接待人数maximum:" class="mt20" v-if="formData.maxParticipants">
 		  		<!--<span>{{formData.maxParticipants}}</span>-->
 		  		<el-input class="w220" v-model="formData.maxParticipants" :disabled="true"></el-input>
 		  	</el-form-item>
@@ -276,5 +276,8 @@ export default {
   }
   .display{
   	display: block!important;
+  }
+  .paddingL40{
+  	padding-left: 40px!important;
   }
 </style>
