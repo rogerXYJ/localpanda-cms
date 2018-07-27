@@ -43,7 +43,6 @@ var cmsNav = [
   	title:'账号管理',
     icon: 'el-icon-setting',
   	list:[
-  		{'title':'登陆','url':'/user/login/'},
   		{'title':'重置密码','url':'/user/resetPassword/'}
   	]
   }
