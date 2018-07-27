@@ -90,7 +90,7 @@
 				let that=this
 				let records=new Array();
 				$.ajax({
-					url: "https://api.localpanda.com/cms/product/activity/"+that.activityId+"/price/detail/list",
+					url: "https://cms.localpanda.com/cms/product/activity/"+that.activityId+"/price/detail/list",
 					dataType: 'json',
 					method: 'GET',
 					success: function(data) {
@@ -134,7 +134,7 @@
 	       }).then(()=>{
 	       		$.ajax({
 		  				method: 'DELETE',
-		  				url:"https://api.localpanda.com/cms/product/activity/"+self.activityId+"/price/detail/"+arr[index].id,
+		  				url:"https://cms.localpanda.com/cms/product/activity/"+self.activityId+"/price/detail/"+arr[index].id,
 		  				dataType:'json',
 		  				success:function(data){
 		  					console.log(data)
@@ -179,7 +179,7 @@
 					}
 					$.ajax({
 						method: 'POST',
-	  				url:"https://api.localpanda.com/cms/product/activity/price/detail",
+	  				url:"https://cms.localpanda.com/cms/product/activity/price/detail",
 	  				dataType:'json',
 	  				data:JSON.stringify(postData),
 	  				contentType:'application/json',
@@ -216,7 +216,7 @@
 								}
 								$.ajax({
 				  				method: 'PUT',
-				  				url:"https://api.localpanda.com/cms/product/activity/price/detail",
+				  				url:"https://cms.localpanda.com/cms/product/activity/price/detail",
 				  				dataType:'json',
 				  				data:JSON.stringify(postData),
 				  				contentType:'application/json',

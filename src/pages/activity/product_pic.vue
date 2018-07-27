@@ -125,7 +125,7 @@ export default {
         }
         
         $.ajax({
-          url: 'https://api.localpanda.com/cms/public/photo/delete/'+data.photoId,
+          url: 'https://cms.localpanda.com/cms/public/photo/delete/'+data.photoId,
           type: 'DELETE',
           dataType: 'json', //如果跨域用jsonp
           success:function(data){
@@ -198,7 +198,7 @@ export default {
       }
       //编辑和新增
       $.ajax({
-        url: 'https://api.localpanda.com/cms/public/photo/'+(fileData.photoId ? 'update' : 'commit'),
+        url: 'https://cms.localpanda.com/cms/public/photo/'+(fileData.photoId ? 'update' : 'commit'),
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType: false,
@@ -251,7 +251,7 @@ export default {
 
 
       $.ajax({
-        url: 'https://api.localpanda.com/cms/public/photo/update',
+        url: 'https://cms.localpanda.com/cms/public/photo/update',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'application/json',
@@ -285,7 +285,7 @@ export default {
 
     //获取已有图片
     $.ajax({
-      url: 'https://api.localpanda.com/cms/public/photo/'+this.activityId+'/ACTIVITY_BANNER',
+      url: 'https://cms.localpanda.com/cms/public/photo/'+this.activityId+'/ACTIVITY_BANNER',
       type: 'GET',
       dataType: 'json', //如果跨域用jsonp
       success:function(data){
@@ -302,7 +302,7 @@ export default {
 
     //获取封面图片
     $.ajax({
-      url: 'https://api.localpanda.com/cms/public/photo/'+this.activityId+'/ACTIVITY_COVER',
+      url: 'https://cms.localpanda.com/cms/public/photo/'+this.activityId+'/ACTIVITY_COVER',
       type: 'GET',
       dataType: 'json', //如果跨域用jsonp
       success:function(data){

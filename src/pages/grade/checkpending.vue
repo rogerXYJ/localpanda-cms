@@ -65,7 +65,7 @@ export default {
     let postData={
   		status:0
   	},
-  	postUrl='https://api.localpanda.com/cms/user/comment/list',
+  	postUrl='https://cms.localpanda.com/cms/user/comment/list',
  	self=this,
  	contentType='application/json; charset=UTF-8';
   	$.ajax({

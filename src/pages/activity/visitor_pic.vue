@@ -152,7 +152,7 @@ export default {
       }
 
       $.ajax({
-        url: 'https://api.localpanda.com/cms/public/photo/update',
+        url: 'https://cms.localpanda.com/cms/public/photo/update',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'application/json',
@@ -193,7 +193,7 @@ export default {
       }
       //编辑和新增
       $.ajax({
-        url: 'https://api.localpanda.com/cms/public/photo/'+(self.objectId ? 'update' : 'commit'),
+        url: 'https://cms.localpanda.com/cms/public/photo/'+(self.objectId ? 'update' : 'commit'),
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType: false,

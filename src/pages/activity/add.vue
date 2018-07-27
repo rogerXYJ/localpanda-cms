@@ -491,10 +491,10 @@ export default {
           //请求接口
           var submitUrl = '';
           if(this.pageId){
-            submitUrl = 'https://api.localpanda.com/cms/product/activity';
+            submitUrl = 'https://cms.localpanda.com/cms/product/activity';
             this.pageData.activityId = this.pageId;
           }else{
-            submitUrl = 'https://api.localpanda.com/cms/product/activity';
+            submitUrl = 'https://cms.localpanda.com/cms/product/activity';
           }
 
 
@@ -552,7 +552,7 @@ export default {
 
     //目的地 和 出发地
     $.ajax({
-      url: 'https://api.localpanda.com/cms/public/dest/list/all',
+      url: 'https://cms.localpanda.com/cms/public/dest/list/all',
       type: 'GET',
       dataType: 'json', //如果跨域用jsonp
       contentType: 'application/json',
@@ -573,7 +573,7 @@ export default {
 
     //目的地 和 出发地
     $.ajax({
-      url: 'https://api.localpanda.com/cms/public/poi/list/all',
+      url: 'https://cms.localpanda.com/cms/public/poi/list/all',
       type: 'GET',
       dataType: 'json', //如果跨域用jsonp
       contentType: 'application/json',

@@ -113,7 +113,7 @@ export default {
 
       if(self.fromValidate.validate()){
         $.ajax({
-          url: 'https://api.localpanda.com/cms/product/activity',
+          url: 'https://cms.localpanda.com/cms/product/activity',
           type: 'POST',
           dataType: 'json', //如果跨域用jsonp
           contentType: 'application/json',
@@ -141,7 +141,7 @@ export default {
     var self = this;
     //二级目的地查询
     $.ajax({
-      url: 'https://api.localpanda.com/cms/public/dest/list/',
+      url: 'https://cms.localpanda.com/cms/public/dest/list/',
       type: 'POST',
       dataType: 'json', //如果跨域用jsonp
       contentType: 'application/json',
@@ -162,7 +162,7 @@ export default {
     });	
 
     $.ajax({
-      url: 'https://api.localpanda.com/cms/product/activity/'+this.activityId,
+      url: 'https://cms.localpanda.com/cms/product/activity/'+this.activityId,
       type: 'GET',
       dataType: 'json', //如果跨域用jsonp
       contentType: 'application/json',

@@ -51,13 +51,13 @@ export default {
     login(){
       var self = this;
       $.ajax({
-        url: 'https://api.localpanda.com/cms/account/login',
+        url: 'https://cms.localpanda.com/cms/account/login',
         type: 'POST',
         contentType: 'application/json',
         data:JSON.stringify(this.form),
         success:function(data){
           if(data.succeed){
-          	window.localStorage.setItem("data",JSON.stringify(data))
+          	window.localStorage.setItem("userName",self.form.userName)
             location.href = '/';
           }else{
             self.errorTip = '账号或密码错误！';

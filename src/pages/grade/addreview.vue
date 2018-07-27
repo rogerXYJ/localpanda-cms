@@ -215,7 +215,7 @@
 						id: self.ruleForm.id
 					}
 					$.ajax({
-						url: 'https://api.localpanda.com/cms/user/comment/list',
+						url: 'https://cms.localpanda.com/cms/user/comment/list',
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: JSON.stringify(param),
@@ -262,7 +262,7 @@
 					}
 					postdata = param;
 					$.ajax({
-						url: "https://api.localpanda.com/cms/content/photo/commit",
+						url: "https://cms.localpanda.com/cms/content/photo/commit",
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: param,
@@ -314,7 +314,7 @@
 						param.append("files",item)
 					})
 					$.ajax({
-						url: "https://api.localpanda.com/cms/content/photo/commit",
+						url: "https://cms.localpanda.com/cms/content/photo/commit",
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: param,
@@ -360,13 +360,13 @@
 							//formData.createTime=formData.time+'00:00:00'
 							//delete formData.time
 							var type = "";
-							var postUrl="https://api.localpanda.com/cms/user/comment"
+							var postUrl="https://cms.localpanda.com/cms/user/comment"
 							if(self.ruleForm.id) {
 								type="POST"
-								//postUrl = "https://api.localpanda.com/cms/user/comment/update"
+								//postUrl = "https://cms.localpanda.com/cms/user/comment/update"
 							} else {
 								type="PUT"
-								//postUrl = "https://api.localpanda.com/cms/user/comment/commit"
+								//postUrl = "https://cms.localpanda.com/cms/user/comment/commit"
 							}
 							
 							//         		let param = new FormData();
@@ -439,7 +439,7 @@
 					this.imageList.splice(index, 1);
 					if(photoId){
 						$.ajax({
-							url: 'https://api.localpanda.com/cms/content/photo/delete/'+photoId,
+							url: 'https://cms.localpanda.com/cms/content/photo/delete/'+photoId,
 							type: 'DELETE',
 							dataType: 'json', //如果跨域用jsonp
 							//processData: false,
@@ -526,7 +526,7 @@
 							param.append("objectId",this.imageList[index].objectId);
 							param.append("objectType",'USER_COMMENT');
 							$.ajax({
-								url: 'https://api.localpanda.com/cms/content/photo/update',
+								url: 'https://cms.localpanda.com/cms/content/photo/update',
 								type: 'POST',
 								dataType: 'json', //如果跨域用jsonp
 								data: param,

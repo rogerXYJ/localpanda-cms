@@ -77,15 +77,13 @@ export default {
     		let self=this
 	    	this.$refs[formName].validate((valid) => {
 	          if (valid) {
-	          	let data = 	JSON.parse(window.localStorage.getItem("data"))
+	          	let userName = 	window.localStorage.getItem("userName")
 	          	let postData={
-	          		id:data.id,
-	          		userName:data.userName,
-	          		password:self.formData.checkPassword,
-	          		valid:data.valid
+	          		userName: userName,
+	          		password: self.formData.checkPassword
 	          	}
 	            $.ajax({
-	            	url:'https://api.localpanda.com/cms/account',
+	            	url:'https://cms.localpanda.com/cms/account',
 	            	type: 'POST',
 			        contentType: 'application/json',
 			        data:JSON.stringify(postData),
@@ -97,10 +95,16 @@ export default {
 					           	 location.href="/"
 					          }
 					        });
-			        	}
+			        	}else{
+									self.$alert('密码修改失败！', {
+					          confirmButtonText: '确定'
+					        });
+								}
 			        },
 			        error:function(data){
-			        	
+			        	self.$alert('密码修改失败！', {
+					          confirmButtonText: '确定'
+					        });
 			        }
 	            })
 	          } else {

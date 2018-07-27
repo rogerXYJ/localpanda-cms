@@ -146,7 +146,7 @@ export default {
   		getData(){
   			let self=this
   			$.ajax({
-	   			url:"https://api.localpanda.com/cms/product/activity/"+self.formData.activityId+"/price",
+	   			url:"https://cms.localpanda.com/cms/product/activity/"+self.formData.activityId+"/price",
 	   			 dataType: 'json',
 	   			 method: 'GET',
 	   			 success:function(data){
@@ -193,7 +193,7 @@ export default {
 							self.formData.departureTime=departureTime
 							
 							$.ajax({
-								url:'https://api.localpanda.com/cms/product/activity/price',
+								url:'https://cms.localpanda.com/cms/product/activity/price',
 								method:type,
 								dataType: 'json',
 								data:JSON.stringify(self.formData),

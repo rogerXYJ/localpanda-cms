@@ -145,7 +145,7 @@ export default {
   methods: {
   	sumbitFn(){
   		console.log(111)
-  		let postUrl='https://api.localpanda.com/cms/user/comment/list',
+  		let postUrl='https://cms.localpanda.com/cms/user/comment/list',
   		self=this,
   		formData=this.formData,
   		contentType='application/json; charset=UTF-8';

@@ -96,8 +96,8 @@ export default {
   	getdata(){
   		let self=this
    		$.ajax({
-   			//https://api.localpanda.com/cms/product/activity/{activityId}/{objectType}/content/list
-   			url:"https://api.localpanda.com/cms/product/activity/"+self.activityId+"/ITEMS_INCLUDED/content/list",
+   			//https://cms.localpanda.com/cms/product/activity/{activityId}/{objectType}/content/list
+   			url:"https://cms.localpanda.com/cms/product/activity/"+self.activityId+"/ITEMS_INCLUDED/content/list",
    			 dataType: 'json',
    			 method: 'GET',
    			 success:function(data){
@@ -116,7 +116,7 @@ export default {
    			 }
    		})
    		$.ajax({
-   			url:"https://api.localpanda.com/cms/product/activity/"+self.activityId+"/ITEMS_EXCLUDED/content/list",
+   			url:"https://cms.localpanda.com/cms/product/activity/"+self.activityId+"/ITEMS_EXCLUDED/content/list",
    			 dataType: 'json',
    			 method: 'GET',
    			 success:function(data){
@@ -136,7 +136,7 @@ export default {
    			 }
    		})
    		$.ajax({
-   			url:"https://api.localpanda.com/cms/product/activity/"+self.activityId+"/NOTICE/content/list",
+   			url:"https://cms.localpanda.com/cms/product/activity/"+self.activityId+"/NOTICE/content/list",
    			 dataType: 'json',
    			 method: 'GET',
    			 success:function(data){
@@ -174,7 +174,7 @@ export default {
 	       }).then(()=>{
 	       		$.ajax({
 		  				method: 'DELETE',
-		  				url:"https://api.localpanda.com/cms/product/activity/content/"+arr[index].id,
+		  				url:"https://cms.localpanda.com/cms/product/activity/content/"+arr[index].id,
 		  				dataType:'json',
 		  				success:function(data){
 		  					console.log(data)
@@ -221,7 +221,7 @@ export default {
   				}
   				$.ajax({
   				method: 'POST',
-	  				url:"https://api.localpanda.com/cms/product/activity/content",
+	  				url:"https://cms.localpanda.com/cms/product/activity/content",
 	  				dataType:'json',
 	  				data:JSON.stringify(formData),
 	  				contentType:'application/json',
@@ -250,7 +250,7 @@ export default {
   			}
   			$.ajax({
   				method: 'PUT',
-  				url:"https://api.localpanda.com/cms/product/activity/content",
+  				url:"https://cms.localpanda.com/cms/product/activity/content",
   				dataType:'json',
   				data:JSON.stringify(formData),
   				contentType:'application/json',

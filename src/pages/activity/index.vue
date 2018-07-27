@@ -203,7 +203,7 @@ export default {
     
 
     $.ajax({
-      url: 'https://api.localpanda.com/cms/public/dest/list',
+      url: 'https://cms.localpanda.com/cms/public/dest/list',
       type: 'POST',
       dataType: 'json', //如果跨域用jsonp
       contentType:'application/json',
@@ -233,7 +233,7 @@ export default {
       var self = this;
 
       $.ajax({
-        url: 'https://api.localpanda.com/cms/product/activity',
+        url: 'https://cms.localpanda.com/cms/product/activity',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType:'application/json',
@@ -270,7 +270,7 @@ export default {
 
       //异步请求
       $.ajax({
-        url: 'https://api.localpanda.com/cms/product/activity/list',
+        url: 'https://cms.localpanda.com/cms/product/activity/list',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType:'application/json',

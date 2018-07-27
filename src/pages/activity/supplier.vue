@@ -75,7 +75,7 @@ export default {
     submit(){
       var self = this;
       $.ajax({
-        url: 'https://api.localpanda.com/cms/product/activity/supplier',
+        url: 'https://cms.localpanda.com/cms/product/activity/supplier',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'application/json',
@@ -103,7 +103,7 @@ export default {
     var self = this;
     //编辑和新增
     $.ajax({
-      url: 'https://api.localpanda.com/cms/product/activity/'+this.activityId+'/supplier/list',
+      url: 'https://cms.localpanda.com/cms/product/activity/'+this.activityId+'/supplier/list',
       type: 'GET',
       dataType: 'json', //如果跨域用jsonp
       success:function(data){

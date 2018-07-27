@@ -176,7 +176,7 @@ export default {
     if(this.pageId){
 
       $.ajax({
-        url: 'https://api.localpanda.com/cms/content/landingpage/info/'+this.pageId,
+        url: 'https://cms.localpanda.com/cms/content/landingpage/info/'+this.pageId,
         type: 'GET',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'multipart/form-data',
@@ -234,7 +234,7 @@ export default {
       }
       //编辑和新增
       $.ajax({
-        url: 'https://api.localpanda.com/cms/content/photo/update',
+        url: 'https://cms.localpanda.com/cms/content/photo/update',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         data: param,
@@ -267,12 +267,12 @@ export default {
           delete formData.createTime;//删除属性
           delete formData.photo;//删除属性
           //新增请求
-          let postUrl = 'https://api.localpanda.com/cms/content/landingpage/info/commit',
+          let postUrl = 'https://cms.localpanda.com/cms/content/landingpage/info/commit',
             contentType = 'multipart/form-data; charset=UTF-8';
           
           //编辑请求
           if(self.pageId){
-            postUrl = 'https://api.localpanda.com/cms/content/landingpage/info/update';
+            postUrl = 'https://cms.localpanda.com/cms/content/landingpage/info/update';
             contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
           }
           

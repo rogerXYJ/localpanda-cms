@@ -181,7 +181,7 @@ export default {
       }
 
       $.ajax({
-        url: 'https://api.localpanda.com/cms/public/photo/update',
+        url: 'https://cms.localpanda.com/cms/public/photo/update',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'application/json',
@@ -233,7 +233,7 @@ export default {
       }
 
       $.ajax({
-        url: 'https://api.localpanda.com/cms/product/activity/itinerary/'+thisData.row.id,
+        url: 'https://cms.localpanda.com/cms/product/activity/itinerary/'+thisData.row.id,
         type: 'DELETE',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'application/json',
@@ -267,7 +267,7 @@ export default {
             ajaxType = 'POST';
           }
           $.ajax({
-            url: 'https://api.localpanda.com/cms/product/activity/itinerary',
+            url: 'https://cms.localpanda.com/cms/product/activity/itinerary',
             type: ajaxType,
             dataType: 'json', //如果跨域用jsonp
             contentType: 'application/json',
@@ -336,7 +336,7 @@ export default {
       }
       //编辑和新增
       $.ajax({
-        url: 'https://api.localpanda.com/cms/public/photo/'+(self.objectId ? 'update' : 'commit'),
+        url: 'https://cms.localpanda.com/cms/public/photo/'+(self.objectId ? 'update' : 'commit'),
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         contentType: false,
@@ -371,7 +371,7 @@ export default {
     if(this.activityId){
 
       $.ajax({
-        url: 'https://api.localpanda.com/cms/product/activity/'+this.activityId+'/itinerary/list',
+        url: 'https://cms.localpanda.com/cms/product/activity/'+this.activityId+'/itinerary/list',
         type: 'GET',
         dataType: 'json', //如果跨域用jsonp
         contentType: 'application/json',

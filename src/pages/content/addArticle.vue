@@ -117,7 +117,7 @@ export default {
       //document.getElementById("myForm").submit();
       
       $.ajax({
-          url: 'https://api.localpanda.com/cms/travel/article/commit',//https://api.localpanda.com/cms/travel/article/commit
+          url: 'https://cms.localpanda.com/cms/travel/article/commit',//https://cms.localpanda.com/cms/travel/article/commit
           type: 'POST',
           contentType: 'application/x-www-form-urlencoded',
           data: {

@@ -106,7 +106,7 @@ export default {
           this.showDialogTip = true;
       }
       $.ajax({
-          url: 'https://api.localpanda.com/cms/travel/article/'+this.articleId,
+          url: 'https://cms.localpanda.com/cms/travel/article/'+this.articleId,
           type: 'GET',
           success:function(data){
               self.searchShow = false;
@@ -152,7 +152,7 @@ export default {
         //document.getElementById("myForm").submit();
         
         $.ajax({
-            url: 'https://api.localpanda.com/cms/travel/article/update',//https://api.localpanda.com/cms/travel/article/commit
+            url: 'https://cms.localpanda.com/cms/travel/article/update',//https://cms.localpanda.com/cms/travel/article/commit
             type: 'POST',
             contentType: 'application/x-www-form-urlencoded',
             data: {
