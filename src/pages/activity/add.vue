@@ -216,11 +216,11 @@
           所属城市:
           <el-select v-model="attractionsCityValue" placeholder="请选择所属城市">
             <el-option
-              v-for="(item,key) in attractionsAll" :key="key" :label="key" :value="key">
+              v-for="(item,key) in attractionsHas" :key="key" :label="key" :value="key">
             </el-option>
           </el-select>
           <el-checkbox-group v-model="attractionsDialogChange" class="mt20">
-            <el-checkbox v-for="(items,index) in attractionsAll[poiCity]" :label="items" :key="index">{{items}}</el-checkbox>
+            <el-checkbox v-for="(items,index) in attractionsHas[poiCity]" :label="items" :key="index">{{items}}</el-checkbox>
           </el-checkbox-group>
 
           <span slot="footer" class="dialog-footer">
@@ -270,6 +270,8 @@ export default {
   data () {
     let urlQuery = this.$route.query;
 
+    
+
     return {
       urlQuery:urlQuery,
 
@@ -305,7 +307,7 @@ export default {
       attractionsDialogChange:[],
       attractionsDialogShow:false,
 
-
+      attractionsHas: '',
       departuresAll:[],
       departuresDialogChange:[],
       departuresDialogShow:false,
@@ -380,7 +382,7 @@ export default {
           { required: true, message: '请选择活兴趣点', trigger: 'blur' }
         ],
         departures:[
-          { required: !(urlQuery.category!='Day Trips' && urlQuery.category!='Tickets' && urlQuery.category!='Transportation'), message: '请选择出发地', trigger: 'blur' }
+          { required: (urlQuery.category!='Day Trips' && urlQuery.category!='Tickets' && urlQuery.category!='Transportation'), message: '请选择出发地', trigger: 'blur' }
         ],
         duration:[
           { required: true, message: '请输入活动时长', trigger: 'blur' }
@@ -610,6 +612,18 @@ export default {
       setTimeout(function(){
         self.fromValidate.init();
       },100);
+    },
+    'pageData.destinations':function(val){
+      var hasObj = {};
+      for(var key in this.attractionsAll){
+        for(var j=0;j<val.length;j++){
+          var thisVal = val[j];
+          if(thisVal == key){
+            hasObj[key] = this.attractionsAll[key]
+          }
+        }
+      };
+      this.attractionsHas = hasObj;
     }
     // 'pageData.venues':function (val, oldVal) { 
     //   for(var i=0;i<val.length;i++){
