@@ -1,0 +1,149 @@
+<template>
+  <div class="cms-page">
+    <!-- 侧边栏导航，activeTitle传入1-1的格式，即可展开并高亮对应的导航 -->
+    <activityAside :activeTitle="'1-2'"></activityAside>
+
+    <div class="cms-main">
+
+      <h3 class="text_c">预定信息</h3>
+      
+
+      <el-form label-width="250px">
+        
+        <el-form-item label="销售团期（Sales Calendar）：">
+          <el-radio v-model="allAvailable" :value="1" :label="1">全部可售</el-radio>
+          <el-radio v-model="allAvailable" :value="0" :label="0">自定义可售团期</el-radio>
+        </el-form-item>
+
+      </el-form>
+
+      <div class="text_c">
+        <el-button type="primary" @click="submit">提交</el-button>
+      </div>
+      
+
+    </div>
+
+    <!-- 文字提示 -->
+    <el-dialog title="温馨提示" :visible.sync="showDialogTip" width="500px" class="bind_dialog">
+      <p v-html="dialogTipTxt"></p>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="showDialogTip = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    
+
+  </div>
+</template>
+
+<script>
+import activityAside from '@/components/common/activityAside.vue';
+  
+
+export default {
+  name: 'product_pic',
+  components: {
+    activityAside
+  },
+  data () {
+    let activityId = this.$route.query.id;
+
+    return {
+      
+      
+      showDialogTip : false,
+      dialogTipTxt : '',
+
+      activityId: activityId,
+
+      allAvailable: 1,
+      saleDate: ''
+    }
+
+
+  },
+  computed:{
+    
+  },
+  
+  methods:{
+    dialogTxt(txt){
+      this.showDialogTip = true;
+      this.dialogTipTxt = txt;
+    },
+    submit(){
+      var self = this;
+      var postData = {
+        "activityId": this.activityId,
+        "allAvailable": this.allAvailable
+      };
+
+      $.ajax({
+        url: 'https://cms.localpanda.com/cms/product/activity',
+        type: 'POST',
+        dataType: 'json', //如果跨域用jsonp
+        contentType: 'application/json',
+        data: JSON.stringify(postData),
+        success:function(data){
+
+          if(data.succeed){
+            self.dialogTxt('<span class="green">设置成功！</span>');
+          }else{
+            self.dialogTxt('<span class="red">设置失败，请重试!!</span>');
+          }
+        },
+        error:function(){
+          self.dialogTxt('<span class="red">设置失败，请重试!!</span>');
+        }
+      });	
+
+    }
+  },
+  mounted(){
+    var self = this;
+    //编辑和新增
+    $.ajax({
+      url: 'https://api.localpanda.com/cms/product/activity/'+this.activityId,
+      type: 'GET',
+      dataType: 'json', //如果跨域用jsonp
+      success:function(data){
+
+        console.log(data);
+        if(data){
+          
+        };
+        
+      },
+      error:function(){
+        
+      }
+    });	
+    
+  },
+  watch:{
+    
+  },
+  head(){
+    return {
+      title: '产品图片信息'
+    }
+  }
+}
+
+</script>
+
+
+
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss">
+  
+  .cms-main{
+    .el-checkbox{
+      margin-right: 30px;
+      margin-left: 0;
+      min-width: 300px;
+    }
+  }
+  
+</style>

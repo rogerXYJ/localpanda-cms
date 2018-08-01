@@ -38,7 +38,7 @@
         </el-table-column>
         <el-table-column header-align="center" label="操作" width="220" align="center" >
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="editItinerary(scope.row,scope.$index+1)">Edit</el-button>
+            <el-button type="text" size="small" @click="editItinerary(scope.row,scope.$index)">Edit</el-button>
             <el-button type="text" size="small" @click="del(scope)">Del</el-button>
             <el-button type="text" size="small" @click="addItinerary(scope.$index+1,scope.row.ranking)">Add Below</el-button>
           </template>
@@ -74,10 +74,11 @@
           </a>
           <span class="vat">{{file.name}}</span>
           <el-button class="vat mt10 ml10" type="text" size="small" @click="file=''" v-if="file">取消</el-button>
-
+          
           <div v-if="dialogData.photo">
             <img :src="dialogData.photo.url" width="300" alt="">
           </div>
+          <div v-else><img :src="fileImg" width="300" alt=""></div>
         </el-form-item>
         
       </el-form>
@@ -132,6 +133,7 @@ export default {
         description:'',
         ranking: 1
       },
+      
 
       //校验规则
       rules: {
@@ -143,11 +145,14 @@ export default {
       activityId: activityId,
 
       file: '',
+      fileImg:'',
 
       objectId:'',
 
       coverPhotoUrl:'',
-      tableData:[]
+      tableData:[],
+
+      posting:false
     }
 
 
@@ -191,7 +196,11 @@ export default {
         success:function(data){
           
           if(data.succeed){
-            self.dialogTxt('设置成功！');
+            self.$message({
+              type: 'success',
+              message: '设置成功！'
+            });
+            //self.dialogTxt('设置成功！');
             self.coverPhotoUrl = thisData.photo.url;
           }else{
             self.dialogTxt('设置失败，请重试!!');
@@ -204,6 +213,10 @@ export default {
       });
     },
     addItinerary(index,ranking){
+
+      this.file = '';
+      this.fileImg = '';
+      
       
       this.dialogShow = true;
       this.dialogType = 'add';
@@ -214,46 +227,72 @@ export default {
         ranking: ranking
       };
       this.editIndex = index;
+
+      setTimeout(function(){
+        document.getElementById('upload').value = '';
+      },100);
     },
     editItinerary(data,index){
+      this.file = '';
+      this.fileImg = '';
+
+
       this.dialogShow = true;
       this.dialogType = 'edit';
       this.editIndex = index;
+
+      
       
       this.dialogData = JSON.parse(JSON.stringify(data));
 
       this.objectId = data.photo?data.photo.photoId:'';
 
+
+      setTimeout(function(){
+        document.getElementById('upload').value = '';
+      },100);
+
+      
+
     },
     del(thisData){
       var self = this;
 
-      if(!confirm("你确定要删除 行程"+(thisData.$index+1)+" 吗？")){
-        return;
-      }
+      
 
-      $.ajax({
-        url: 'https://cms.localpanda.com/cms/product/activity/itinerary/'+thisData.row.id,
-        type: 'DELETE',
-        dataType: 'json', //如果跨域用jsonp
-        contentType: 'application/json',
-        success:function(data){
-          
-          if(data.succeed){
-            self.dialogTxt('删除成功！');
-            self.tableData.splice(thisData.$index,1);
-            if(!self.tableData.length){
-              self.hasItinerary = false;
+      this.$alert("你确定要删除 行程"+(thisData.$index+1)+" 吗？", '温馨提示', {
+        confirmButtonText: '确定'
+      }).then(() => {
+        $.ajax({
+          url: 'https://cms.localpanda.com/cms/product/activity/itinerary/'+thisData.row.id,
+          type: 'DELETE',
+          dataType: 'json', //如果跨域用jsonp
+          contentType: 'application/json',
+          success:function(data){
+            
+            if(data.succeed){
+              self.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              //self.dialogTxt('删除成功！');
+              
+              self.tableData.splice(thisData.$index,1);
+              if(!self.tableData.length){
+                self.hasItinerary = false;
+              }
+            }else{
+              self.dialogTxt('删除失败，请刷新页面后重试!');
             }
-          }else{
+          
+          },
+          error:function(){
             self.dialogTxt('删除失败，请刷新页面后重试!');
           }
-         
-        },
-        error:function(){
-          self.dialogTxt('删除失败，请刷新页面后重试!');
-        }
+        });
       });
+
+      
     },
     new_itinerary(){
       var self = this;
@@ -266,6 +305,12 @@ export default {
           if(this.dialogType == 'edit'){
             ajaxType = 'POST';
           }
+
+          if(self.posting){
+            return;
+          }
+
+          self.posting = true;
           $.ajax({
             url: 'https://cms.localpanda.com/cms/product/activity/itinerary',
             type: ajaxType,
@@ -295,10 +340,15 @@ export default {
               }else{
                 self.dialogTxt('<span class="red">失败!</span>');
               }
+              
+              setTimeout(function(){
+                self.posting = false;
+              },500);
             
             },
             error:function(){
               self.dialogTxt('<span class="red">失败!</span>');
+              self.posting = false;
             }
           });	
         } else {
@@ -309,6 +359,7 @@ export default {
     },
     uploadChange(e){
       this.file = e.target.files.item(0);
+      this.fileImg = window.URL.createObjectURL(this.file);
     },
     uploadImg(objectId,dialogData){
       var self = this;
@@ -316,9 +367,17 @@ export default {
       if(!this.file){
         //提示
         if(self.dialogType == 'edit'){
-          self.dialogTxt('<span class="green">修改成功！</span>');
+          self.$message({
+            type: 'success',
+            message: '修改成功!'
+          });
+          //self.dialogTxt('<span class="green">修改成功！</span>');
         }else{
-          self.dialogTxt('<span class="green">新增成功！</span>');
+          self.$message({
+            type: 'success',
+            message: '新增成功！'
+          });
+          //self.dialogTxt('<span class="green">新增成功！</span>');
         }
         
         self.dialogShow = false;
@@ -345,7 +404,11 @@ export default {
         success:function(data){
           
           if(data.succeed){
-            self.dialogTxt('修改成功！');
+            //self.dialogTxt('修改成功！');
+            self.$message({
+              type: 'success',
+              message: '修改成功!'
+            });
             self.dialogShow = false;
             self.tableData.splice(self.editIndex,0,dialogData);
           }else{
