@@ -397,6 +397,12 @@ export default {
         objectType : 'ACTIVITY_ITINERARY',
         file : this.file
       };
+
+      
+      if(!self.objectId){
+        formData.files = this.file;
+      }
+      
       let param = new FormData()  // 创建form对象
       for(let key in formData){
         param.append(key, formData[key])  // 通过append向form对象添加数据
