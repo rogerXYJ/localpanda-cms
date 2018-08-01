@@ -13,7 +13,7 @@
 				<div class="hr"></div>
 				<div class="setPice" v-for="(item,index) in formData.records">
 					<div>
-						<el-row :gutter="24">
+						<el-row :gutter="18">
 							<el-col :span="6">
 								<el-form-item label="Number of People：" required :key="item.key">
 									<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
@@ -26,7 +26,7 @@
 									<input class="el-input__inner w220 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
 								</el-form-item>
 							</el-col>
-							<el-col :span="4">
+							<el-col :span="6">
 								<el-form-item>
 									<el-button type="danger" class="w70" v-if="index>0" @click="del(formData.records,index)">Del</el-button>
 									<el-button type="primary" class="w70" v-if="index==0" @click="add(formData.records)">Add</el-button>
