@@ -369,7 +369,7 @@ export default {
           { required: true, message: '请选择活兴趣点', trigger: 'blur' }
         ],
         departures:[
-          { required: true, message: '请选择出发地', trigger: 'blur' }
+          { required: urlQuery.category!='Day Trips' && urlQuery.category!='Tickets' && urlQuery.category!='Transportation', message: '请选择出发地', trigger: 'blur' }
         ],
         duration:[
           { required: true, message: '请输入活动时长', trigger: 'change' }

@@ -43,7 +43,7 @@ export default {
         icon: 'el-icon-menu',
         list:[
           {'title':'基本信息','url':'/activity/info'+urlId},
-          {'title':'预定信息','url':'/activity/yuding'+urlId},
+          {'title':'预定信息','url':'/activity/book'+urlId},
           {'title':'行程信息','url':'/activity/itinerary'+urlId},
           {'title':'内容信息','url':'/activity/content'+urlId},
           {'title':'价格信息','url':'/activity/price'+urlId},
@@ -94,6 +94,7 @@ export default {
     overflow: hidden; 
     height: 100vh;
     position: fixed; left: 0; top: 0;
+    z-index: 99;
   }
   .cms-aside .logo a{ color: #fff;
     display: block;
