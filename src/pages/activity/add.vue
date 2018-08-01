@@ -109,7 +109,7 @@
           <div class="hr"></div>
 
           <el-form-item class="shenzi_box" label="资审时效：" required prop="workdayConfirmCost">
-            <el-input v-model="pageData.workdayConfirmCost" @blur="hideError"></el-input>　工作日资审时间　
+            <el-input v-model="pageData.workdayConfirmCost" @blur="hideError"></el-input>
             <el-select v-model="pageData.confirmCostUnit" placeholder="请选择资审时效">
               <el-option label="HOURS" value="HOURS">HOURS</el-option>
               <el-option label="DAY" value="DAY">DAY</el-option>
@@ -118,9 +118,9 @@
 
           
           <el-form-item label="集合方式（pickup）：" required>
-            <el-radio v-model="pageData.pickup" :value="0" :label="0">提供接送</el-radio>
-            <el-radio v-model="pageData.pickup" :value="1" :label="1">自行前往</el-radio>
-            <div class="jihe_info" v-if="pageData.pickup==1">
+            <el-radio v-model="pageData.pickup" :value="1" :label="1">提供接送</el-radio>
+            <el-radio v-model="pageData.pickup" :value="0" :label="0">自行前往</el-radio>
+            <div class="jihe_info" v-if="pageData.pickup==0">
               <ul>
                 <li v-for="(item,index) in pageData.venues" class="clearfix">
                   
@@ -288,7 +288,7 @@ export default {
 
       pageId: urlQuery.id?urlQuery.id:'',
 
-      trafficTypeAll: ['Private Vehicle','walking','bikeing','van','Coach','metro/taxi','Bullet Train','Flight','Others'],
+      trafficTypeAll: ['Private Vehicle','walking','biking','van','Coach','metro/taxi','Bullet Train','Flight','Others'],
 
       categoryAll: ['Day Trips','Trans-China Trips','Regional Multi-Day Trips','Transportation','Tickets'],
 
@@ -349,7 +349,7 @@ export default {
         confirmCostUnit: 'HOURS',
 
         //是否提高接送
-        pickup: 0,
+        pickup: 1,
 
         //集合信息
         venues: [''],
