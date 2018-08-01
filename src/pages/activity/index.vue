@@ -187,7 +187,7 @@ export default {
       //表格数据
       tableData:{
         list : [],
-        pageLength : 200
+        pageLength : 10
       },
 
 
@@ -268,7 +268,6 @@ export default {
         }
       }
 
-      //异步请求
       $.ajax({
         url: 'https://cms.localpanda.com/cms/product/activity/list',
         type: 'POST',
@@ -287,6 +286,24 @@ export default {
         },
         error:function(){
           self.searchTip = true;
+        }
+      });
+
+      //异步请求
+      $.ajax({
+        url: 'https://cms.localpanda.com/cms/product/activity/count',
+        type: 'POST',
+        dataType: 'json', //如果跨域用jsonp
+        contentType:'application/json',
+        data: JSON.stringify(postData),
+        success:function(data){
+          if(data){
+            self.tableData.pageLength = data;
+          }
+          
+        },
+        error:function(){
+          
         }
       });	
     },
