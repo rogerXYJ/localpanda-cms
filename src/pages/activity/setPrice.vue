@@ -5,7 +5,7 @@
 
 		<div class="cms-main">
 			<h3 class="text_c">配置价格</h3>
-			<el-form :model="formData" ref="formData">
+			<el-form :model="formData" ref="formData" class="paddingL40">
 				<el-form-item>
 					<span>当前货币单位：{{currency}}</span>
 					<a class="el-button el-button--primary fr" :href="'/activity/price?id='+activityId">返回价格信息维护</a>
@@ -14,16 +14,16 @@
 				<div class="setPice" v-for="(item,index) in formData.records">
 					<div>
 						<el-row :gutter="24">
-							<el-col :span="10">
+							<el-col :span="6">
 								<el-form-item label="Number of People：" required :key="item.key">
 									<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
-									<input class="el-input__inner wb60 js_validate" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" />
+									<input class="el-input__inner w220 js_validate" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" />
 								</el-form-item>
 							</el-col>
-							<el-col :span="10">
+							<el-col :span="6">
 								<el-form-item label="Total Price：" required :key="item.key">
 									<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
-									<input class="el-input__inner wb60 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
+									<input class="el-input__inner w220 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
@@ -132,6 +132,7 @@
 	          cancelButtonText: '取消',
 	          type: 'warning', 
 	       }).then(()=>{
+	       		console.log("https://cms.localpanda.com/cms/product/activity/"+self.activityId+"/price/detail/"+arr[index].id)
 	       		$.ajax({
 		  				method: 'DELETE',
 		  				url:"https://cms.localpanda.com/cms/product/activity/"+self.activityId+"/price/detail/"+arr[index].id,
@@ -271,4 +272,7 @@
 	.w70{
 		width: 70px!important;
 	}
+	.paddingL40{
+	  	padding-left: 40px!important;
+	  }
 </style>
