@@ -34,7 +34,7 @@
 	  	<el-form-item  label="注意事项 (Additional Info): " label-width="200px">
 	  		<div class="item fl wb90 pb30" v-for="(item,index) in formData.AdditionalInfo">
 	  			<el-input class="wb60" v-model="item.title"></el-input>
-	  			<el-button type="success" class="ml20" v-if="!item.newItem&&item.title&&item.content" @click="updata(formData.AdditionalInfo,index)">Updata</el-button>
+	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.AdditionalInfo,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.AdditionalInfo,index,'NOTICE')" v-else>Commit</el-button>
 	  			<el-button type="danger" v-if="index>0" @click="del(formData.AdditionalInfo,index)">Del</el-button>
 	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
@@ -166,7 +166,7 @@ export default {
   		},
   		del(arr,index){
   			let self=this
-  			if(!arr[index].newItem&&arr[index].title&&arr[index].content){
+  			if(!arr[index].newItem&&arr[index].title){
   				self.$confirm('请确定是否进行删除？', {
 	          confirmButtonText: '确定',
 	          cancelButtonText: '取消',
@@ -219,7 +219,8 @@ export default {
   					title:arr[index].title,
   					content:arr[index].content
   				}
-  				$.ajax({
+  				if(formData.title){
+  					$.ajax({
   				method: 'POST',
 	  				url:"https://cms.localpanda.com/cms/product/activity/content",
 	  				dataType:'json',
@@ -238,6 +239,8 @@ export default {
 	  				}
 	  				
 	  			});
+  				}
+  				
 	
   		},
   		commit(arr,index,type){
@@ -248,26 +251,29 @@ export default {
   				title:arr[index].title,
   				content:arr[index].content
   			}
-  			$.ajax({
-  				method: 'PUT',
-  				url:"https://cms.localpanda.com/cms/product/activity/content",
-  				dataType:'json',
-  				data:JSON.stringify(formData),
-  				contentType:'application/json',
-  				success:function(data){
-  					 self.$alert('您已提交成功！', {
-			          confirmButtonText: '确定',
-			          callback: action => {
-			            self.getdata()
-			          }
-			       });
-  				},
-  				error:function(data){
-  					
-  				}
-  				
-  			});
-  		}
+  			if(formData.title){
+  				$.ajax({
+	  				method: 'PUT',
+	  				url:"https://cms.localpanda.com/cms/product/activity/content",
+	  				dataType:'json',
+	  				data:JSON.stringify(formData),
+	  				contentType:'application/json',
+	  				success:function(data){
+	  					 self.$alert('您已提交成功！', {
+				          confirmButtonText: '确定',
+				          callback: action => {
+				            self.getdata()
+				          }
+				       });
+	  				},
+	  				error:function(data){
+	  					
+	  				}
+	  				
+	  			});
+	  		}
+  			}
+  			
   },
   watch:{
     
