@@ -1,6 +1,8 @@
 <template>
   <div class="cms-aside">
-      <div class="logo"><a href="/activity/">Local panda</a></div>
+      <div class="logo"><a href="/">Local panda</a></div>
+
+      <a class="aside-back" href="/activity/">返回产品查询</a>
 
       <div class="aside-content">
         <el-menu :default-openeds="activeDown" :default-active="activeTitle" background-color="#333" text-color="#fff" active-text-color="#ffd04b">
@@ -85,7 +87,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="css">
+<style lang="scss">
   .logo{ font-size: 24px; text-align: center; height: 60px; line-height: 60px; }
   .cms-aside{
     width: 200px; 
@@ -138,4 +140,18 @@ export default {
 .aside-content::-webkit-scrollbar { width: 6px;  }
 .aside-content::-webkit-scrollbar-track { background-color: #333;  border-radius: 3px; }
 .aside-content::-webkit-scrollbar-thumb { border-radius: 3px;  background-color: #000; }
+.aside-back{
+  display: block;
+  border: 1px solid #ddd;
+  width: 100px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  color: #ddd;
+  margin: 0 auto 20px;
+  &:hover{
+    color: #fff;
+    border: 1px solid #fff;
+  }
+}
 </style>
