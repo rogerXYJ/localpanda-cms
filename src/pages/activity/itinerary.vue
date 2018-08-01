@@ -393,16 +393,10 @@ export default {
 
 
       var formData = {
-        
         objectId : objectId,
         objectType : 'ACTIVITY_ITINERARY',
-        files : this.file
+        file : this.file
       };
-      if(self.objectId){
-        console.log(11111111111111);
-        console.log(dialogData.photo.photoId);
-        formData.photoId = dialogData.photo.photoId;
-      }
       let param = new FormData()  // 创建form对象
       for(let key in formData){
         param.append(key, formData[key])  // 通过append向form对象添加数据
