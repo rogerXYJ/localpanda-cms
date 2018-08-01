@@ -27,7 +27,7 @@
               <el-button type="text" size="small" v-if="!items.file && !isCover(items)" @click="setCover(items)">设为封面</el-button>
               <span v-if="!items.file && isCover(items)" class="cover_txt mt5 fl">封面图</span>
             </div>
-            <div class="ranking mt15">权重：
+            <div class="ranking mt15" v-if="!items.file && !isCover(items)">权重：
               <el-select v-model="items.ranking" style="width:110px;" size="small">
                 <el-option :label="item" :value="item" v-for="item in 7" :key="item">{{item}}</el-option>
               </el-select>

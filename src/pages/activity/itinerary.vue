@@ -310,6 +310,8 @@ export default {
             return;
           }
 
+          
+
           self.posting = true;
           $.ajax({
             url: 'https://cms.localpanda.com/cms/product/activity/itinerary',
@@ -332,6 +334,10 @@ export default {
                   
                 }else if(!this.objectId){
                   self.tableData.splice(self.editIndex,0,self.dialogData);
+                  if(!self.file){
+                    location.reload();
+                  }
+                  
                   //self.tableData.push(self.dialogData);
                 }
                 self.uploadImg(objectId,self.dialogData);
@@ -383,12 +389,20 @@ export default {
         self.dialogShow = false;
         return false;
       }
+      
+
 
       var formData = {
         objectId : objectId,
         objectType : 'ACTIVITY_ITINERARY',
-        files : this.file
+        file : this.file
       };
+
+      
+      if(!self.objectId){
+        formData.files = this.file;
+      }
+      
       let param = new FormData()  // 创建form对象
       for(let key in formData){
         param.append(key, formData[key])  // 通过append向form对象添加数据
@@ -410,7 +424,8 @@ export default {
               message: '修改成功!'
             });
             self.dialogShow = false;
-            self.tableData.splice(self.editIndex,0,dialogData);
+            //self.tableData.splice(self.editIndex,0,dialogData);
+            location.reload();
           }else{
             self.dialogTxt('更新失败，请确认是否选择图片!');
           }
