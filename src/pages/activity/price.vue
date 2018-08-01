@@ -16,7 +16,7 @@
 		      <el-option label="CAD" value="CAD"></el-option>
 		      <el-option label="JPY" value="JPY"></el-option>
 		    </el-select>
-		    <a class="el-button el-button--primary fr" :href="'/activity/setPrice?id='+formData.activityId+'&currency='+formData.currency">价格设置</a>
+		    <a class="el-button el-button--primary fr" :href="'/activity/setPrice?id='+id+'&currency='+formData.currency">价格设置</a>
 		    <!--<el-button type="primary" class="fr"></el-button>-->
 	  	</el-form-item>
 	  	<div class="box">
@@ -30,12 +30,12 @@
 		  		</el-form-item>
 	  	</div>
 	  	<el-row :gutter="20">
-		  <el-col :span="6">
+		  <el-col :span="8">
 		  	<el-form-item label="儿童年龄 (Child Standard):" class="mt20" prop="childStandard">
 	  			<el-input class="w220" v-model="formData.childStandard"></el-input>
 	  		</el-form-item>
 		  </el-col>
-		  <el-col :span="6">
+		  <el-col :span="8">
 		  	<el-form-item label="儿童差价 (Child Discount)：" class="mt20">
 		  		<el-input class="w220" v-model="formData.childDiscount"></el-input>
 		  	</el-form-item>
@@ -43,13 +43,13 @@
 		</el-row>
 		
 		<el-row :gutter="20">
-		  <el-col :span="6">
+		  <el-col :span="8">
 		  	<el-form-item label="原始价格 (Original Price)：" class="mt40" v-if="formData.originalPrice">
 		  		<el-input class="w220" v-model="formData.originalPrice"></el-input>
 		  		
 		  	</el-form-item>
 		  </el-col>
-		  <el-col :span="6">
+		  <el-col :span="8">
 		  	<el-form-item label="最低价格Bottom Price：" class="mt40" v-if="formData.bottomPrice">
 		  		<!--<span>{{formData.bottomPrice}}</span>-->
 		  		<el-input class="w220" v-model="formData.bottomPrice" :disabled="true"></el-input>
@@ -57,12 +57,12 @@
 		  </el-col>
 		</el-row>
 	  	<el-row :gutter="20">
-		  <el-col :span="6">
+		  <el-col :span="8">
 		  	<el-form-item label=" 最小成团人数minimum:" class="mt20" prop="minParticipants">
 		  			<el-input class="w220" v-model="formData.minParticipants"></el-input>
 		  	</el-form-item>
 		  </el-col>
-		  <el-col :span="6">
+		  <el-col :span="8">
 		  	<el-form-item label="最大接待人数maximum:" class="mt20" v-if="formData.maxParticipants">
 		  		<!--<span>{{formData.maxParticipants}}</span>-->
 		  		<el-input class="w220" v-model="formData.maxParticipants" :disabled="true"></el-input>
@@ -115,6 +115,7 @@ export default {
   	let id=this.$route.query.id
     return{
     	activeTitle: '4-4',
+    	id:id,
     	radio:0,
     	departureTime:[''],
     	isType:false,
