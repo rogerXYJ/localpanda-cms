@@ -38,7 +38,7 @@
         </el-table-column>
         <el-table-column header-align="center" label="操作" width="220" align="center" >
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="editItinerary(scope.row,scope.$index+1)">Edit</el-button>
+            <el-button type="text" size="small" @click="editItinerary(scope.row,scope.$index)">Edit</el-button>
             <el-button type="text" size="small" @click="del(scope)">Del</el-button>
             <el-button type="text" size="small" @click="addItinerary(scope.$index+1,scope.row.ranking)">Add Below</el-button>
           </template>
