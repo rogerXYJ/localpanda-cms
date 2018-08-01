@@ -624,6 +624,28 @@ export default {
         }
       };
       this.attractionsHas = hasObj;
+      
+
+      //删除活动地点，同时删除目的地下的景点poi
+      if(!val.length){
+        this.pageData.attractions = {};
+      }else{
+        var attractions = this.pageData.attractions;
+        for(var key in attractions){
+          var has = false;
+          for(var j=0;j<val.length;j++){
+            var thisVal = val[j];
+            if(thisVal==key){
+              has = true;
+            }
+          }
+          if(!has){
+            delete this.pageData.attractions[key];
+          }
+        }
+      }
+
+
     }
     // 'pageData.venues':function (val, oldVal) { 
     //   for(var i=0;i<val.length;i++){
