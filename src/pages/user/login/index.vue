@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h2>Localpanda CMS管理系统</h2>
+    <h2>Localpanda CMS</h2>
     <div class="login_box">
       <h3>登录</h3>
       <el-form label-width="50px">
@@ -12,12 +12,12 @@
           </li>
           <li>
               <el-form-item label="密码">
-                <el-input type="password" v-model="form.password" @keyup="enter"></el-input>
+                <input class="el-input__inner" type="password" v-model="form.password" @keydown="inputEnter"></input>
               </el-form-item>
           </li>
           <li>
               <el-form-item label="">
-                <el-button class="btn" @click="login" type="primary">登录</el-button>
+                <el-button class="btn" @click="login" type="primary" :loading="loging">{{btnTxt}}</el-button>
               </el-form-item>
           </li>
           <li>
@@ -45,11 +45,14 @@ export default {
         password: ''
       },
       errorTip:'',
+      btnTxt: '登录',
+      loging: false
     }
   },
   methods:{
     login(){
       var self = this;
+      self.errorTip = ' ';
       $.ajax({
         url: 'https://cms.localpanda.com/cms/account/login',
         type: 'POST',
@@ -62,15 +65,19 @@ export default {
           }else{
             self.errorTip = '账号或密码错误！';
           }
+          self.loging = false;
+          self.btnTxt = '登录';
         },
         error: function () {
-          
+          self.loging = false;
+          self.btnTxt = '登录';
         }
       });	
     },
-    enter(e){
+    inputEnter(e){
       if(e.keyCode == 13){
-        console.log(e.keyCode);
+        this.loging = true;
+        this.btnTxt = '玩命登陆中';
         this.login();
       }
       
@@ -145,13 +152,14 @@ export default {
     background-color: rgba(0,0,0,0.5);
     overflow: hidden;
     min-height: 100vh;
-    h2{ text-align: center; margin-top: 0; padding-top:100px; color: #ddd; position: relative; z-index: 2;}
+    h2{ text-align: center; color: #ddd; position:absolute; left:40px; z-index: 2; text-shadow: 0 1px 20px rgba(255,255,255,0.4);}
     
     .login_box{
       width: 350px;
       position: fixed;
       left: 50%;
       top: 50%;
+      z-index:99;
       margin: -143px 0 0 -211px;
       padding: 0 40px 0 30px;
       border: 1px solid #333;
