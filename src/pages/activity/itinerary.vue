@@ -399,6 +399,8 @@ export default {
         files : this.file
       };
       if(self.objectId){
+        console.log(11111111111111);
+        console.log(dialogData.photo.photoId);
         formData.photoId = dialogData.photo.photoId;
       }
       let param = new FormData()  // 创建form对象
