@@ -78,7 +78,8 @@
 		  	<el-form-item   v-if="radio==0">
 						<div v-for="(item,index) in departureTime" class="mt20">
 			  			<span class="ml115">时间{{index+1}}:</span>
-			  			<el-input placeholder="如：9:00" class="w220 ml10" v-model="departureTime[index]"></el-input>
+			  			<!--<el-input placeholder="如：9:00" class="w220 ml10" v-model="departureTime[index]"></el-input>-->
+			  			<input class="el-input__inner w220 js_validate" vType="text" type="text" vTip="请填写时间!!!" v-model="departureTime[index]" />
 			  			<el-button type="primary" v-if="index==0" class="ml20 w70" @click="addTime(departureTime)">Add</el-button>
 			  			<el-button type="danger" v-if="index>0" :class="index>0?'ml20 w70':''" @click="delTime(departureTime,index)">Del</el-button>
 		  			</div>
@@ -104,7 +105,7 @@
 
 <script>
 import activityAside from '@/components/common/activityAside.vue';
-  
+import Validate from '@/assets/js/plugin/validate/'; 
 
 export default {
   name: 'cms-price',
@@ -112,7 +113,7 @@ export default {
     activityAside
   },
   data () {
-  	let id=this.$route.query.id
+  	var id=this.$route.query.id
     return{
     	activeTitle: '4-4',
     	id:id,
@@ -146,6 +147,10 @@ export default {
  },
   mounted(){
    		this.getData()
+   		this.fromValidate = new Validate({
+		      inputClassName:'js_validate', //需要校验的input的className
+		      errorClassName:'valError'  //报错时，会自动在input上添加的className
+		    });
   },
   methods:{
   		getData(){
@@ -156,13 +161,13 @@ export default {
 	   			 method: 'GET',
 	   			 success:function(data){
 	   			 		self.formData=data
-	   			 		console.log(self.formData)
+	   			 		
 	   			 		if(data){
 	   			 			self.isType=true
 	   			 		}
-							if(data.departureTime){
-								self.departureTime=data.departureTime
-							}
+						if(data.departureTime){
+							self.departureTime=data.departureTime
+						}
 	   			 		
 	   			 	
 	   			 		
@@ -182,12 +187,14 @@ export default {
   			}else{
   				time=refundTimeLimit+" Days"
   			}
-  			this.formData.refundInstructions="You can reschedule or cancel your trip at zero cost up to "+time+" before your travel date. We are unable to refund any cancellations made within "+ time +" of your trip's departure. If you want to make any adjustments (e.g. travel date, number of participants, activities plan etc.) to your itinerary, feel free to contact us."
+  			this.formData.refundInstructions="You can reschedule or cancel your trip at zero cost up to "+ time+" before your travel date."
   			console.log(this.formData.refundInstructions)
   		},
   		addTime(arr){
   			arr.push('')
-  			
+  			setTimeout(()=>{
+				this.fromValidate.init()
+			},200)
   		},
   		delTime(arr,index){
   			arr.splice(index,1)
@@ -196,7 +203,7 @@ export default {
 				let self=this
 				let departureTime=[];
 				let type=self.isType?'POST':'PUT';
-				let message=self.isType?"您已创建成功！":"您已更新成功！";
+				let message=self.isType?"您已更新成功！":"您已创建成功！";
 				
 				self.$refs[formName].validate((valid) => {
 					if(valid){
@@ -208,7 +215,7 @@ export default {
 								}
 							});
 							self.formData.departureTime=departureTime
-							
+							self.formData.activityId=self.id
 							$.ajax({
 								url:'https://cms.localpanda.com/cms/product/activity/price',
 								method:type,
@@ -281,4 +288,11 @@ export default {
   .paddingL40{
   	padding-left: 40px!important;
   }
+  .valError{
+		border: 1px solid red!important;	
+	}
+	.vTip{
+		color: red!important;
+		padding-left: 115px;
+	}
 </style>

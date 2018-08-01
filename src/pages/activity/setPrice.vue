@@ -12,31 +12,31 @@
 				</el-form-item>
 				<div class="hr"></div>
 				<div class="setPice" v-for="(item,index) in formData.records">
-					<div>
-						<el-row :gutter="18">
-							<el-col :span="6">
-								<el-form-item label="Number of People：" required :key="item.key">
+					<div class="clearfix">
+						
+							
+								<el-form-item label="Number of People：" required :key="item.key" class="fl">
 									<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
 									<input class="el-input__inner w220 js_validate" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" />
 								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="Total Price：" required :key="item.key">
+							
+							
+								<el-form-item label="Total Price：" required :key="item.key" class="fl ml30">
 									<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
 									<input class="el-input__inner w220 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
 								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item>
+							
+							
+								<el-form-item class="fl padding40 ml30">
 									<el-button type="danger" class="w70" v-if="index>0" @click="del(formData.records,index)">Del</el-button>
 									<el-button type="primary" class="w70" v-if="index==0" @click="add(formData.records)">Add</el-button>
 									<el-button type="success" v-if="item.id" @click="upData(formData.records,index)">Update</el-button>
 								</el-form-item>
-							</el-col>
+							
 						</el-row>
 					</div>
 				</div>
-				<el-form-item class="text_c mt100" v-if="showBtn">
+				<el-form-item class=" mt100" v-if="showBtn">
 					<el-button type="primary" class="w120" @click="commit('formData')">提交</el-button>
 				</el-form-item>
 			</el-form>
@@ -132,7 +132,7 @@
 	          cancelButtonText: '取消',
 	          type: 'warning', 
 	       }).then(()=>{
-	       		console.log("https://cms.localpanda.com/cms/product/activity/"+self.activityId+"/price/detail/"+arr[index].id)
+	       		
 	       		$.ajax({
 		  				method: 'DELETE',
 		  				url:"https://cms.localpanda.com/cms/product/activity/"+self.activityId+"/price/detail/"+arr[index].id,
@@ -150,7 +150,7 @@
 				             type: 'info',
 				            	message: '删除失败!'
 				          });
-		  					}
+		  				}
 		  					
 		  				},
 		  				error:function(data){
@@ -158,7 +158,12 @@
 		  				}
 		  				
 		  			});
-	       	
+		  			arr.forEach(item=>{
+		  				if(!item.newItem){
+		  					self.showBtn=false
+		  				}
+		  			})
+	       			console.log(self.showBtn)
 	       }).catch(() => {
           self.$message({
             type: 'info',
@@ -168,6 +173,14 @@
   			
   		}else{
   				arr=arr.splice(index,1)
+  				console.log(arr)
+  				arr.forEach(item=>{
+  					console.log(item)
+	  				if(!item.newItem){
+	  					self.showBtn=false
+	  				}
+	  			})
+  				console.log(self.showBtn)
   		}
 			},
 			upData(arr,index){
@@ -274,5 +287,8 @@
 	}
 	.paddingL40{
 	  	padding-left: 40px!important;
+	  }
+	 .padding40{
+	  	padding-top: 40px;
 	  }
 </style>
