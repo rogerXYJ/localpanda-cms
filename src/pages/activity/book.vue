@@ -17,6 +17,8 @@
 
       </el-form>
 
+      <calendar v-if="!allAvailable" type="multi2" size="big" showDouble="true" maxMonths="6" v-model="changeDate" @change="selectDate"></calendar>
+
       <div class="text_c">
         <el-button type="primary" @click="submit">提交</el-button>
       </div>
@@ -38,12 +40,14 @@
 
 <script>
 import activityAside from '@/components/common/activityAside.vue';
+import calendar from '@/panda/calendar/';
   
 
 export default {
   name: 'product_pic',
   components: {
-    activityAside
+    activityAside,
+    calendar
   },
   data () {
     let activityId = this.$route.query.id;
@@ -57,7 +61,8 @@ export default {
       activityId: activityId,
 
       allAvailable: 1,
-      saleDate: ''
+      saleDate: '',
+      changeDate:[]
     }
 
 
@@ -70,6 +75,23 @@ export default {
     dialogTxt(txt){
       this.showDialogTip = true;
       this.dialogTipTxt = txt;
+    },
+    selectDate(data){
+      //清除所有可售字段
+      var $list = data.el.querySelectorAll('.day_list .is_sale');
+      for(var i=0;i<$list.length;i++){
+        $list[i].remove();
+      }
+      
+      //根据选择添加可售字段
+      var $active = data.el.querySelectorAll('.active');
+      for(var i=0;i<$active.length;i++){
+        var tipDom = document.createElement('div');
+        tipDom.className='is_sale';
+        tipDom.innerHTML = '可售';
+        $active[i].appendChild(tipDom);
+      }
+      
     },
     submit(){
       var self = this;

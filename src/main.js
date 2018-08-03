@@ -7,6 +7,10 @@ import router from './router'
 //引入公共样式
 import './assets/css/base.css'
 
+//字体
+import "./assets/font/iconfont.css";
+import './assets/font/iconfont.js'
+
 //引入UI框架
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
