@@ -165,7 +165,7 @@ export default {
         showAddActivity: false, //显示新增关键词
         resourceTip : false,
         resource : '',
-        categoryAll: ['Day Trips','Trans-China Trips','Regional Multi-Day Trips','Transportation','Tickets']
+        categoryAll: ['Day Trip','Trans-China Trip','Regional Multi-Day Trip','Transportation','Ticket']
       },
 
       //数据操作

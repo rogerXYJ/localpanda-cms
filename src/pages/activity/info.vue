@@ -25,7 +25,7 @@
           </el-form-item>
           
 
-          <el-form-item label="服务类型（groupType）：" required prop="groupType" v-if="pageData.category!='Transportation' && pageData.category!='Tickets'">
+          <el-form-item label="服务类型（groupType）：" required prop="groupType" v-if="pageData.category!='Transportation' && pageData.category!='Ticket'">
             <el-radio v-model="pageData.groupType" label="Private">Private</el-radio>
             <el-radio v-model="pageData.groupType" label="Group">Group</el-radio>
           </el-form-item>
@@ -279,7 +279,7 @@ export default {
 
       trafficTypeAll: ['Private Vehicle','walking','biking','van','Coach','metro/taxi','Bullet Train','Flight','Others'],
 
-      categoryAll: ['Day Trips','Trans-China Trips','Regional Multi-Day Trips','Transportation','Tickets'],
+      categoryAll: ['Day Trip','Trans-China Trip','Regional Multi-Day Trip','Transportation','Ticket'],
 
       tourTypeArr: ["Landmarks","City tour","Food","Old Neighborhood","Architecture","History","Art","Cultural","Night","Nightlife","Performances & Shows","Family Friendly","Parks & Zoos","Outdoor","Wildlife","Short excursions","Shopping","Sightseeing","Nature & scenery","Layover tour","Multi-day tour","Popular & Classic Tours","Hiking","Watertown","Huangpu River Cruise"," Expat-friendly","Transfer"],
 
@@ -616,7 +616,7 @@ export default {
 
               console.log(self.pageData);
 
-              if(self.pageData.category=='Day Trips' || self.pageData.category=='Tickets' || self.pageData.category=='Transportation'){
+              if(self.pageData.category=='Day Trip' || self.pageData.category=='Ticket' || self.pageData.category=='Transportation'){
                 self.rules.departures = [{ required: false, message: '请选择出发地', trigger: 'blur' }]
               }
               
@@ -718,7 +718,7 @@ export default {
 
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped>
   .el-input{
     width: auto;
   }
