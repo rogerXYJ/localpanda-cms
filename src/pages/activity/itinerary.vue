@@ -503,7 +503,7 @@ export default {
 
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped>
   
   .cms-main{
     .itinerary_list{
@@ -549,6 +549,7 @@ export default {
       line-height: 40px;
       display: block;
       opacity: 0;
+      z-index: 9;
     }
   }
   .vat{
