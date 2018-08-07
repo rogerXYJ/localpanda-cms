@@ -10,7 +10,7 @@
 
       <el-form label-width="150px">
         <el-form-item label="产品图片：">
-          <el-button type="primary" @click="showDialogTip = false">添加新图片<input class="upload_input" type="file" @change="imgChange"></el-button>
+          <span class="el-button el-button--primary" @click="showDialogTip = false">添加新图片<input class="upload_input" type="file" @change="imgChange" title=""></span>
         </el-form-item>
 
         
@@ -33,10 +33,10 @@
               </el-select>
             </div>
             <div class="list_bot mt30" v-if="!items.photoId">
-              <el-button type="primary" size="small" @click="uploading(items)" :loading="items.loading">开始上传</el-button>
+              <span class="el-button el-button--primary el-button--small" @click="uploading(items)" :loading="items.loading" title="">开始上传</span>
             </div>
             <div class="list_bot mt30" v-else>
-              <el-button type="primary" size="small" plain>重新上传<input class="upload_input" type="file" @change="newChange(items,index,$event)"></el-button>
+              <span class="el-button el-button--primary el-button--small is-plain">重新上传<input class="upload_input" type="file" @change="newChange(items,index,$event)" title=""></span>
               <el-button type="primary" size="small" @click="uploading(items)" :loading="items.loading">更新</el-button>
             </div>
           </div>
@@ -377,6 +377,7 @@ export default {
           .el-button{
             position: relative;
             overflow: hidden;
+            vertical-align: top;
           }
         }
       }
