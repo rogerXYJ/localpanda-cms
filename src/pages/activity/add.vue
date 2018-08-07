@@ -288,7 +288,7 @@ export default {
 
       pageId: urlQuery.id?urlQuery.id:'',
 
-      trafficTypeAll: ['Private Vehicle','walking','biking','van','Coach','metro/taxi','Bullet Train','Flight','Others'],
+      trafficTypeAll: ['Private Vehicle','Walking','Biking','Van','Coach','Metro/Taxi','Bullet Train','Flight','Others'],
 
       categoryAll: ['Day Trip','Trans-China Trip','Regional Multi-Day Trip','Transportation','Ticket'],
 
