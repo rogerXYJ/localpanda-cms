@@ -81,7 +81,7 @@
             <el-input v-model="pageData.duration" @blur="hideError"></el-input>
             <el-select v-model="pageData.durationUnit" placeholder="请选择活动时长">
               <el-option label="HOURS" value="HOURS">HOURS</el-option>
-              <el-option label="DAY" value="DAY">DAY</el-option>
+              <el-option label="DAYS" value="DAYS">DAYS</el-option>
             </el-select>　超过12小时请选择按天计算
           </el-form-item>
 
@@ -109,7 +109,7 @@
             <el-input v-model="pageData.workdayConfirmCost" @blur="hideError"></el-input>
             <el-select v-model="pageData.confirmCostUnit" placeholder="请选择资审时效">
               <el-option label="HOURS" value="HOURS">HOURS</el-option>
-              <el-option label="DAY" value="DAY">DAY</el-option>
+              <el-option label="DAYS" value="DAYS">DAYS</el-option>
             </el-select>　超过10小时请选择按天计算
           </el-form-item>
 
