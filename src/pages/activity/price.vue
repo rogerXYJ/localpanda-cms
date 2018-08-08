@@ -20,12 +20,19 @@
 		    <!--<el-button type="primary" class="fr"></el-button>-->
 	  	</el-form-item>
 	  	<div class="box">
-	  		 	<label style="display:inline-block; width: 100px;text-align: right;">退改规则:</label>
-			    <el-form-item label="时间:" class="mt20" label-width="100px" prop="refundTimeLimit">
-		  		 	<el-input class="w220" v-model="formData.refundTimeLimit"></el-input> /天
+	  		 	<label style="display:inline-block; width: 90px;text-align: right;">退改规则:</label>
+	  		 	<el-form-item label="是否全额退款:" label-width="100px">
+		  		 	<el-radio-group v-model="formData.fullRefund" prop="fullRefund">
+					    <el-radio :label="true">全额退款 </el-radio>
+					    <el-radio :label="false">部分退款</el-radio>
+					  </el-radio-group>
+		  		</el-form-item>
+			    <el-form-item label="时间:" class="mt20" label-width="100px" prop="refundTimeLimit" v-if="formData.fullRefund">
+		  		 	<el-input class="w220" v-model="formData.refundTimeLimit" @input="changeRefundTimeLimit"></el-input> /天
+		  		 	<span v-show="changeDate" class="red ml30">退款时效有变动，请注意与细则说明保持同步！</span>
 		  		</el-form-item>
 	  			<el-form-item label="细则说明:" label-width="100px" prop="refundInstructions">
-	  				<el-button type="primary" class="display" @click="replaceCont">自动套用模板</el-button>
+	  				<el-button type="primary" v-if="formData.fullRefund" class="display" @click="replaceCont">自动套用模板</el-button>
 		  		 	<el-input class="wb60 mt20" v-model="formData.refundInstructions" type="textarea" :rows="7"></el-input>
 		  		</el-form-item>
 	  	</div>
@@ -120,6 +127,7 @@ export default {
     	radio:0,
     	departureTime:[''],
     	isType:false,
+    	changeDate:false,
     	formData:{
     		activityId:id,
     		currency:'USD',//币种
@@ -132,7 +140,8 @@ export default {
     		minParticipants:'',//最小成团人数
     		//departureTime:[''],//出发时间
     		startTime:null,//出发时间区间
-    		endTime:null//出发时间区间
+    		endTime:null,//出发时间区间
+    		fullRefund:''
     	},
     	rules:{
     		currency:{required: true, message: '请选择币种！！！',trigger: 'change'},
@@ -140,7 +149,8 @@ export default {
     		refundInstructions:{required: true, message: '请填写退改细则说明！！！',trigger: 'blur'},
     		childStandard:{required: true, message: '请填写儿童年龄！！！',trigger: 'blur'},
     		//originalPrice:{required: true, message: '请填写原始价格！！！',trigger: 'blur'},
-    		minParticipants:{required: true, message: '请填写最小成团人数！！！',trigger: 'blur'}
+    		minParticipants:{required: true, message: '请填写最小成团人数！！！',trigger: 'blur'},
+    		fullRefund:{required: true, message: '请选择是否全部退款！！！',trigger: 'change'}
     	},
     }
 	
@@ -151,7 +161,8 @@ export default {
 		      inputClassName:'js_validate', //需要校验的input的className
 		      errorClassName:'valError'  //报错时，会自动在input上添加的className
 		    });
-  },
+		console.log(this.changeData)
+  },	
   methods:{
   		getData(){
   			let self=this
@@ -168,6 +179,9 @@ export default {
 						if(data.departureTime){
 							self.departureTime=data.departureTime
 						}
+						if(data.refundTimeLimit==0){
+							self.formData.refundTimeLimit=''
+						}
 	   			 		
 	   			 	
 	   			 		
@@ -179,9 +193,19 @@ export default {
 	   			
 	   		})
   		},
+  		changeRefundTimeLimit(e){
+  			
+  			if(e){
+  				this.changeDate=true
+  			}
+  			
+  		},
   		replaceCont(){
   			let time='';
   			let refundTimeLimit=this.formData.refundTimeLimit;
+  			if(!refundTimeLimit){
+  				return
+  			}
   			if(refundTimeLimit<=2){
   				time=refundTimeLimit*24+" hours"
   			}else{
@@ -216,6 +240,9 @@ export default {
 							});
 							self.formData.departureTime=departureTime
 							self.formData.activityId=self.id
+							if(!self.formData.fullRefund){
+								self.formData.refundTimeLimit=0
+							}
 							$.ajax({
 								url:'https://cms.localpanda.com/cms/product/activity/price',
 								method:type,
@@ -256,7 +283,7 @@ export default {
   },
   
   watch:{
-    
+     
   },
   head(){
     return {
@@ -295,4 +322,5 @@ export default {
 		color: red!important;
 		padding-left: 115px;
 	}
+	
 </style>

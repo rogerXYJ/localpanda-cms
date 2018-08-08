@@ -13,10 +13,16 @@
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Inclusions,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Inclusions,index,'ITEMS_INCLUDED')" v-else>Commit</el-button>
 	  			<el-button type="danger" v-if="index>0" @click="del(formData.Inclusions,index)">Del</el-button>
-	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-button type="warning"  @click="showContentFn(index,0)">ShowContent</el-button>
+	  			
+	  			<el-input class="mt20 wb60" v-show="item.showContent"  type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<!--<div class="mt20 wb60 el-textarea" @click="aa(item.showContent)" >
+	  				<textarea rows="8" class="el-textarea__inner" v-model="item.content" style="min-height: 33px;">
+	  				</textarea>
+	  			</div>-->
 	  		</div>
 	  		<div class="text_c wb60">
-	  			<el-button type="primary" @click="add(formData.Inclusions)" plain class="mt30">Add</el-button>
+	  			<el-button type="primary" @click="add(formData.Inclusions)" plain >Add</el-button>
 	  		</div>
 	  	</el-form-item>
 	  	<el-form-item  label="活动不包含 (Exclusions):" label-width="200px">
@@ -25,10 +31,11 @@
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Exclusions,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Exclusions,index,'ITEMS_EXCLUDED')" v-else>Commit</el-button>
 	  			<el-button type="danger" v-if="index>0" @click="del(formData.Exclusions,index)">Del</el-button>
-	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-input class="mt20 wb60"  v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-button type="warning"  @click="showContentFn(index,1)">ShowContent</el-button>
 	  		</div>
 	  		<div class="text_c wb60">
-	  			<el-button type="primary" plain class="mt30" @click="add(formData.Exclusions)">Add</el-button>
+	  			<el-button type="primary" plain  @click="add(formData.Exclusions)">Add</el-button>
 	  		</div>
 	  	</el-form-item>
 	  	<el-form-item  label="注意事项 (Additional Info): " label-width="200px">
@@ -37,10 +44,11 @@
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.AdditionalInfo,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.AdditionalInfo,index,'NOTICE')" v-else>Commit</el-button>
 	  			<el-button type="danger" v-if="index>0" @click="del(formData.AdditionalInfo,index)">Del</el-button>
-	  			<el-input class="mt20 wb60" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-input class="mt20 wb60" v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-button type="warning"   @click="showContentFn(index,2)">ShowContent</el-button>
 	  		</div>
 	  		<div class="text_c wb60">
-	  			<el-button type="primary" plain class="mt30" @click="add(formData.AdditionalInfo)">Add</el-button>
+	  			<el-button type="primary"  plain  @click="add(formData.AdditionalInfo)">Add</el-button>
 	  		</div>
 	  	</el-form-item>
 	  </el-form>
@@ -68,19 +76,22 @@ export default {
     		Inclusions:[
     		{
     			titile:'',
-    			content:''
+    			content:'',
+    			showContent:false
     			
     		}],
     		Exclusions:[
     		{
     			title:'',
-    			content:''
+    			content:'',
+    			showContent:false
     		}
     		],
     		AdditionalInfo:[
     			{
     				title:'',
-    				content:''
+    				content:'',
+    				showContent:false
     			}
     		]
     		
@@ -101,13 +112,16 @@ export default {
    			 dataType: 'json',
    			 method: 'GET',
    			 success:function(data){
-   			 	console.log(data)
+   			 	data.forEach(item=>{
+   			 		item.showContent=false
+   			 	})
    			 	self.formData.Inclusions=data
    			 	if(self.formData.Inclusions.length<1){
    			 			self.formData.Inclusions.push({
    			 				title:'',
    			 				content:'',
    			 				newItem:true,
+   			 				showContent:false
    			 			})
    			 	}
    			 },
@@ -120,13 +134,17 @@ export default {
    			 dataType: 'json',
    			 method: 'GET',
    			 success:function(data){
-   			 	console.log(data)
-   			 	self.formData.Exclusions=data
+   			 	
+   				data.forEach(item=>{
+   			 		item.showContent=false
+   			 	})
+   				self.formData.Exclusions=data
    			 	if(self.formData.Exclusions.length<1){
    			 		self.formData.Exclusions.push({
    			 				title:'',
    			 				content:'',
    			 				newItem:true,
+   			 				showContent:false
    			 				
    			 		})
    			 	}
@@ -140,13 +158,17 @@ export default {
    			 dataType: 'json',
    			 method: 'GET',
    			 success:function(data){
-   			 	console.log(data)
+   			 	
+   			 	data.forEach(item=>{
+   			 		item.showContent=false
+   			 	})
    			 	self.formData.AdditionalInfo=data
    			 	if(self.formData.AdditionalInfo.length<1){
    			 		self.formData.AdditionalInfo.push({
    			 				title:'',
    			 				content:'',
    			 				newItem:true,
+   			 				showContent:false
    			 		})
    			 	}
    			 },
@@ -154,6 +176,22 @@ export default {
    			 		
    			 }
    		})
+  	},
+  	showContentFn(index,id){
+  		let self=this
+  		if(id==0){
+  			console.log(0)
+  			console.log(index)
+			self.formData.Inclusions[index].showContent=!self.formData.Inclusions[index].showContent
+			//self.formData.Inclusions[index].showContent=true
+			//console.log(self.formData.Inclusions[index].showContent)
+  		}else if(id==1){
+  			
+			self.formData.Exclusions[index].showContent=!self.formData.Exclusions[index].showContent
+  		}else{
+  			
+			self.formData.AdditionalInfo[index].showContent=!self.formData.AdditionalInfo[index].showContent
+  		}
   	},
   	add(arr){
   			let self=this
@@ -292,6 +330,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
- 
+ 	.none{
+ 		display: none;
+ 	}
   
 </style>
