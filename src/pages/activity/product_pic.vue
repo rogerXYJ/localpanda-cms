@@ -27,7 +27,7 @@
               <el-button type="text" size="small" v-if="!items.file && !isCover(items)" @click="setCover(items)">设为封面</el-button>
               <span v-if="!items.file && isCover(items)" class="cover_txt mt5 fl">封面图</span>
             </div>
-            <div class="ranking mt15" v-if="!items.file && !isCover(items)">权重：
+            <div class="ranking mt15" v-if="!items.file">权重：
               <el-select v-model="items.ranking" style="width:110px;" size="small">
                 <el-option :label="item" :value="item" v-for="item in 7" :key="item">{{item}}</el-option>
               </el-select>
@@ -131,7 +131,10 @@ export default {
           success:function(data){
             
             if(data.succeed){
-              self.dialogTxt('删除成功！');
+              self.$message({
+                type: 'success',
+                message: '删除成功！'
+              });
               self.imgList.splice(index,1);
             }else{
               self.dialogTxt(data.errorMessage);
@@ -209,10 +212,16 @@ export default {
           if(data.succeed){
             
             if(!fileData.photoId){
-              alert('修改成功！');
+              self.$message({
+                type: 'success',
+                message: '修改成功！'
+              });
               location.reload();
             }else{
-              self.dialogTxt('修改成功！');
+              self.$message({
+                type: 'success',
+                message: '修改成功！'
+              });
             }
             
           }else{
@@ -261,7 +270,10 @@ export default {
         success:function(data){
           
           if(data.succeed){
-            self.dialogTxt('设置成功！');
+            self.$message({
+              type: 'success',
+              message: '设置成功！'
+            });
             self.coverPhotoUrl = thisData.url;
           }else{
             self.dialogTxt('设置失败，请重试!!');

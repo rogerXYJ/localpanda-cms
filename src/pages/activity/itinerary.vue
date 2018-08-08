@@ -28,12 +28,21 @@
           align="center" 
           >
         </el-table-column>
-        <el-table-column header-align="center" label="图片" width="200"  align="center">
+        <el-table-column header-align="center" label="图片" width="300"  align="center">
           <template slot-scope="scope">
             <a class="btn_view" target="_blank" :href="scope.row.photo && scope.row.photo.url" v-if="scope.row.photo">View</a>
-            <span class="fs12 c_999 ml5" v-if="scope.row.photo && scope.row.photo.url==coverPhotoUrl">Cover photo</span>
+
+            
+            
+            <span class="fs12 c_999 ml5 mr10" v-if="scope.row.photo && scope.row.photo.url==coverPhotoUrl">Cover photo</span>
             <el-button type="text" size="small" v-else-if="scope.row.photo" @click="setCover(scope.row)">Set as Cover</el-button>
             <span v-else>-</span>
+
+            
+            <span class="fs12 c_999 mr10" v-if="scope.row.photo && isBanner(scope.row.photo.url)">Banner photo</span>
+            <el-button class="" type="text" size="small" v-else-if="scope.row.photo" @click="setBanner(scope.row)">Set as Banner</el-button>
+            
+
           </template>
         </el-table-column>
         <el-table-column header-align="center" label="操作" width="220" align="center" >
@@ -152,7 +161,9 @@ export default {
       coverPhotoUrl:'',
       tableData:[],
 
-      posting:false
+      posting:false,
+
+      imgList:[]
     }
 
 
@@ -170,6 +181,18 @@ export default {
           return false;
         };
       }
+      return false;
+    },
+    isBanner(url){
+      
+      for(var i=0;i<this.imgList.length;i++){
+        var thisData = this.imgList[i];
+        console.log(thisData);
+        if(url == thisData.url){
+          return true;
+        }
+      }
+      
       return false;
     },
     setCover(thisData){
@@ -211,6 +234,80 @@ export default {
           self.dialogTxt('设置失败，请重试!!');
         }
       });
+    },
+    setBanner(thisData){
+      var self = this;
+
+      
+          
+
+      var formData = {
+        "objectId": thisData.activityId,
+        "objectType": "ACTIVITY_BANNER",
+        "url": thisData.photo.url
+      };
+      let param = new FormData()  // 创建form对象
+      for(let key in formData){
+        param.append(key, formData[key])  // 通过append向form对象添加数据
+      }
+
+      $.ajax({
+        url: 'https://cms.localpanda.com/cms/public/photo/commit',
+        type: 'POST',
+        dataType: 'json', //如果跨域用jsonp
+        contentType: 'application/json',
+        contentType: false,
+        data: param,
+        processData: false,
+        success:function(data){
+          
+          if(data.succeed){
+            self.$message({
+              type: 'success',
+              message: '设置成功！'
+            });
+
+            self.imgList.push({
+              url: formData.url
+            });
+
+
+            //获取已有图片
+            // $.ajax({
+            //   url: 'https://cms.localpanda.com/cms/public/photo/'+self.activityId+'/ACTIVITY_BANNER',
+            //   type: 'GET',
+            //   dataType: 'json', //如果跨域用jsonp
+            //   success:function(data2){
+                
+            //     if(data2.length){
+            //       self.imgList = data2;
+            //     }
+                
+            //   },
+            //   error:function(){
+            //     self.dialogTxt('数据获取失败，请刷新页面!');
+            //   }
+            // });	
+
+
+          }else{
+            self.$message({
+              type: 'error',
+              message: '设置失败，请重试！'
+            });
+          }
+        
+        },
+        error:function(){
+          self.$message({
+            type: 'error',
+            message: '设置失败，请重试！'
+          });
+        }
+      });
+
+
+          
     },
     addItinerary(index,ranking){
 
@@ -448,31 +545,55 @@ export default {
     //请求编辑数据
     if(this.activityId){
 
+      
+
+
+      //获取已有图片
       $.ajax({
-        url: 'https://cms.localpanda.com/cms/product/activity/'+this.activityId+'/itinerary/list',
+        url: 'https://cms.localpanda.com/cms/public/photo/'+this.activityId+'/ACTIVITY_BANNER',
         type: 'GET',
         dataType: 'json', //如果跨域用jsonp
-        contentType: 'application/json',
-        success:function(data){
+        success:function(data2){
           
-          console.log(data);
-          var list = data.activityItineraryList;
-          if(list.length){
-            self.tableData = list;
-            self.hasItinerary = true;
-            self.coverPhotoUrl = data.coverPhotoUrl?data.coverPhotoUrl:'';
-          }else{
-            self.hasItinerary = false;
-          }
+          if(data2.length){
+            self.imgList = data2;
 
-          self.tabLoading = false;
-         
+
+            $.ajax({
+              url: 'https://cms.localpanda.com/cms/product/activity/'+self.activityId+'/itinerary/list',
+              type: 'GET',
+              dataType: 'json', //如果跨域用jsonp
+              contentType: 'application/json',
+              success:function(data){
+                
+                console.log(data);
+                var list = data.activityItineraryList;
+                if(list.length){
+                  self.tableData = list;
+                  self.hasItinerary = true;
+                  self.coverPhotoUrl = data.coverPhotoUrl?data.coverPhotoUrl:'';
+                }else{
+                  self.hasItinerary = false;
+                }
+
+                self.tabLoading = false;
+                
+              },
+              error:function(){
+                self.hasItinerary = false;
+                self.tabLoading = false;
+              }
+            });	
+          }
+          
         },
         error:function(){
-          self.hasItinerary = false;
-          self.tabLoading = false;
+          self.dialogTxt('数据获取失败，请刷新页面!');
         }
       });	
+
+
+      
 
       
     }else{

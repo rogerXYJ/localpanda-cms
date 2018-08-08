@@ -15,8 +15,13 @@
           </el-form-item>
 
 
+          <el-form-item label="产品经理（owner）：">
+            <el-radio v-model="pageData.owner" v-for="item in ownerAll" :value="item" :label="item" :key="item"></el-radio>
+          </el-form-item>
+
+
           <el-form-item label="产品标题（title）：" required prop="title">
-            <el-input v-model="pageData.title"></el-input>
+            <el-input class="w_100b" v-model="pageData.title"></el-input>
           </el-form-item>
           
 
@@ -100,6 +105,11 @@
           <el-form-item label="是否在列表页显示：" v-if="pageId">
             <el-radio v-model="pageData.display" :label="1" :value="1">Yes</el-radio>
             <el-radio v-model="pageData.display" :label="0" :value="0">No</el-radio>
+          </el-form-item>
+
+          <el-form-item label="行程排版风格（newType）：">
+            <el-radio v-model="pageData.newType" :label="false" :value="false">旧版</el-radio>
+            <el-radio v-model="pageData.newType" :label="true" :value="true">新版</el-radio>
           </el-form-item>
           
 
@@ -277,6 +287,8 @@ export default {
 
       pageId: urlQuery.id?urlQuery.id:'',
 
+      ownerAll: ['Cindy','Leo','Vickey','Jeremy'],
+
       trafficTypeAll: ['Private Vehicle','Walking','Biking','Van','Coach','Metro/Taxi','Bullet Train','Flight','Others'],
 
       categoryAll: ['Day Trip','Trans-China Trip','Regional Multi-Day Trip','Transportation','Ticket'],
@@ -306,6 +318,7 @@ export default {
       departuresRequired:true,
 
       pageData:{
+        owner:'',
         title: '',
         category: '',
         groupType: 'Private',
@@ -334,6 +347,9 @@ export default {
 
         //是否前台可见
         display: 1,
+
+        //行程排版风格
+        newType: false,
 
         //资审耗时
         workdayConfirmCost: '',
@@ -461,6 +477,7 @@ export default {
       $(e.target).parents('.el-form-item').addClass('is-success').removeClass('is-error');
     },
     submitForm(pageData){
+      var self = this;
       this.$refs[pageData].validate((valid) => {
 
         if (valid && this.fromValidate.validate()) {
@@ -516,15 +533,25 @@ export default {
             success:function(data){
               
               if(data.succeed){
-                alert('修改成功！');
-                location.reload();
+                
+                self.$alert("修改成功！", '温馨提示', {
+                  confirmButtonText: '确定',
+                  callback:function(){
+                    location.reload();
+                  }
+                });
+                
               }else{
-                alert('修改失败！');
+                self.$alert("修改失败！", '温馨提示', {
+                  confirmButtonText: '确定'
+                });
               }
               
             },
             error:function(){
-              alert('修改失败！');
+              self.$alert("修改失败！", '温馨提示', {
+                confirmButtonText: '确定'
+              });
             }
           });	
 
@@ -722,6 +749,7 @@ export default {
   .el-input{
     width: auto;
   }
+  .w_100b{ width: 100%;}
   .cms-main{
     .change_type_list{
       margin-top: 10px;
