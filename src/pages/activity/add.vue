@@ -15,8 +15,12 @@
           </el-form-item>
 
 
+          <el-form-item label="产品经理（owner）：" >
+            <el-radio v-model="pageData.owner" v-for="item in ownerAll" :value="item" :label="item" :key="item"></el-radio>
+          </el-form-item>
+
           <el-form-item label="产品标题（title）：" required prop="title">
-            <el-input v-model="pageData.title" placeholder="请输入产品标题"></el-input>
+            <el-input class="w_100b" v-model="pageData.title" placeholder="请输入产品标题"></el-input>
           </el-form-item>
           
 
@@ -25,7 +29,7 @@
           </el-form-item>
           
 
-          <el-form-item label="服务类型（groupType）：" required prop="groupType" v-if="pageData.category!='Transportation' && pageData.category!='Tickets'">
+          <el-form-item label="服务类型（groupType）：" required prop="groupType" v-if="pageData.category!='Transportation' && pageData.category!='Ticket'">
             <el-radio v-model="pageData.groupType" label="Private">Private</el-radio>
             <el-radio v-model="pageData.groupType" label="Group">Group</el-radio>
           </el-form-item>
@@ -84,7 +88,7 @@
             <el-input v-model="pageData.duration" @blur="hideError"></el-input>
             <el-select v-model="pageData.durationUnit" placeholder="请选择活动时长">
               <el-option label="HOURS" value="HOURS">HOURS</el-option>
-              <el-option label="DAY" value="DAY">DAY</el-option>
+              <el-option label="DAYS" value="DAYS">DAYS</el-option>
             </el-select>　超过12小时请选择按天计算
           </el-form-item>
 
@@ -104,6 +108,12 @@
             <el-radio v-model="pageData.display" :label="1" :value="1">Yes</el-radio>
             <el-radio v-model="pageData.display" :label="0" :value="0">No</el-radio>
           </el-form-item>
+
+
+          <el-form-item label="行程排版风格（newType）：">
+            <el-radio v-model="pageData.newType" :label="false" :value="false">旧版</el-radio>
+            <el-radio v-model="pageData.newType" :label="true" :value="true">新版</el-radio>
+          </el-form-item>
           
 
           <div class="hr"></div>
@@ -112,7 +122,7 @@
             <el-input v-model="pageData.workdayConfirmCost" @blur="hideError"></el-input>
             <el-select v-model="pageData.confirmCostUnit" placeholder="请选择资审时效">
               <el-option label="HOURS" value="HOURS">HOURS</el-option>
-              <el-option label="DAY" value="DAY">DAY</el-option>
+              <el-option label="DAYS" value="DAYS">DAYS</el-option>
             </el-select>　超过10小时请选择按天计算
           </el-form-item>
 
@@ -259,7 +269,7 @@
 
 <script>
 import cmsAside from '@/components/common/cmsAside.vue';
-import Validate from '@/assets/js/plugin/validate/';
+import Validate from '@/panda/validate/';
   
 
 export default {
@@ -288,9 +298,11 @@ export default {
 
       pageId: urlQuery.id?urlQuery.id:'',
 
-      trafficTypeAll: ['Private Vehicle','walking','biking','van','Coach','metro/taxi','Bullet Train','Flight','Others'],
+      ownerAll: ['Cindy','Leo','Vickey','Jeremy'],
 
-      categoryAll: ['Day Trips','Trans-China Trips','Regional Multi-Day Trips','Transportation','Tickets'],
+      trafficTypeAll: ['Private Vehicle','Walking','Biking','Van','Coach','Metro/Taxi','Bullet Train','Flight','Others'],
+
+      categoryAll: ['Day Trip','Trans-China Trip','Regional Multi-Day Trip','Transportation','Ticket'],
 
       tourTypeArr: ["Landmarks","City tour","Food","Old Neighborhood","Architecture","History","Art","Cultural","Night","Nightlife","Performances & Shows","Family Friendly","Parks & Zoos","Outdoor","Wildlife","Short excursions","Shopping","Sightseeing","Nature & scenery","Layover tour","Multi-day tour","Popular & Classic Tours","Hiking","Watertown","Huangpu River Cruise"," Expat-friendly","Transfer"],
 
@@ -315,6 +327,7 @@ export default {
       //venuesList: {},
 
       pageData:{
+        owner:'',
         title: '',
         category: urlQuery.category?urlQuery.category:'',
         groupType: 'Private',
@@ -343,6 +356,8 @@ export default {
 
         //是否在列表页显示
         display: 1,
+        //行程排版风格
+        newType: false,
 
         //资审耗时
         workdayConfirmCost: '',
@@ -382,7 +397,7 @@ export default {
           { required: true, message: '请选择活兴趣点', trigger: 'blur' }
         ],
         departures:[
-          { required: (urlQuery.category!='Day Trips' && urlQuery.category!='Tickets' && urlQuery.category!='Transportation'), message: '请选择出发地', trigger: 'blur' }
+          { required: (urlQuery.category!='Day Trip' && urlQuery.category!='Ticket' && urlQuery.category!='Transportation'), message: '请选择出发地', trigger: 'blur' }
         ],
         duration:[
           { required: true, message: '请输入活动时长', trigger: 'blur' }
@@ -470,6 +485,7 @@ export default {
       $(e.target).parents('.el-form-item').addClass('is-success').removeClass('is-error');
     },
     submitForm(pageData){
+      var self = this;
       this.$refs[pageData].validate((valid) => {
 
         if (valid && this.fromValidate.validate()) {
@@ -523,11 +539,17 @@ export default {
               
               if(data.succeed){
                 location.href =  '/activity/info?id='+data.response;
+              }else{
+                self.$alert("添加失败！", '温馨提示', {
+                  confirmButtonText: '确定'
+                });
               }
               
             },
             error:function(){
-              alert('添加失败！');
+              self.$alert("添加失败！", '温馨提示', {
+                confirmButtonText: '确定'
+              });
             }
           });	
 
@@ -667,10 +689,11 @@ export default {
 
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped>
   .el-input{
     width: auto;
   }
+  .w_100b{ width: 100%;}
   .cms-main{
     .change_type_list{
       margin-top: 10px;

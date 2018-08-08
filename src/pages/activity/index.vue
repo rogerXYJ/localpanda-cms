@@ -60,8 +60,7 @@
         <el-form-item label="供应商">
           <el-select v-model="formInline.supplierId" placeholder="请选择供应商">
             <el-option label="不限" value=""></el-option>
-            <el-option label="供应商A" value="12312323"></el-option>
-            <el-option label="供应商B" value="12312312"></el-option>
+            <el-option :label="item.name" :value="item.id" v-for="(item,index) in supplierAll" :key="index"></el-option>
           </el-select>
         </el-form-item>
 
@@ -85,7 +84,7 @@
           border
           empty-text="没有匹配数据！！！"
           class="keyword-table">
-          <el-table-column prop="activityId" label="ID" width="50"></el-table-column>
+          <el-table-column prop="activityId" label="ID" width="90"></el-table-column>
           <el-table-column prop="title" label="活动标题"></el-table-column>
           <el-table-column prop="destinations" label="目的地" width="200">
             <template slot-scope="scope">
@@ -97,7 +96,7 @@
           <el-table-column label="状态" width="80">
             <template slot-scope="scope"><span class="opacity08" :class="{green:scope.row.valid,red:!scope.row.valid}">{{scope.row.valid?'有效':'无效'}}</span></template>
           </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" width="160">
+          <el-table-column prop="createTime" label="创建时间" width="120">
             <template slot-scope="scope">
               {{new Date(scope.row.createTime).toLocaleDateString()}}
             </template>
@@ -166,7 +165,7 @@ export default {
         showAddActivity: false, //显示新增关键词
         resourceTip : false,
         resource : '',
-        categoryAll: ['Day Trips','Trans-China Trips','Regional Multi-Day Trips','Transportation','Tickets']
+        categoryAll: ['Day Trip','Trans-China Trip','Regional Multi-Day Trip','Transportation','Ticket']
       },
 
       //数据操作
@@ -183,6 +182,7 @@ export default {
       },
       
       destinationsAll:[],
+      supplierAll:[],
 
       //表格数据
       tableData:{
@@ -223,6 +223,27 @@ export default {
         
       }
     });	
+
+
+    //获取供应商
+    $.ajax({
+      url: 'https://cms.localpanda.com/cms/product/supplier/list/all',
+      type: 'GET',
+      dataType: 'json', //如果跨域用jsonp
+      contentType:'application/json',
+      success:function(data){
+
+        if(data.length){
+          self.supplierAll = data;
+        }
+        
+
+      },
+      error:function(){
+        
+      }
+    });	
+    
 
     
 

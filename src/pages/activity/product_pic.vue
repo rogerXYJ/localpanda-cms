@@ -10,7 +10,7 @@
 
       <el-form label-width="150px">
         <el-form-item label="产品图片：">
-          <el-button type="primary" @click="showDialogTip = false">添加新图片<input class="upload_input" type="file" @change="imgChange"></el-button>
+          <span class="el-button el-button--primary" @click="showDialogTip = false">添加新图片<input class="upload_input" type="file" @change="imgChange" title=""></span>
         </el-form-item>
 
         
@@ -27,16 +27,16 @@
               <el-button type="text" size="small" v-if="!items.file && !isCover(items)" @click="setCover(items)">设为封面</el-button>
               <span v-if="!items.file && isCover(items)" class="cover_txt mt5 fl">封面图</span>
             </div>
-            <div class="ranking mt15" v-if="!items.file && !isCover(items)">权重：
+            <div class="ranking mt15" v-if="!items.file">权重：
               <el-select v-model="items.ranking" style="width:110px;" size="small">
                 <el-option :label="item" :value="item" v-for="item in 7" :key="item">{{item}}</el-option>
               </el-select>
             </div>
             <div class="list_bot mt30" v-if="!items.photoId">
-              <el-button type="primary" size="small" @click="uploading(items)" :loading="items.loading">开始上传</el-button>
+              <span class="el-button el-button--primary el-button--small" @click="uploading(items)" :loading="items.loading" title="">开始上传</span>
             </div>
             <div class="list_bot mt30" v-else>
-              <el-button type="primary" size="small" plain>重新上传<input class="upload_input" type="file" @change="newChange(items,index,$event)"></el-button>
+              <span class="el-button el-button--primary el-button--small is-plain">重新上传<input class="upload_input" type="file" @change="newChange(items,index,$event)" title=""></span>
               <el-button type="primary" size="small" @click="uploading(items)" :loading="items.loading">更新</el-button>
             </div>
           </div>
@@ -131,7 +131,10 @@ export default {
           success:function(data){
             
             if(data.succeed){
-              self.dialogTxt('删除成功！');
+              self.$message({
+                type: 'success',
+                message: '删除成功！'
+              });
               self.imgList.splice(index,1);
             }else{
               self.dialogTxt(data.errorMessage);
@@ -209,10 +212,16 @@ export default {
           if(data.succeed){
             
             if(!fileData.photoId){
-              alert('修改成功！');
+              self.$message({
+                type: 'success',
+                message: '修改成功！'
+              });
               location.reload();
             }else{
-              self.dialogTxt('修改成功！');
+              self.$message({
+                type: 'success',
+                message: '修改成功！'
+              });
             }
             
           }else{
@@ -261,7 +270,10 @@ export default {
         success:function(data){
           
           if(data.succeed){
-            self.dialogTxt('设置成功！');
+            self.$message({
+              type: 'success',
+              message: '设置成功！'
+            });
             self.coverPhotoUrl = thisData.url;
           }else{
             self.dialogTxt('设置失败，请重试!!');
@@ -335,7 +347,7 @@ export default {
 
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped>
   
   .cms-main{
     .img_list{
@@ -377,6 +389,7 @@ export default {
           .el-button{
             position: relative;
             overflow: hidden;
+            vertical-align: top;
           }
         }
       }
@@ -402,6 +415,7 @@ export default {
       line-height: 40px;
       display: block;
       opacity: 0;
+      z-index: 9;
     }
   }
   .upload_input{
@@ -412,6 +426,7 @@ export default {
     line-height: 40px;
     display: block;
     opacity: 0;
+    z-index: 9;
   }
   
 </style>

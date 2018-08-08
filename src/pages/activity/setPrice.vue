@@ -47,7 +47,7 @@
 
 <script>
 	import activityAside from '@/components/common/activityAside.vue';
-	import Validate from '@/assets/js/plugin/validate/';
+	import Validate from '@/panda/validate/';
 	export default {
 		name: 'cms-setPrice',
 		components: {
