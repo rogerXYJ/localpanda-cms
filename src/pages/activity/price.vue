@@ -86,7 +86,7 @@
 						<div v-for="(item,index) in departureTime" class="mt20">
 			  			<span class="ml115">时间{{index+1}}:</span>
 			  			<!--<el-input placeholder="如：9:00" class="w220 ml10" v-model="departureTime[index]"></el-input>-->
-			  			<input class="el-input__inner w220 js_validate" vType="text" type="text" vTip="请填写时间!!!" v-model="departureTime[index]" />
+			  			<input class="el-input__inner w220 js_validate" vType="time" type="text" vTip="请正确填写时间格式如9:00!!" v-model="departureTime[index]" />
 			  			<el-button type="primary" v-if="index==0" class="ml20 w70" @click="addTime(departureTime)">Add</el-button>
 			  			<el-button type="danger" v-if="index>0" :class="index>0?'ml20 w70':''" @click="delTime(departureTime,index)">Del</el-button>
 		  			</div>
@@ -161,7 +161,7 @@ export default {
 		      inputClassName:'js_validate', //需要校验的input的className
 		      errorClassName:'valError'  //报错时，会自动在input上添加的className
 		    });
-		console.log(this.changeData)
+		
   },	
   methods:{
   		getData(){
@@ -172,7 +172,7 @@ export default {
 	   			 method: 'GET',
 	   			 success:function(data){
 	   			 		self.formData=data
-	   			 		
+	   			 		this.changeDate=false
 	   			 		if(data){
 	   			 			self.isType=true
 	   			 		}
@@ -212,7 +212,7 @@ export default {
   				time=refundTimeLimit+" Days"
   			}
   			this.formData.refundInstructions="You can reschedule or cancel your trip at zero cost up to "+ time+" before your travel date."
-  			console.log(this.formData.refundInstructions)
+  			
   		},
   		addTime(arr){
   			arr.push('')
@@ -230,7 +230,7 @@ export default {
 				let message=self.isType?"您已更新成功！":"您已创建成功！";
 				
 				self.$refs[formName].validate((valid) => {
-					if(valid){
+					if(valid && this.fromValidate.validate()){
 							let self=this
 							//self.formData.departureTime=self.departureTime
 							self.departureTime.forEach(item=>{
@@ -276,14 +276,18 @@ export default {
 							
 							
 					}else{
-						alert("有必填项未填写")
+						alert("有必填项未填写或者填写有误！！！")
 					}
 				})
   		}
   },
   
   watch:{
-     
+     "formData.fullRefund":function(val){
+     		if(!val){
+     			this.formData.refundInstructions=''
+     		}
+     }
   },
   head(){
     return {

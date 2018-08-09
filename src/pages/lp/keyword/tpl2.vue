@@ -341,7 +341,7 @@ export default {
       }
       //编辑和新增
       $.ajax({
-        url: 'https://cms.localpanda.com/cms/content/photo/update',
+        url: 'https://cms.localpanda.com/cms/public/photo/update',
         type: 'POST',
         dataType: 'json', //如果跨域用jsonp
         data: param,

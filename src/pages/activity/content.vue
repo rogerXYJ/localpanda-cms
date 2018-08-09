@@ -12,7 +12,7 @@
 	  			<el-input class="wb60" v-model="item.title"></el-input>
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Inclusions,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Inclusions,index,'ITEMS_INCLUDED')" v-else>Commit</el-button>
-	  			<el-button type="danger" v-if="index>0" @click="del(formData.Inclusions,index)">Del</el-button>
+	  			<el-button type="danger"  @click="del(formData.Inclusions,index)">Del</el-button>
 	  			<el-button type="warning"  @click="showContentFn(index,0)">ShowContent</el-button>
 	  			
 	  			<el-input class="mt20 wb60" v-show="item.showContent"  type="textarea" :rows="8" v-model="item.content"></el-input>
@@ -30,9 +30,10 @@
 	  			<el-input class="wb60" v-model="item.title"></el-input>
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Exclusions,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Exclusions,index,'ITEMS_EXCLUDED')" v-else>Commit</el-button>
-	  			<el-button type="danger" v-if="index>0" @click="del(formData.Exclusions,index)">Del</el-button>
-	  			<el-input class="mt20 wb60"  v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-button type="danger"  @click="del(formData.Exclusions,index)">Del</el-button>
 	  			<el-button type="warning"  @click="showContentFn(index,1)">ShowContent</el-button>
+	  			<el-input class="mt20 wb60"  v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			
 	  		</div>
 	  		<div class="text_c wb60">
 	  			<el-button type="primary" plain  @click="add(formData.Exclusions)">Add</el-button>
@@ -43,9 +44,10 @@
 	  			<el-input class="wb60" v-model="item.title"></el-input>
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.AdditionalInfo,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.AdditionalInfo,index,'NOTICE')" v-else>Commit</el-button>
-	  			<el-button type="danger" v-if="index>0" @click="del(formData.AdditionalInfo,index)">Del</el-button>
-	  			<el-input class="mt20 wb60" v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-button type="danger"  @click="del(formData.AdditionalInfo,index)">Del</el-button>
 	  			<el-button type="warning"   @click="showContentFn(index,2)">ShowContent</el-button>
+	  			<el-input class="mt20 wb60" v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			
 	  		</div>
 	  		<div class="text_c wb60">
 	  			<el-button type="primary"  plain  @click="add(formData.AdditionalInfo)">Add</el-button>
@@ -114,6 +116,7 @@ export default {
    			 success:function(data){
    			 	data.forEach(item=>{
    			 		item.showContent=false
+   			 		delete item.newItem
    			 	})
    			 	self.formData.Inclusions=data
    			 	if(self.formData.Inclusions.length<1){
@@ -137,6 +140,7 @@ export default {
    			 	
    				data.forEach(item=>{
    			 		item.showContent=false
+   			 		delete item.newItem
    			 	})
    				self.formData.Exclusions=data
    			 	if(self.formData.Exclusions.length<1){
@@ -161,6 +165,7 @@ export default {
    			 	
    			 	data.forEach(item=>{
    			 		item.showContent=false
+   			 		delete item.newItem
    			 	})
    			 	self.formData.AdditionalInfo=data
    			 	if(self.formData.AdditionalInfo.length<1){
@@ -180,8 +185,6 @@ export default {
   	showContentFn(index,id){
   		let self=this
   		if(id==0){
-  			console.log(0)
-  			console.log(index)
 			self.formData.Inclusions[index].showContent=!self.formData.Inclusions[index].showContent
 			//self.formData.Inclusions[index].showContent=true
 			//console.log(self.formData.Inclusions[index].showContent)
@@ -199,6 +202,7 @@ export default {
   				title:'',
   				content:'',
   				newItem:true,
+  				showContent:false
   			})
   			
   		},
@@ -217,7 +221,7 @@ export default {
 		  				success:function(data){
 		  					console.log(data)
 		  					if(data.succeed){
-		  						arr=arr.splice(index,1)
+		  						arr=arr.splice(index,1)	
 		  						 self.$message({
 					            type: 'success',
 					            message: '删除成功!'
@@ -259,19 +263,19 @@ export default {
   				}
   				if(formData.title){
   					$.ajax({
-  				method: 'POST',
-	  				url:"https://cms.localpanda.com/cms/product/activity/content",
-	  				dataType:'json',
-	  				data:JSON.stringify(formData),
-	  				contentType:'application/json',
-	  				success:function(data){
-	  					 self.$alert('您已更新成功！', {
-				          confirmButtonText: '确定',
-				          callback: action => {
-				            self.getdata()
-				          }
-				       });
-	  				},
+		  				method: 'POST',
+			  				url:"https://cms.localpanda.com/cms/product/activity/content",
+			  				dataType:'json',
+			  				data:JSON.stringify(formData),
+			  				contentType:'application/json',
+			  				success:function(data){
+			  					 self.$alert('您已更新成功！', {
+						          confirmButtonText: '确定',
+						          callback: action => {
+						            self.getdata()
+						          }
+						       });
+			  				},
 	  				error:function(data){
 	  						
 	  				}
