@@ -15,7 +15,7 @@
           </el-form-item>
 
 
-          <el-form-item label="产品经理（owner）：" >
+          <el-form-item label="产品经理（owner）：" prop="owner">
             <el-radio v-model="pageData.owner" v-for="item in ownerAll" :value="item" :label="item" :key="item"></el-radio>
           </el-form-item>
 
@@ -29,7 +29,7 @@
           </el-form-item>
           
 
-          <el-form-item label="服务类型（groupType）：" required prop="groupType" v-if="pageData.category!='Transportation' && pageData.category!='Ticket'">
+          <el-form-item label="服务类型(groupType)：" required prop="groupType" v-if="pageData.category!='Transportation' && pageData.category!='Ticket'">
             <el-radio v-model="pageData.groupType" label="Private">Private</el-radio>
             <el-radio v-model="pageData.groupType" label="Group">Group</el-radio>
           </el-form-item>
@@ -298,7 +298,7 @@ export default {
 
       pageId: urlQuery.id?urlQuery.id:'',
 
-      ownerAll: ['Cindy','Leo','Vickey','Jeremy'],
+      ownerAll: ['Cindy','Leo','Vicky','Jeremy'],
 
       trafficTypeAll: ['Private Vehicle','Walking','Biking','Van','Coach','Metro/Taxi','Bullet Train','Flight','Others'],
 
@@ -378,6 +378,7 @@ export default {
       
       //校验规则
       rules: {
+      	owner:[ { required: true, message: '请选择经理人', trigger: 'change' }],
         title:[
           { required: true, message: '请输入title', trigger: 'blur' }
         ],

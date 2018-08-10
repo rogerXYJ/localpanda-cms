@@ -15,7 +15,7 @@
           </el-form-item>
 
 
-          <el-form-item label="产品经理（owner）：">
+          <el-form-item label="产品经理（owner）：" prop="owner">
             <el-radio v-model="pageData.owner" v-for="item in ownerAll" :value="item" :label="item" :key="item"></el-radio>
           </el-form-item>
 
