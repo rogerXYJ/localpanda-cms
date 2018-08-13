@@ -102,6 +102,10 @@ var Validate = (function(){
 				return value >= min;
 			};
 			return true;
+		}else if(type=="time"){
+			if(value){
+				return /^\d{1,2}:\d{2}$/.test(value)	
+			}
 		}
 		
 	}

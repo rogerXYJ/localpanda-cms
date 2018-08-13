@@ -287,7 +287,7 @@ export default {
 
       pageId: urlQuery.id?urlQuery.id:'',
 
-      ownerAll: ['Cindy','Leo','Vickey','Jeremy'],
+      ownerAll: ['Cindy','Leo','Vicky','Jeremy'],
 
       trafficTypeAll: ['Private Vehicle','Walking','Biking','Van','Coach','Metro/Taxi','Bullet Train','Flight','Others'],
 
@@ -370,6 +370,7 @@ export default {
       
       //校验规则
       rules: {
+      	owner:[ {required: true, message: '请选择经理人', trigger: 'change' }],
         title:[
           { required: true, message: '请输入title', trigger: 'blur' }
         ],
