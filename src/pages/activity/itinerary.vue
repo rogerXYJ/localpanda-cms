@@ -555,7 +555,7 @@ export default {
         dataType: 'json', //如果跨域用jsonp
         success:function(data2){
           
-          if(data2.length){
+          
             self.imgList = data2;
 
 
@@ -584,7 +584,6 @@ export default {
                 self.tabLoading = false;
               }
             });	
-          }
           
         },
         error:function(){
