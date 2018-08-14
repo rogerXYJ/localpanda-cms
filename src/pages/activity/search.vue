@@ -22,6 +22,11 @@
           </div>
         </el-form-item>
 
+        <el-form-item label="是否覆盖系统权重：" class="mt40" required>
+          <el-radio v-model="weightAbsolute" :label="true">是</el-radio>
+          <el-radio v-model="weightAbsolute" :label="false">否</el-radio>
+        </el-form-item>
+
         <el-form-item label="当前产品搜索权重加值：" class="mt40" required>
           <input v-model="weight" class="el-input__inner w200 js_validate" vType="number" min="0" max="500" vTip="请输入0~500之间的数字" type="text">　
           0～500，加值越多，搜索权重越高（默认0）
@@ -80,6 +85,10 @@ export default {
       destinationsDetail:[],
       destArr:[],
 
+      weightAbsolute:false,
+
+
+      hasData:false
       
 
     }
@@ -108,28 +117,51 @@ export default {
         "keywords": this.keywords,
         "weight": this.weight,
         "destinationsDetail": this.destinationsDetail,
+        "weightAbsolute":this.weightAbsolute
       };
 
 
       if(self.fromValidate.validate()){
-        $.ajax({
-          url: 'https://cms.localpanda.com/cms/product/activity',
-          type: 'POST',
-          dataType: 'json', //如果跨域用jsonp
-          contentType: 'application/json',
-          data: JSON.stringify(postData),
-          success:function(data){
+        if(self.hasData){
+          $.ajax({
+            url: 'https://cms.localpanda.com/cms/product/activity/search/info',
+            type: 'POST',
+            dataType: 'json', //如果跨域用jsonp
+            contentType: 'application/json',
+            data: JSON.stringify(postData),
+            success:function(data){
 
-            if(data.succeed){
-              self.dialogTxt('<span class="green">设置成功！</span>');
-            }else{
+              if(data.succeed){
+                self.dialogTxt('<span class="green">设置成功！</span>');
+              }else{
+                self.dialogTxt('<span class="red">设置失败，请重试!!</span>');
+              }
+            },
+            error:function(){
               self.dialogTxt('<span class="red">设置失败，请重试!!</span>');
             }
-          },
-          error:function(){
-            self.dialogTxt('<span class="red">设置失败，请重试!!</span>');
-          }
-        });	
+          });	
+        }else{
+          $.ajax({
+            url: 'https://cms.localpanda.com/cms/product/activity/search/info',
+            type: 'PUT',
+            dataType: 'json', //如果跨域用jsonp
+            contentType: 'application/json',
+            data: JSON.stringify(postData),
+            success:function(data){
+
+              if(data.succeed){
+                self.dialogTxt('<span class="green">设置成功！</span>');
+              }else{
+                self.dialogTxt('<span class="red">设置失败，请重试!!</span>');
+              }
+            },
+            error:function(){
+              self.dialogTxt('<span class="red">设置失败，请重试!!</span>');
+            }
+          });	
+        }
+        
       }
 
       
@@ -159,20 +191,23 @@ export default {
       error:function(){
         
       }
-    });	
+    });
 
     $.ajax({
-      url: 'https://cms.localpanda.com/cms/product/activity/'+this.activityId,
+      url: 'https://cms.localpanda.com/cms/product/activity/'+this.activityId+'/search/info',
       type: 'GET',
       dataType: 'json', //如果跨域用jsonp
       contentType: 'application/json',
       success:function(data){
-
-        self.weight = data.weight;
-        if(data.keywords){
+        
+        if(data){
+          self.weight = data.weight;
           self.keywords = data.keywords;
           self.destinationsDetail = data.destinationsDetail;
+          self.weightAbsolute = data.weightAbsolute
+          self.hasData = true;
         }
+        
         
       },
       error:function(){
