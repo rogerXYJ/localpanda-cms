@@ -110,6 +110,7 @@
           <el-form-item label="行程排版风格（newType）：">
             <el-radio v-model="pageData.newType" :label="false" :value="false">旧版</el-radio>
             <el-radio v-model="pageData.newType" :label="true" :value="true">新版</el-radio>
+            <a v-if="pageData.newType" :href="'https://www.localpanda.com/activity/details/'+pageId+'?newStyle=1'" target="_blank" class="el-button el-button--primary is-plain block w120 mt10">预览</a>
           </el-form-item>
           
 

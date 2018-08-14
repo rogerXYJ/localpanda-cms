@@ -13,7 +13,7 @@
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Inclusions,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Inclusions,index,'ITEMS_INCLUDED')" v-else>Commit</el-button>
 	  			<el-button type="danger"  @click="del(formData.Inclusions,index)">Del</el-button>
-	  			<el-button type="warning"  @click="showContentFn(index,0)">ShowContent</el-button>
+	  			<el-button type="warning"  @click="showContentFn(index,0)">{{item.showContent?'hide content':(!item.content?'add content':'show content')}}</el-button>
 	  			
 	  			<el-input class="mt20 wb60" v-show="item.showContent"  type="textarea" :rows="8" v-model="item.content"></el-input>
 	  			<!--<div class="mt20 wb60 el-textarea" @click="aa(item.showContent)" >
@@ -31,7 +31,7 @@
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.Exclusions,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Exclusions,index,'ITEMS_EXCLUDED')" v-else>Commit</el-button>
 	  			<el-button type="danger"  @click="del(formData.Exclusions,index)">Del</el-button>
-	  			<el-button type="warning"  @click="showContentFn(index,1)">ShowContent</el-button>
+	  			<el-button type="warning"  @click="showContentFn(index,1)">{{item.showContent?'hide content':(!item.content?'add content':'show content')}}</el-button>
 	  			<el-input class="mt20 wb60"  v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
 	  			
 	  		</div>
@@ -45,7 +45,7 @@
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.AdditionalInfo,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.AdditionalInfo,index,'NOTICE')" v-else>Commit</el-button>
 	  			<el-button type="danger"  @click="del(formData.AdditionalInfo,index)">Del</el-button>
-	  			<el-button type="warning"   @click="showContentFn(index,2)">ShowContent</el-button>
+	  			<el-button type="warning"   @click="showContentFn(index,2)">{{item.showContent?'hide content':(!item.content?'add content':'show content')}}</el-button>
 	  			<el-input class="mt20 wb60" v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
 	  			
 	  		</div>
@@ -115,7 +115,11 @@ export default {
    			 method: 'GET',
    			 success:function(data){
    			 	data.forEach(item=>{
-   			 		item.showContent=false
+					item.showContent=false
+					if(item.content){
+						item.showContent=true
+					}
+   			 		
    			 		delete item.newItem
    			 	})
    			 	self.formData.Inclusions=data
@@ -140,6 +144,9 @@ export default {
    			 	
    				data.forEach(item=>{
    			 		item.showContent=false
+					if(item.content){
+						item.showContent=true
+					}
    			 		delete item.newItem
    			 	})
    				self.formData.Exclusions=data
@@ -165,6 +172,9 @@ export default {
    			 	
    			 	data.forEach(item=>{
    			 		item.showContent=false
+					if(item.content){
+						item.showContent=true
+					}
    			 		delete item.newItem
    			 	})
    			 	self.formData.AdditionalInfo=data

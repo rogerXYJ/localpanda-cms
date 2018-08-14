@@ -20,30 +20,30 @@
 		    <!--<el-button type="primary" class="fr"></el-button>-->
 	  	</el-form-item>
 	  	<div class="box">
-	  		 	<label style="display:inline-block; width: 90px;text-align: right;">退改规则:</label>
-	  		 	<el-form-item label="是否全额退款:" label-width="100px">
+	  		 	<label style="display:inline-block; width: 140px;padding-right:15px;text-align: right;box-sizing: border-box;">退改规则:</label>
+	  		 	<el-form-item label="是否支持全额退款:" label-width="140px">
 		  		 	<el-radio-group v-model="formData.fullRefund" prop="fullRefund">
-					    <el-radio :label="true">全额退款 </el-radio>
-					    <el-radio :label="false">部分退款</el-radio>
+					    <el-radio :label="true">是 </el-radio>
+					    <el-radio :label="false">否</el-radio>
 					  </el-radio-group>
 		  		</el-form-item>
-			    <el-form-item label="时间:" class="mt20" label-width="100px" prop="refundTimeLimit" v-if="formData.fullRefund">
+			    <el-form-item label="时间:" class="mt20" label-width="140px" prop="refundTimeLimit" v-if="formData.fullRefund">
 		  		 	<el-input class="w220" v-model="formData.refundTimeLimit" @input="changeRefundTimeLimit"></el-input> /天
 		  		 	<span v-show="changeDate" class="red ml30">退款时效有变动，请注意与细则说明保持同步！</span>
 		  		</el-form-item>
-	  			<el-form-item label="细则说明:" label-width="100px" prop="refundInstructions">
+	  			<el-form-item label="细则说明:" label-width="140px" prop="refundInstructions">
 	  				<el-button type="primary" v-if="formData.fullRefund" class="display" @click="replaceCont">自动套用模板</el-button>
 		  		 	<el-input class="wb60 mt20" v-model="formData.refundInstructions" type="textarea" :rows="7"></el-input>
 		  		</el-form-item>
 	  	</div>
 	  	<el-row :gutter="20">
 		  <el-col :span="8">
-		  	<el-form-item label="儿童年龄 (Child Standard):" class="mt20" prop="childStandard">
+		  	<el-form-item label="儿童年龄 (Child Standard):" class="mt20" label-width="200px" prop="childStandard">
 	  			<el-input class="w220" v-model="formData.childStandard"></el-input>
 	  		</el-form-item>
 		  </el-col>
 		  <el-col :span="8">
-		  	<el-form-item label="儿童差价 (Child Discount)：" class="mt20">
+		  	<el-form-item label="儿童差价 (Child Discount)：" label-width="200px" class="mt20">
 		  		<el-input class="w220" v-model="formData.childDiscount"></el-input>
 		  	</el-form-item>
 		  </el-col>
@@ -51,32 +51,39 @@
 		
 		<el-row :gutter="20">
 		  <el-col :span="8">
-		  	<el-form-item label="原始价格 (Original Price)：" class="mt40" v-if="formData.originalPrice">
+		  	<el-form-item label="原始价格 (Original Price)：" label-width="200px" class="mt40" v-if="formData.originalPrice">
 		  		<el-input class="w220" v-model="formData.originalPrice"></el-input>
 		  		
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="8">
-		  	<el-form-item label="最低价格Bottom Price：" class="mt40" v-if="formData.bottomPrice">
+		  	<el-form-item label="最低价格Bottom Price：" label-width="200px" class="mt40" v-if="formData.bottomPrice">
 		  		<!--<span>{{formData.bottomPrice}}</span>-->
 		  		<el-input class="w220" v-model="formData.bottomPrice" :disabled="true"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		</el-row>
+		
+			 
+			<el-form-item label="成本价:" label-width="200px" class="mt40">
+					<el-input v-model="formData.costPrice" class="w220"></el-input>
+			</el-form-item>
+			
+	
 	  	<el-row :gutter="20">
 		  <el-col :span="8">
-		  	<el-form-item label=" 最小成团人数minimum:" class="mt20" prop="minParticipants">
+		  	<el-form-item label=" 最小成团人数minimum:" label-width="200px" class="mt20" prop="minParticipants">
 		  			<el-input class="w220" v-model="formData.minParticipants"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="8">
-		  	<el-form-item label="最大接待人数maximum:" class="mt20" v-if="formData.maxParticipants">
+		  	<el-form-item label="最大接待人数maximum:" label-width="200px" class="mt20" v-if="formData.maxParticipants">
 		  		<!--<span>{{formData.maxParticipants}}</span>-->
 		  		<el-input class="w220" v-model="formData.maxParticipants" :disabled="true"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		</el-row>
-				<el-form-item label="出发时间 departure time:" class="mt20">
+				<!--<el-form-item label="出发时间 departure time:" class="mt20">
 					  <el-radio-group v-model="radio">
 					    <el-radio :label="0">Fixed 固定时间</el-radio>
 					    <el-radio :label="1">Flexible 时段</el-radio>
@@ -85,7 +92,7 @@
 		  	<el-form-item   v-if="radio==0">
 						<div v-for="(item,index) in departureTime" class="mt20">
 			  			<span class="ml115">时间{{index+1}}:</span>
-			  			<!--<el-input placeholder="如：9:00" class="w220 ml10" v-model="departureTime[index]"></el-input>-->
+			  			
 			  			<input class="el-input__inner w220 js_validate" vType="time" type="text" vTip="请正确填写时间格式如9:00!!" v-model="departureTime[index]" />
 			  			<el-button type="primary" v-if="index==0" class="ml20 w70" @click="addTime(departureTime)">Add</el-button>
 			  			<el-button type="danger" v-if="index>0" :class="index>0?'ml20 w70':''" @click="delTime(departureTime,index)">Del</el-button>
@@ -97,7 +104,7 @@
 					   	至
 		  			 <el-input class="w220"></el-input>
 
-		  	</el-form-item>
+		  	</el-form-item>-->
 	  	<el-form-item label="费用说明Additional instructions：">
 	  		<el-input type="textarea" v-model="formData.priceInstructions" :rows="7"></el-input>
 	  	</el-form-item>
@@ -141,7 +148,8 @@ export default {
     		//departureTime:[''],//出发时间
     		startTime:null,//出发时间区间
     		endTime:null,//出发时间区间
-    		fullRefund:''
+    		fullRefund:true,
+    		costPrice:null
     	},
     	rules:{
     		currency:{required: true, message: '请选择币种！！！',trigger: 'change'},
@@ -157,11 +165,11 @@ export default {
  },
   mounted(){
    		this.getData()
-   		this.fromValidate = new Validate({
-		      inputClassName:'js_validate', //需要校验的input的className
-		      errorClassName:'valError'  //报错时，会自动在input上添加的className
-		    });
-		
+// 		this.fromValidate = new Validate({
+//		      inputClassName:'js_validate', //需要校验的input的className
+//		      errorClassName:'valError'  //报错时，会自动在input上添加的className
+//		    });
+//		
   },	
   methods:{
   		getData(){
@@ -176,9 +184,9 @@ export default {
 	   			 		if(data){
 	   			 			self.isType=true
 	   			 		}
-						if(data.departureTime){
-							self.departureTime=data.departureTime
-						}
+//						if(data.departureTime){
+//							self.departureTime=data.departureTime
+//						}
 						if(data.refundTimeLimit==0){
 							self.formData.refundTimeLimit=''
 						}
@@ -214,15 +222,15 @@ export default {
   			this.formData.refundInstructions="You can reschedule or cancel your trip at zero cost up to "+ time+" before your travel date."
   			
   		},
-  		addTime(arr){
-  			arr.push('')
-  			setTimeout(()=>{
-				this.fromValidate.init()
-			},200)
-  		},
-  		delTime(arr,index){
-  			arr.splice(index,1)
-  		},
+//		addTime(arr){
+//			arr.push('')
+//			setTimeout(()=>{
+//				this.fromValidate.init()
+//			},200)
+//		},
+//		delTime(arr,index){
+//			arr.splice(index,1)
+//		},
   		sumbit(formName){
 				let self=this
 				let departureTime=[];
@@ -230,15 +238,15 @@ export default {
 				let message=self.isType?"您已更新成功！":"您已创建成功！";
 				
 				self.$refs[formName].validate((valid) => {
-					if(valid && this.fromValidate.validate()){
+					if(valid){
 							let self=this
 							//self.formData.departureTime=self.departureTime
-							self.departureTime.forEach(item=>{
-								if(item!=''){
-									departureTime.push(item)
-								}
-							});
-							self.formData.departureTime=departureTime
+//							self.departureTime.forEach(item=>{
+//								if(item!=''){
+//									departureTime.push(item)
+//								}
+//							});
+//							self.formData.departureTime=departureTime
 							self.formData.activityId=self.id
 							if(!self.formData.fullRefund){
 								self.formData.refundTimeLimit=0
@@ -286,6 +294,8 @@ export default {
      "formData.fullRefund":function(val){
      		if(!val){
      			this.formData.refundInstructions=''
+     		}else{
+     			this.replaceCont()
      		}
      }
   },
