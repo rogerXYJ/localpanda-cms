@@ -161,6 +161,7 @@
 						source: 1
 						//file:'',
 					},
+					isfirst:false,
 					rules: {
 						activityId: {
 							required: true,
@@ -234,6 +235,7 @@
 								}
 								//用户头像
 								if(resData.userPortraitPhoto){
+									self.isfirst=true
 									self.imageUrl = resData.userPortraitPhoto.url
 								}
 								
@@ -251,7 +253,7 @@
 				//上传头图
 				uploadimg(id, file) {
 					var self = this;
-					if(self.ruleForm.id){
+					if(self.isfirst){
 						var  postdata={
 							objectId: id,
 							objectType: "COMMENT_PORTRAIT",
@@ -271,7 +273,7 @@
 					}
 					postdata = param;
 					$.ajax({
-						url:self.ruleForm.id?"https://cms.localpanda.com/cms/public/photo/update":"https://cms.localpanda.com/cms/public/photo/commit",
+						url:self.isfirst?"https://cms.localpanda.com/cms/public/photo/update":"https://cms.localpanda.com/cms/public/photo/commit",
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: param,
