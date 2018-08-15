@@ -211,30 +211,30 @@
 			mounted() {
 				let self = this
 				if(self.ruleForm.id) {
-					let param = {
-						id: self.ruleForm.id
-					}
+					// let param = {
+					// 	id: self.ruleForm.id
+					// }
 					$.ajax({
-						url: 'https://cms.localpanda.com/cms/user/comment/list',
-						type: 'POST',
+						url: 'https://cms.localpanda.com/cms/user/comment/detail/'+self.ruleForm.id,
+						type: 'get',
 						dataType: 'json', //如果跨域用jsonp
-						data: JSON.stringify(param),
+						//data: JSON.stringify(param),
 						contentType: self.contentType,
 						//processData: false,
 						success: function(data) {
 							var resData = data;
-							if(resData.length > 0) {
+							if(resData) {
 								//星级转为字符串
-								resData[0].score+='';
-								self.ruleForm = resData[0];
+								resData.score+='';
+								self.ruleForm = resData;
 								
 								//点评图片
-								if( resData[0].userCommentPhoto){
-									self.imageList = resData[0].userCommentPhoto;
+								if( resData.userCommentPhoto){
+									self.imageList = resData.userCommentPhoto;
 								}
 								//用户头像
-								if(resData[0].userPortraitPhoto){
-									self.imageUrl = resData[0].userPortraitPhoto.url
+								if(resData.userPortraitPhoto){
+									self.imageUrl = resData.userPortraitPhoto.url
 								}
 								
 							} else {
@@ -251,18 +251,27 @@
 				//上传头图
 				uploadimg(id, file) {
 					var self = this;
-					let postdata = {
-						objectId: id,
-						objectType: "COMMENT_PORTRAIT",
-						files: file
+					if(self.ruleForm.id){
+						var  postdata={
+							objectId: id,
+							objectType: "COMMENT_PORTRAIT",
+							file: file
+						}
+					}else{
+						var  postdata = {
+							objectId: id,
+							objectType: "COMMENT_PORTRAIT",
+							files: file
+						}
 					}
+					
 					let param = new FormData();
 					for(let key in postdata) {
 						param.append(key, postdata[key]) // 通过append向form对象添加数据
 					}
 					postdata = param;
 					$.ajax({
-						url: "https://cms.localpanda.com/cms/public/photo/commit",
+						url:self.ruleForm.id?"https://cms.localpanda.com/cms/public/photo/update":"https://cms.localpanda.com/cms/public/photo/commit",
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: param,
@@ -314,7 +323,7 @@
 						param.append("files",item)
 					})
 					$.ajax({
-						url: "https://cms.localpanda.com/cms/public/photo/commit",
+						url:"https://cms.localpanda.com/cms/public/photo/commit",
 						type: 'POST',
 						dataType: 'json', //如果跨域用jsonp
 						data: param,
