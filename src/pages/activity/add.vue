@@ -330,7 +330,7 @@ export default {
         owner:'',
         title: '',
         category: urlQuery.category?urlQuery.category:'',
-        groupType: 'Private',
+        groupType: (urlQuery.category=='Transportation' || urlQuery.category=='Ticket') ? '' : 'Private',
         trafficType: '',
 
         tourTypes: [],
