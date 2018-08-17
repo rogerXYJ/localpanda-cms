@@ -323,7 +323,7 @@ export default {
         owner:'',
         title: '',
         category: '',
-        groupType: 'Private',
+        groupType: '',
         trafficType: 'Walking',
 
         tourTypes: [],

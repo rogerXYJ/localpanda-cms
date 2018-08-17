@@ -8,9 +8,9 @@
       <h3 class="text_c">搜索信息管理</h3>
       
 
-      <el-form label-width="180px">
+      <el-form label-width="150px">
         
-        <el-form-item label="当前产品搜索关键词：">
+        <el-form-item label="强制绑定关键词：">
           <ul class="keyword_list">
             <li v-for="(items,index) in keywords" :key="index">
               <input v-model="keywords[index]" class="el-input__inner" vType="text" vTip="请输入搜索关键词" type="text">
@@ -22,22 +22,31 @@
           </div>
         </el-form-item>
 
-        <el-form-item label="是否覆盖系统权重：" class="mt40" required>
-          <el-radio v-model="weightAbsolute" :label="true">是</el-radio>
-          <el-radio v-model="weightAbsolute" :label="false">否</el-radio>
+        <el-form-item label="产品权重管理：" class="mt40 bg_eee" required>
+          <el-radio v-model="weightAbsolute" :label="true">设置绝对权重</el-radio>
+          <el-radio v-model="weightAbsolute" :label="false">增加相对权重</el-radio>
+
+          <p class="c_999" v-if="weightAbsolute">主要用于固定列表页中头部产品的顺序（系统会跳过计算直接赋予该权重）</p>
+          <p class="c_999" v-else>主要用于提升产品在列表页的排序位置（在系统算法的基础上增加该权重，但由于基础权重动态变化因此位置不固定）</p>
+
+          
+          <div class="mt10" v-if="weightAbsolute">
+            <input v-model="weight" class="el-input__inner w200 js_validate" vType="number" min="0" max="5000" vTip="请输入0~5000之间的数字" type="text">　
+          0～5000，加值越多，搜索权重越高（默认0）
+          </div>
+          <div class="mt10" v-else>
+            <input v-model="weight" class="el-input__inner w200 js_validate" vType="number" min="0" max="500" vTip="请输入0~500之间的数字" type="text">　
+          0～500，加值越多，搜索权重越高（默认0）
+          </div>
         </el-form-item>
 
-        <el-form-item label="当前产品搜索权重加值：" class="mt40" required>
-          <input v-model="weight" class="el-input__inner w200 js_validate" vType="number" min="0" max="500" vTip="请输入0~500之间的数字" type="text">　
-          0～500，加值越多，搜索权重越高（默认0）
-        </el-form-item>
         
-        <el-form-item label="二级目的地：" class="mt40">
+        <!-- <el-form-item label="二级目的地：" class="mt40">
           <div class="mdd_tip">（仅用于产品前台展示）</div>
           <el-checkbox-group v-model="destinationsDetail">
             <el-checkbox v-for="(items,index) in destArr" :label="items.name" :value="items.name" :key="index">{{items.name}}</el-checkbox>
           </el-checkbox-group>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label=" ">
           <el-button class="mt30" type="primary" @click="submit">提交</el-button>
@@ -82,10 +91,10 @@ export default {
 
       keywords:[''],
       weight: 0,
-      destinationsDetail:[],
-      destArr:[],
+      // destinationsDetail:[],
+      // destArr:[],
 
-      weightAbsolute:false,
+      weightAbsolute:'',
 
 
       hasData:false
@@ -116,7 +125,7 @@ export default {
         "activityId": this.activityId,
         "keywords": this.keywords,
         "weight": this.weight,
-        "destinationsDetail": this.destinationsDetail,
+        //"destinationsDetail": this.destinationsDetail,
         "weightAbsolute":this.weightAbsolute
       };
 
@@ -172,26 +181,26 @@ export default {
   mounted(){
     var self = this;
     //二级目的地查询
-    $.ajax({
-      url: 'https://cms.localpanda.com/cms/public/dest/list/',
-      type: 'POST',
-      dataType: 'json', //如果跨域用jsonp
-      contentType: 'application/json',
-      data: JSON.stringify({
-        "detail":true,
-        "valid":true
-      }),
-      success:function(data){
+    // $.ajax({
+    //   url: 'https://cms.localpanda.com/cms/public/dest/list/',
+    //   type: 'POST',
+    //   dataType: 'json', //如果跨域用jsonp
+    //   contentType: 'application/json',
+    //   data: JSON.stringify({
+    //     "detail":true,
+    //     "valid":true
+    //   }),
+    //   success:function(data){
 
-        if(data.length){
-          self.destArr = data;
-        };
+    //     if(data.length){
+    //       self.destArr = data;
+    //     };
         
-      },
-      error:function(){
+    //   },
+    //   error:function(){
         
-      }
-    });
+    //   }
+    // });
 
     $.ajax({
       url: 'https://cms.localpanda.com/cms/product/activity/'+this.activityId+'/search/info',
@@ -203,9 +212,11 @@ export default {
         if(data){
           self.weight = data.weight;
           self.keywords = data.keywords;
-          self.destinationsDetail = data.destinationsDetail;
+          //self.destinationsDetail = data.destinationsDetail;
           self.weightAbsolute = data.weightAbsolute
           self.hasData = true;
+        }else{
+          self.weightAbsolute = true;
         }
         
         
@@ -281,6 +292,11 @@ export default {
       top: 100%;
       line-height: 24px;
       font-size: 10px;
+    }
+
+    .bg_eee{
+      background-color: #f1f1f1;
+      padding: 20px 0;
     }
   }
   
