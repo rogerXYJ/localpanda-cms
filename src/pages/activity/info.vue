@@ -110,9 +110,10 @@
           <el-form-item label="行程排版风格（newType）：">
             <el-radio v-model="pageData.newType" :label="false" :value="false">旧版</el-radio>
             <el-radio v-model="pageData.newType" :label="true" :value="true">新版</el-radio>
-            <a v-if="pageData.newType" :href="'https://www.localpanda.com/activity/details/'+pageId+'?newStyle=1'" target="_blank" class="el-button el-button--primary is-plain block w120 mt10">预览</a>
+            <span class="block">(<label class="red"> 切换到新的行程排版之前，确保严格按照时间顺序组织行程内容，并使用质量较高的行程图片. <a :href="'https://www.localpanda.com/activity/details/'+pageId+'?newStyle=1'" target="_blank" class=" check blue" >新排版预览</a></label> )</span>
+            
           </el-form-item>
-          
+        
 
           <div class="hr"></div>
 
@@ -816,7 +817,7 @@ export default {
       }
     }
   }
-
-  
-  
+  .check{
+    text-decoration: underline;
+  }
 </style>
