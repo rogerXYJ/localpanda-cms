@@ -39,12 +39,12 @@
 	  	<el-row :gutter="20">
 		  <el-col :span="8">
 		  	<el-form-item label="儿童年龄 (Child Standard):" class="mt20" label-width="200px" prop="childStandard">
-	  			<el-input class="w220" v-model="formData.childStandard"></el-input>
+	  			<el-input class="w120" v-model="formData.childStandard"></el-input>
 	  		</el-form-item>
 		  </el-col>
 		  <el-col :span="8">
 		  	<el-form-item label="儿童差价 (Child Discount)：" label-width="200px" class="mt20">
-		  		<el-input class="w220" v-model="formData.childDiscount"></el-input>
+		  		<el-input class="w120" v-model="formData.childDiscount"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		</el-row>
@@ -52,34 +52,27 @@
 		<el-row :gutter="20">
 		  <el-col :span="8">
 		  	<el-form-item label="原始价格 (Original Price)：" label-width="200px" class="mt40" v-if="formData.originalPrice">
-		  		<el-input class="w220" v-model="formData.originalPrice"></el-input>
+		  		<el-input class="w120" v-model="formData.originalPrice"></el-input>
 		  		
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="8">
 		  	<el-form-item label="最低价格Bottom Price：" label-width="200px" class="mt40" v-if="formData.bottomPrice">
 		  		<!--<span>{{formData.bottomPrice}}</span>-->
-		  		<el-input class="w220" v-model="formData.bottomPrice" :disabled="true"></el-input>
+		  		<el-input class="w120" v-model="formData.bottomPrice" :disabled="true"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		</el-row>
-		
-			 
-			<el-form-item label="成本价:" label-width="200px" class="mt40">
-					<el-input v-model="formData.costPrice" class="w220"></el-input>
-			</el-form-item>
-			
-	
 	  	<el-row :gutter="20">
 		  <el-col :span="8">
 		  	<el-form-item label=" 最小成团人数minimum:" label-width="200px" class="mt20" prop="minParticipants">
-		  			<el-input class="w220" v-model="formData.minParticipants"></el-input>
+		  			<el-input class="w120" v-model="formData.minParticipants"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="8">
 		  	<el-form-item label="最大接待人数maximum:" label-width="200px" class="mt20" v-if="formData.maxParticipants">
 		  		<!--<span>{{formData.maxParticipants}}</span>-->
-		  		<el-input class="w220" v-model="formData.maxParticipants" :disabled="true"></el-input>
+		  		<el-input class="w120" v-model="formData.maxParticipants" :disabled="true"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		</el-row>
@@ -103,7 +96,6 @@
 					   <el-input class="w220 ml10"></el-input>
 					   	至
 		  			 <el-input class="w220"></el-input>
-
 		  	</el-form-item>-->
 	  	<el-form-item label="费用说明Additional instructions：">
 	  		<el-input type="textarea" v-model="formData.priceInstructions" :rows="7"></el-input>
@@ -120,7 +112,6 @@
 <script>
 import activityAside from '@/components/common/activityAside.vue';
 import Validate from '@/panda/validate/'; 
-
 export default {
   name: 'cms-price',
   components: {
@@ -134,7 +125,9 @@ export default {
     	radio:0,
     	departureTime:[''],
     	isType:false,
-    	changeDate:false,
+		changeDate:false,
+		initialrefund:false,
+		initialrefundInstructions:'',
     	formData:{
     		activityId:id,
     		currency:'USD',//币种
@@ -149,7 +142,7 @@ export default {
     		startTime:null,//出发时间区间
     		endTime:null,//出发时间区间
     		fullRefund:true,
-    		costPrice:null
+    		// costPrice:null
     	},
     	rules:{
     		currency:{required: true, message: '请选择币种！！！',trigger: 'change'},
@@ -180,10 +173,13 @@ export default {
 	   			 method: 'GET',
 	   			 success:function(data){
 	   			 		self.formData=data
-	   			 		this.changeDate=false
+							this.changeDate=false
+							self.initialrefund=data.fullRefund
+							self.initialrefundInstructions=data.refundInstructions
 	   			 		if(data){
 	   			 			self.isType=true
-	   			 		}
+						}
+						
 //						if(data.departureTime){
 //							self.departureTime=data.departureTime
 //						}
@@ -205,7 +201,9 @@ export default {
   			
   			if(e){
   				this.changeDate=true
-  			}
+  			}else{
+				  this.changeDate=false
+			  }
   			
   		},
   		replaceCont(){
@@ -292,10 +290,16 @@ export default {
   
   watch:{
      "formData.fullRefund":function(val){
-     		if(!val){
-     			this.formData.refundInstructions=''
+		 	this.formData.refundInstructions=''
+     		if(val){
+				 if(this.initialrefund){
+					this.formData.refundInstructions=this.initialrefundInstructions
+				 }
      		}else{
-     			this.replaceCont()
+				 if(!this.initialrefund){
+					this.formData.refundInstructions=this.initialrefundInstructions  
+				 }
+     			
      		}
      }
   },
@@ -305,7 +309,6 @@ export default {
     }
   }
 }
-
 </script>
 
 

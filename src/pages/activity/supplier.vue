@@ -147,12 +147,12 @@ export default {
 
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped>
   
   .cms-main{
     .el-checkbox{
       margin-right: 30px;
-      margin-left: 0;
+      margin-left: 0!important;
       min-width: 300px;
     }
   }

@@ -13,27 +13,27 @@
 				<div class="hr"></div>
 				<div class="setPice" v-for="(item,index) in formData.records">
 					<div class="clearfix">
-						
-							
-								<el-form-item label="Number of People：" required :key="item.key" class="fl">
-									<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
-									<input class="el-input__inner w220 js_validate" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" />
-								</el-form-item>
-							
-							
-								<el-form-item label="Total Price：" required :key="item.key" class="fl ml30">
-									<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
-									<input class="el-input__inner w220 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
-								</el-form-item>
-							
-							
-								<el-form-item class="fl padding40 ml30">
-									<el-button type="danger" class="w70" v-if="index>0" @click="del(formData.records,index)">Del</el-button>
-									<el-button type="primary" class="w70" v-if="index==0" @click="add(formData.records)">Add</el-button>
-									<el-button type="success" v-if="item.id" @click="upData(formData.records,index)">Update</el-button>
-								</el-form-item>
-							
-						</el-row>
+						<el-form-item label="Number of People：" required :key="item.key" class="fl">
+							<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
+							<input class="el-input__inner w120 js_validate" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" />
+						</el-form-item>
+					
+					
+						<el-form-item label="Total Price：" required :key="item.key" class="fl ml30">
+							<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
+							<input class="el-input__inner w120 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
+						</el-form-item>
+						<el-form-item label="Cost Price" :key="item.key" class="fl ml30">
+							<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
+							<input class="el-input__inner w120"  v-model="item.costPrice" />
+						</el-form-item>
+					
+					
+						<el-form-item class="fl padding40 ml30">
+							<el-button type="danger" class="w70" v-if="index>0" @click="del(formData.records,index)">Del</el-button>
+							<el-button type="primary" class="w70" v-if="index==0" @click="add(formData.records)">Add</el-button>
+							<el-button type="success" v-if="item.id" @click="upData(formData.records,index)">Update</el-button>
+						</el-form-item>
 					</div>
 				</div>
 				<el-form-item class=" mt100" v-if="showBtn">
@@ -68,6 +68,7 @@
 							activityId:id,
 							capacity:'',
 							price:'',
+							costPrice:null,
 							newItem:true,
 							
 						}
@@ -116,6 +117,7 @@
 						activityId:this.activityId,
 						capacity:'',
 						price:'',
+						costPrice:null,
 						newItem:true,
 				})
 				this.showBtn=true
@@ -189,6 +191,7 @@
 						id:arr[index].id,
 						capacity:arr[index].capacity,
 						price:arr[index].price,
+						costPrice:arr[index].costPrice?arr[index].costPrice:null,
 						activityId:arr[index].activityId
 					}
 					$.ajax({
@@ -268,7 +271,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped>
 	.cms-main{
 		overflow-x: hidden!important;
 	}

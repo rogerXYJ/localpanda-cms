@@ -34,7 +34,12 @@
             <el-radio v-model="pageData.groupType" label="Group">Group</el-radio>
           </el-form-item>
           
-          <el-form-item label="交通类型（trafficType）：" required prop="trafficType">
+          <el-form-item label="交通类型（trafficType）：" required prop="trafficType" v-if="pageData.category!='Ticket'">
+            <el-select v-model="pageData.trafficType" placeholder="请选择交通类型">
+              <el-option :label="item" :value="item" v-for="item in trafficTypeAll" :key="item">{{item}}</el-option>
+            </el-select>
+          </el-form-item>
+           <el-form-item label="交通类型（trafficType）：" v-else>
             <el-select v-model="pageData.trafficType" placeholder="请选择交通类型">
               <el-option :label="item" :value="item" v-for="item in trafficTypeAll" :key="item">{{item}}</el-option>
             </el-select>
@@ -63,8 +68,18 @@
             </dl>
           </el-form-item>
 
-          <el-form-item label="兴趣点（attractions）：" class="poi_box" required prop="attractions">
+          <el-form-item label="兴趣点（attractions）：" class="poi_box" required prop="attractions" v-if="pageData.category!='Transportation'" >
             <el-button type="primary" class="js_validate" id="btn_attractions" vType="data" vTip="请选择兴趣点" :data="JSON.stringify(pageData.attractions)" plain @click="addAttractions">添加</el-button>
+            <dl class="change_type_list" v-for="(item,key) in pageData.attractions">
+              <!--  v-if="pageData.attractions[item] && pageData.attractions[item].length" -->
+              <dt>{{key}}</dt>
+              <dd>
+                <p class="change_text"><span v-for="items in item" :key="items">{{items}}</span></p>
+              </dd>
+            </dl>
+          </el-form-item>
+          <el-form-item label="兴趣点（attractions）：" class="poi_box"  v-else>
+            <el-button type="primary"  id="btn_attractions" :data="JSON.stringify(pageData.attractions)" plain @click="addAttractions">添加</el-button>
             <dl class="change_type_list" v-for="(item,key) in pageData.attractions">
               <!--  v-if="pageData.attractions[item] && pageData.attractions[item].length" -->
               <dt>{{key}}</dt>
@@ -113,6 +128,7 @@
           <el-form-item label="行程排版风格（newType）：">
             <el-radio v-model="pageData.newType" :label="false" :value="false">旧版</el-radio>
             <el-radio v-model="pageData.newType" :label="true" :value="true">新版</el-radio>
+            <span v-if="!pageData.newType" class="block">(<label class="red"> 切换到新的行程排版之前，确保严格按照时间顺序组织行程内容，并使用质量较高的行程图片. <a :href="'https://www.localpanda.com/activity/details/'+pageId+'?newStyle=1&valid=1'" target="_blank" class=" check blue" >新排版预览</a></label> )</span>
           </el-form-item>
           
 
@@ -127,7 +143,7 @@
           </el-form-item>
 
           
-          <el-form-item label="集合方式（pickup）：" required>
+          <el-form-item label="集合方式（pickup）：" required v-if="pageData.category!='Ticket'">
             <el-radio v-model="pageData.pickup" :value="1" :label="1">提供接送</el-radio>
             <el-radio v-model="pageData.pickup" :value="0" :label="0">自行前往</el-radio>
             <div class="jihe_info" v-if="pageData.pickup==0">
@@ -137,6 +153,26 @@
                     <p><span class="red">*</span> 集合信息描述{{index+1}}</p>
 
                     <textarea vtype="text" class="el-textarea__inner js_validate" rows="3" placeholder="请输入内容"  v-model="pageData.venues[index]"></textarea>
+                    <el-button type="danger" plain @click="jiheDel(index)" v-if="index!=0">Del</el-button><br>
+                </li>
+              </ul>
+              <div class="jihe_add">
+                  <el-button type="primary" plain @click="jiheAdd">Add</el-button>
+              </div>
+              
+            </div>
+          </el-form-item>
+
+           <el-form-item label="集合方式（pickup）：" v-else>
+            <el-radio v-model="pageData.pickup" :value="1" :label="1">提供接送</el-radio>
+            <el-radio v-model="pageData.pickup" :value="0" :label="0">自行前往</el-radio>
+            <div class="jihe_info" v-if="pageData.pickup==0">
+              <ul>
+                <li v-for="(item,index) in pageData.venues" class="clearfix">
+                  
+                    <p> 集合信息描述{{index+1}}</p>
+
+                    <textarea vtype="text" class="el-textarea__inner" rows="3" placeholder="请输入内容"  v-model="pageData.venues[index]"></textarea>
                     <el-button type="danger" plain @click="jiheDel(index)" v-if="index!=0">Del</el-button><br>
                 </li>
               </ul>
