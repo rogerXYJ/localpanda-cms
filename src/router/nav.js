@@ -45,6 +45,13 @@ var cmsNav = [
   	list:[
   		{'title':'重置密码','url':'/user/resetPassword/'}
   	]
+  },
+  { 
+  	title:'订单查询',
+    icon: 'el-icon-view',
+  	list:[
+  		{'title':'订单查询','url':'/order/'}
+  	]
   }
 ]
 

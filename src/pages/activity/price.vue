@@ -21,8 +21,8 @@
 	  	</el-form-item>
 	  	<div class="box">
 	  		 	<label style="display:inline-block; width: 140px;padding-right:15px;text-align: right;box-sizing: border-box;">退改规则:</label>
-	  		 	<el-form-item label="是否支持全额退款:" label-width="140px">
-		  		 	<el-radio-group v-model="formData.fullRefund" prop="fullRefund">
+	  		 	<el-form-item label="是否支持全额退款:" label-width="140px" >
+		  		 	<el-radio-group v-model="formData.fullRefund" prop="fullRefund" @change="reset('formData')">
 					    <el-radio :label="true">是 </el-radio>
 					    <el-radio :label="false">否</el-radio>
 					  </el-radio-group>
@@ -130,7 +130,7 @@ export default {
 		initialrefundInstructions:'',
     	formData:{
     		activityId:id,
-    		currency:'USD',//币种
+    		currency:'CNY',//币种
     		refundTimeLimit:'',//退改时间
     		refundInstructions:'',//退改细则
     		childStandard:'',//儿童年龄
@@ -196,7 +196,10 @@ export default {
 	   			
 	   			
 	   		})
-  		},
+		  },
+		reset(formName){
+			this.$refs[formName].resetFields();
+		},
   		changeRefundTimeLimit(e){
   			
   			if(e){

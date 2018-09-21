@@ -42,9 +42,10 @@ let routers = [
   {path:'/activity/visitor_pic',name: 'visitor_pic', title:'游客图片管理'},
   {path:'/activity/supplier',name: 'supplier', title:'供应商信息'},
   {path:'/activity/search',name: 'search', title:'搜索信息管理'},
-  {path:'/activity/book',name: 'book', title:'预定信息'}
+  {path:'/activity/book',name: 'book', title:'预定信息'},
   
-  
+  {path:'/order/',name: 'index', title:'订单查询'},
+  {path:'/order/orderDetails',name: 'orderDetails', title:'订单详情'},
   
 
 

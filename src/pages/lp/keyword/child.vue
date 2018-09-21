@@ -495,7 +495,7 @@ export default {
 
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped>
   .el-form--inline .el-form-item{
     margin-right: 20px;
   }
@@ -503,7 +503,7 @@ export default {
   .keyword-table{ 
     margin-top: 20px;
     width: 100%;
-    th{}
+    
   }
   .keyword-table-tip{
     text-align: center;

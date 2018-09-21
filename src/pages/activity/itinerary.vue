@@ -28,7 +28,7 @@
           align="center" 
           >
         </el-table-column>
-        <el-table-column header-align="center" label="图片" width="300"  align="center">
+        <el-table-column header-align="center" label="图片" width="400"  align="center">
           <template slot-scope="scope">
             <a class="btn_view" target="_blank" :href="scope.row.photo && scope.row.photo.url" v-if="scope.row.photo">View</a>
 
@@ -41,6 +41,8 @@
             
             <span class="fs12 c_999 mr10" v-if="scope.row.photo && isBanner(scope.row.photo.url)">Banner photo</span>
             <el-button class="" type="text" size="small" v-else-if="scope.row.photo" @click="setBanner(scope.row)">Set as Banner</el-button>
+
+           <el-button class="" v-if="scope.row.photo&&scope.row.photo.url!=coverPhotoUrl" @click="delPhoto(scope)" type="text" size="small" >Del</el-button>
             
 
           </template>
@@ -187,7 +189,6 @@ export default {
       
       for(var i=0;i<this.imgList.length;i++){
         var thisData = this.imgList[i];
-        console.log(thisData);
         if(url == thisData.url){
           return true;
         }
@@ -351,6 +352,36 @@ export default {
 
       
 
+    },
+    
+    delPhoto(thisData){
+    console.log(thisData)
+      var self=this;
+      self.$alert("你确定要删除  行程"+(thisData.$index+1)+"的图片吗？",'温馨提示',{
+        confirmButtonText: '确定'}).then(()=>{
+          $.ajax({
+          url: 'https://cms.localpanda.com/cms/public/photo/delete/'+thisData.row.photo.photoId,
+          type: 'DELETE',
+          dataType: 'json', //如果跨域用jsonp
+          success:function(data){
+            
+            if(data.succeed){
+              self.$message({
+                type: 'success',
+                message: '删除成功！'
+              });
+              self.imgList.splice(thisData.$index,1);
+              location.reload()
+            }else{
+              self.dialogTxt(data.errorMessage);
+            }
+
+          },
+          error:function(){
+            self.dialogTxt('删除失败，请重新尝试!');
+          }
+          })
+        });	
     },
     del(thisData){
       var self = this;

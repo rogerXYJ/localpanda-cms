@@ -15,7 +15,8 @@
 					<div class="clearfix">
 						<el-form-item label="Number of People：" required :key="item.key" class="fl">
 							<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
-							<input class="el-input__inner w120 js_validate" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" />
+							<!-- <input class="el-input__inner w120 js_validate" v-if="item.id" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" /> -->
+							<input class="el-input__inner w120"  type="text" disabled  v-model="item.capacity"/>
 						</el-form-item>
 					
 					
@@ -30,8 +31,9 @@
 					
 					
 						<el-form-item class="fl padding40 ml30">
-							<el-button type="danger" class="w70" v-if="index>0" @click="del(formData.records,index)">Del</el-button>
-							<el-button type="primary" class="w70" v-if="index==0" @click="add(formData.records)">Add</el-button>
+							<el-button type="primary" class="w70" v-if="index==formData.records.length-1" @click="add(formData.records)">Add</el-button>
+							<el-button type="danger" class="w70" v-if="index==formData.records.length-1&&index>0" @click="del(formData.records,index)">Del</el-button>
+							
 							<el-button type="success" v-if="item.id" @click="upData(formData.records,index)">Update</el-button>
 						</el-form-item>
 					</div>
@@ -57,6 +59,7 @@
 		data() {
 			let id = this.$route.query.id,
 				currency = this.$route.query.currency;
+				
 			return {
 				activeTitle: '4-4',
 				activityId: id,
@@ -78,7 +81,9 @@
 			}
 
 		},
-
+		created(){
+			this.getPriceDetails()
+		},
 		mounted() {
 		   this.getData();
 		   this.fromValidate = new Validate({
@@ -87,7 +92,35 @@
 		    });
 		},
 		methods: {
-			getData() {
+		getPriceDetails(){
+  			let self=this
+  			$.ajax({
+	   			url:"https://cms.localpanda.com/cms/product/activity/"+self.activityId+"/price",
+	   			 dataType: 'json',
+	   			 method: 'GET',
+	   			 success:function(data){
+	   			 	if(data&&data.minParticipants){
+						self.formData.records[0].capacity=data.minParticipants
+					}else{
+						self.$alert('请先填写最小成团人数', {
+							confirmButtonText: '确定',
+							callback: action => {
+							  location.href='/activity/price?id='+self.activityId
+							}
+						});
+					}
+	   			 },
+	   			 error:function(data){
+	   			 	self.$alert('请先填写最小成团人数', {
+						confirmButtonText: '确定',
+						callback: action => {
+							location.href='/activity/price?id='+self.activityId
+						}
+					});
+	   			 }
+	   		})
+  		},
+		getData() {
 				let that=this
 				let records=new Array();
 				$.ajax({
@@ -112,14 +145,16 @@
 
 				})
 			},
-			add(arr){
+			add(arr,e){
+				console.log()
 				arr.push({
 						activityId:this.activityId,
-						capacity:'',
+						capacity:arr[arr.length-1].capacity+1,
 						price:'',
 						costPrice:null,
 						newItem:true,
 				})
+				
 				this.showBtn=true
 				setTimeout(()=>{
 					this.fromValidate.init()
@@ -208,7 +243,14 @@
 							            self.getData()
 							          }
 							       });
-	  						}
+	  						}else{
+								  self.$alert(data.errorMessage, {
+							          confirmButtonText: '确定',
+							          callback: action => {
+							            
+							          }
+							       });
+							  }
 	  				},
 	  				error:function(data){
 	  					
@@ -245,7 +287,14 @@
 							            self.getData()
 							          }
 							       });
-				  					}
+				  				}else{
+									self.$alert(data.errorMessage, {
+							          confirmButtonText: '确定',
+							          callback: action => {
+							            
+							          }
+							       }); 
+								}
 				  					 
 				  				},
 				  				error:function(data){
