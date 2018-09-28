@@ -3,19 +3,48 @@
          <cmsAside :activeTitle="'6-1'"></cmsAside>
          <div class="cms-main">
              <h3 class="text_c">订单查询</h3>
-             <el-form :model="formData" label-width="80px">
-                 <el-form-item label="活动ID:">
-                     <el-input v-model="formData.activityId" class="w220"></el-input>
-                 </el-form-item>
-                 <el-form-item label="订单ID:">
+             <el-form :model="formData" label-width="120px">
+                  <el-form-item  class="inline" label="订单ID:">
                      <el-input v-model="formData.orderId" class="w220"></el-input>
                  </el-form-item>
+                 <el-form-item label="活动ID:" class="inline">
+                     <el-input v-model="formData.activityId" class="w220"></el-input>
+                 </el-form-item>
+                
                 <el-form-item label="订单状态:">
                    <el-checkbox-group v-model="formData.status">
-                    <el-checkbox v-for="item in status" :key="item" :label="item">{{item}}</el-checkbox> 
+                    <!-- <el-checkbox v-for="item in status" :key="item" :label="item">{{item}}</el-checkbox>  -->
+                    <div class="checkboxItem">
+                         <el-checkbox key="PAYMENT_PENDING" label="PAYMENT_PENDING">PAYMENT_PENDING (待支付)</el-checkbox>
+                         <el-checkbox key="PAYMENT_SUCCESS" label="PAYMENT_SUCCESS">PAYMENT_SUCCESS (已支付待资审)</el-checkbox>
+                    </div>
+                    <div class="checkboxItem">
+                         <el-checkbox key="CONFIRM_WAITING" label="CONFIRM_WAITING">CONFIRM_WAITING (资审中待确认)</el-checkbox>
+                         <el-checkbox key="BOOKING_SUCCESS" label="BOOKING_SUCCESS">BOOKING_SUCCESS (已确认)</el-checkbox>
+                    </div>
+                    <div class="checkboxItem">
+                         <el-checkbox key="COMPLETED" label="COMPLETED">COMPLETED (已出游)</el-checkbox>
+                        <el-checkbox key="CANCELED" label="CANCELED">CANCELED (已取消)</el-checkbox>
+                         
+                    </div>
+                    <div class="checkboxItem">
+                        <el-checkbox key="REFUNDING" label="REFUNDING">REFUNDING (退款中)</el-checkbox>
+                         <el-checkbox key="REFUNDED" label="REFUNDED">REFUNDED (已退款)</el-checkbox>
+                        
+                    </div>
+
                 </el-checkbox-group>
                 </el-form-item>
-                
+                 <el-form-item label="设备类型:" class="inline">
+                     <el-select v-model="formData.deviceType">
+                            <el-option value="PC" label="PC"></el-option>
+                            <el-option value="MOBILE" label="MOBILE"></el-option>
+                             <el-option value="IPAD" label="IPAD"></el-option>
+                        </el-select>
+                 </el-form-item>
+                  <el-form-item label="邮箱:" class="inline">
+                    <el-input v-model="formData.emailAddress" class="w320"></el-input>
+                </el-form-item>
                 <el-form-item label="出行日期:">
                   
                     <el-date-picker type="date" placeholder="出行起始日期" v-model="formData.travelStartDate" class="w220" format="yyyy-MM-dd" 
@@ -27,15 +56,18 @@
                 </el-form-item>
                   <el-form-item label="创建日期:">
                   
-                    <el-date-picker type="date" placeholder="订单创建起始日期" v-model="formData.startDate" class="w220" format="yyyy-MM-dd" 
+                    <el-date-picker type="date" placeholder="订单创建起始日期" v-model="formData.startDate" @change="datefn(1)" class="w220" format="yyyy-MM-dd" 
 			        value-format="yyyy-MM-dd"></el-date-picker>
                     -
-                    <el-date-picker type="date" placeholder="订单创建截止日期" v-model="formData.endDate" class="w220" format="yyyy-MM-dd" 
+                    <el-date-picker type="date" placeholder="订单创建截止日期" v-model="formData.endDate" @change="datefn(2)" class="w220" format="yyyy-MM-dd" 
 			        value-format="yyyy-MM-dd"></el-date-picker>
                     
                 </el-form-item>
-                <el-form-item label="Email:">
-                    <el-input v-model="formData.emailAddress" class="w320"></el-input>
+                <el-form-item label="是否包含测试单: ">
+                    <el-radio-group v-model="formData.includeTest">
+					    <el-radio :label="true">是 </el-radio>
+					    <el-radio :label="false">否</el-radio>
+					  </el-radio-group>
                 </el-form-item>
                
                  <el-form-item>
@@ -46,7 +78,20 @@
           
            <div class="keyword-table-box pb40" v-show="showlist">
             <div class="hr"></div>
-            <h5 class="clearfix">订单列表 <a class="btn_text ml30" @click="downLoad">下载</a> <span class="fr">共计{{records}}条</span></h5>
+            <h5 class="clearfix" style="line-height:40px">订单列表 
+                <a class="btn_text ml30" @click="downLoad">下载</a> 
+            
+                <span class="fr">
+                     <span class="mr20">
+                        <label>排序:</label>
+                        <el-select v-model="formData.sort" @change="change">
+                            <el-option value="CREATE_TIME" label="CREATE_TIME"></el-option>
+                            <el-option value="START_DATE" label="START_DATE"></el-option>
+                        </el-select>
+                    </span>
+                    共计{{records}}条
+                </span>
+            </h5>
             <el-table :data="tableData"   border class="keyword-table mt30" style="max-width:100%" empty-text="没有匹配数据！！！">
                 
                 <el-table-column  label="操作" width="140">
@@ -137,7 +182,11 @@ export default {
                startDate:null,
                endDate:null,
                orderId:null,
-               emailAddress:null
+               emailAddress:null,
+               sort:'CREATE_TIME',
+               deviceType:null,
+               includeTest:false,
+               
             },
             pageNum:1,
             pageSize:20,
@@ -167,6 +216,7 @@ export default {
     methods:{
     downLoad(){
             var self=this;
+            console.log(self.formData.startDate)
             var domDown=document.getElementById("downNode");
             var html='<form method="POST" target="_blank" action="https://cms.localpanda.com/cms/order/activity/download">' +
                 (self.formData.activityId?'<input name="activityId" type="hidden"  value="'+ self.formData.activityId +'">':'')+
@@ -176,11 +226,14 @@ export default {
                   (self.formData.endDate?'<input name="endDate" type="hidden" value="'+self.formData.endDate+'">':'')+
                   (self.formData.travelStartDate?'<input name="travelStartDate" type="hidden" value="'+self.formData.travelStartDate+'">':'')+
                    (self.formData.travelEndDate? '<input name="travelEndDate" type="hidden" value="'+self.formData.travelEndDate+'">':'')+
+                   (self.formData.deviceType? '<input name="deviceType" type="hidden" value="'+self.formData.deviceType+'">':'')+
+                   ('<input name="includeTest" type="hidden" value="'+self.formData.includeTest+'">')+
+                   ('<input name="sort" type="hidden" value="'+self.formData.sort+'">')+
 					'</form>';
             domDown.innerHTML =html;
             
             var form=domDown.querySelector('form');
-           
+          
             form.submit()
 
 
@@ -205,6 +258,13 @@ export default {
 
             // })
               
+        },
+        datefn(id){
+            if(id==1){
+                this.formData.startDate+=" 00:00:00"
+            }else{
+                this.formData.endDate+=" 23:59:59"
+            }
         },
         btnFn(scope){
             var self=this,
@@ -315,6 +375,11 @@ export default {
         //     });
 
         // },
+
+        //排序
+        change(){
+           this.sumbitFn()
+        },
         sumbitFn(){
             this.pageNum=1
              const loading = this.$loading({
@@ -328,7 +393,8 @@ export default {
             formData=this.formData,
             contentType='application/json; charset=UTF-8';
             formData.pageNum=self.pageNum;
-            formData.pageSize=self.pageSize
+            formData.pageSize=self.pageSize;
+             console.log(formData)
             $.ajax({
                 url: postUrl,
                 type: 'POST',
@@ -358,7 +424,7 @@ export default {
 
         },
         pageChange(val){
-            console.log(val)
+            
             let self=this
             self.pageNum=val
              const loading = this.$loading({
@@ -400,14 +466,42 @@ export default {
             })
         }
     },
+    watch:{
+        //     'formData.startDate':{
+        //         handler(val,oldVal){
+        //             if(val){
+        //                 val=val+' 00:00:00'
+        //             }
+               
+        //       },
+        //       deep: true
+        // },
+        // 'formData.endDate':{
+        //     handler(val,oldVal){
+        //         if(val){
+        //             val=val+' 23:59:59'
+        //         }
+        //     }
+        // }
+    }
 }
 </script>
 <style lang="scss" scoped>
+.el-form-item{
+    margin-bottom:12px!important;
+    
+}
 .w320{
     width: 320px!important;
 }
 .w1000{
     width: 1000px!important;
+}
+.inline{
+    display: inline-block!important;
+}
+.el-checkbox{
+    width: 250px;
 }
 </style>
 

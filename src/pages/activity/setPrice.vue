@@ -5,37 +5,43 @@
 
 		<div class="cms-main">
 			<h3 class="text_c">配置价格</h3>
+			 
 			<el-form :model="formData" ref="formData" class="paddingL40">
 				<el-form-item>
 					<span>当前货币单位：{{currency}}</span>
 					<a class="el-button el-button--primary fr" :href="'/activity/price?id='+activityId">返回价格信息维护</a>
 				</el-form-item>
+				
 				<div class="hr"></div>
-				<div class="setPice" v-for="(item,index) in formData.records">
-					<div class="clearfix">
-						<el-form-item label="Number of People：" required :key="item.key" class="fl">
-							<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
-							<!-- <input class="el-input__inner w120 js_validate" v-if="item.id" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" /> -->
-							<input class="el-input__inner w120"  type="text" disabled  v-model="item.capacity"/>
-						</el-form-item>
-					
-					
-						<el-form-item label="Total Price：" required :key="item.key" class="fl ml30">
-							<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
-							<input class="el-input__inner w120 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
-						</el-form-item>
-						<el-form-item label="Cost Price" :key="item.key" class="fl ml30">
-							<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
-							<input class="el-input__inner w120"  v-model="item.costPrice" />
-						</el-form-item>
-					
-					
-						<el-form-item class="fl padding40 ml30">
-							<el-button type="primary" class="w70" v-if="index==formData.records.length-1" @click="add(formData.records)">Add</el-button>
-							<el-button type="danger" class="w70" v-if="index==formData.records.length-1&&index>0" @click="del(formData.records,index)">Del</el-button>
-							
-							<el-button type="success" v-if="item.id" @click="upData(formData.records,index)">Update</el-button>
-						</el-form-item>
+				<div>
+					<span class="red">* 为避免价格公式及价格明细中总价与人均价的计算结果有偏差,现在系统要求价格必须能够整除当前人数(整除包括两位小数).
+如3人价格为100是不允许的,但99.99或100.02是可以的.</span>
+					<div class="setPice" v-for="(item,index) in formData.records">
+						<div class="clearfix">
+							<el-form-item label="Number of People：" required :key="item.key" class="fl">
+								<!--<el-input class="wb60" v-model="item.capacity"></el-input>-->
+								<!-- <input class="el-input__inner w120 js_validate" v-if="item.id" vType="text" type="text" vTip="请选择人数!!!" v-model="item.capacity" /> -->
+								<input class="el-input__inner w120 disabled"  type="text" disabled  v-model="item.capacity"/>
+							</el-form-item>
+						
+						
+							<el-form-item label="Total Price：" required :key="item.key" class="fl ml30">
+								<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
+								<input class="el-input__inner w120 js_validate" vType="text" type="text" vTip="请选择价格!!!" v-model="item.price" />
+							</el-form-item>
+							<el-form-item label="Cost Price" :key="item.key" class="fl ml30">
+								<!--<el-input class="wb60 js_validate" v-model="item.price" ></el-input>-->
+								<input class="el-input__inner w120"  v-model="item.costPrice" />
+							</el-form-item>
+						
+						
+							<el-form-item class="fl padding40 ml30">
+								<el-button type="primary" class="w70" v-if="index==formData.records.length-1" @click="add(formData.records)">Add</el-button>
+								<el-button type="danger" class="w70" v-if="index==formData.records.length-1&&index>0" @click="del(formData.records,index)">Del</el-button>
+								
+								<el-button type="success" v-if="item.id" @click="upData(formData.records,index)">Update</el-button>
+							</el-form-item>
+						</div>
 					</div>
 				</div>
 				<el-form-item class=" mt100" v-if="showBtn">
@@ -119,7 +125,14 @@
 					});
 	   			 }
 	   		})
-  		},
+		  },
+		  //推荐价格
+		// recommendPrice(){
+
+
+
+
+		// },
 		getData() {
 				let that=this
 				let records=new Array();
@@ -342,5 +355,10 @@
 	  }
 	 .padding40{
 	  	padding-top: 40px;
+	  }
+	  .disabled{
+		   border: 1px solid #DDD;
+			background-color: #F5F5F5;
+			color:#ACA899;
 	  }
 </style>
