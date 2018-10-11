@@ -22,6 +22,10 @@
           <el-form-item label="产品标题（title）：" required prop="title">
             <el-input class="w_100b" v-model="pageData.title" placeholder="请输入产品标题"></el-input>
           </el-form-item>
+
+          <el-form-item label="活动简述（shortTitle）：">
+            <el-input class="w_100b" v-model="pageData.shortTitle"></el-input>
+          </el-form-item>
           
 
           <el-form-item label="产品类型（category）：" required prop="category">
@@ -145,7 +149,14 @@
           
           <el-form-item label="集合方式（pickup）：" required v-if="pageData.category!='Ticket'">
             <el-radio v-model="pageData.pickup" :value="1" :label="1">提供接送</el-radio>
+            <el-radio v-model="pageData.pickup" :value="2" :label="2">提供接</el-radio>
+            <el-radio v-model="pageData.pickup" :value="3" :label="3">提供送</el-radio>
             <el-radio v-model="pageData.pickup" :value="0" :label="0">自行前往</el-radio>
+
+            <div class="jiesong_info" v-if="pageData.pickup!==0">
+              <el-input type="textarea" :rows="4" placeholder="请输入接送说明" v-model="pageData.statement"></el-input>
+            </div>
+
             <div class="jihe_info" v-if="pageData.pickup==0">
               <ul>
                 <li v-for="(item,index) in pageData.venues" class="clearfix">
@@ -163,7 +174,7 @@
             </div>
           </el-form-item>
 
-           <el-form-item label="集合方式（pickup）：" v-else>
+           <!-- <el-form-item label="集合方式（pickup）：" v-else>
             <el-radio v-model="pageData.pickup" :value="1" :label="1">提供接送</el-radio>
             <el-radio v-model="pageData.pickup" :value="0" :label="0">自行前往</el-radio>
             <div class="jihe_info" v-if="pageData.pickup==0">
@@ -181,7 +192,7 @@
               </div>
               
             </div>
-          </el-form-item>
+          </el-form-item> -->
           
 
 
@@ -230,6 +241,15 @@
               :rows="6"
               placeholder="请输入内容"
               v-model="pageData.remark">
+            </el-input>
+          </el-form-item>
+
+          <el-form-item label="活动限制（limits）：">
+            <el-input
+              type="textarea"
+              :rows="6"
+              placeholder="请输入内容"
+              v-model="pageData.limits">
             </el-input>
           </el-form-item>
 
@@ -365,6 +385,7 @@ export default {
       pageData:{
         owner:'',
         title: '',
+        shortTitle:'',
         category: urlQuery.category?urlQuery.category:'',
         groupType: (urlQuery.category=='Transportation' || urlQuery.category=='Ticket') ? '' : 'Private',
         trafficType: '',
@@ -396,7 +417,7 @@ export default {
         newType: false,
 
         //资审耗时
-        workdayConfirmCost: '',
+        workdayConfirmCost: '4',
         confirmCostUnit: 'HOURS',
 
         //是否提高接送
@@ -409,6 +430,8 @@ export default {
         notice:'',
         introduction:'',
         remark: '',
+        limits:'',
+        statement:''
 
       },
       
@@ -742,6 +765,9 @@ export default {
         font-size: 14px;
         span{ margin-right: 20px;}
       }
+    }
+    .jiesong_info{
+      margin-top: 10px;
     }
     .jihe_info{
       li{

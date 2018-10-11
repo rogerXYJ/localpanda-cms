@@ -5,8 +5,22 @@
 
     <div class="cms-main">
       <h3 class="text_c">价格信息</h3>
+
+
 	  <el-form :model="formData" :rules="rules" ref="formData"  class="mt40 paddingL40">
-	  	<el-form-item label="货币类型 (Currency):" prop="currency">
+      
+      <el-form-item label="是否统一定价:" prop="unifiedPricing" label-width="180px">
+        <el-radio-group v-model="formData.unifiedPricing">
+          <el-radio :label="true">是 </el-radio>
+          <el-radio :label="false">否</el-radio>
+        </el-radio-group>
+
+        <el-button v-if="formData.unifiedPricing || !hasData" type="primary" class="btn_setprice" disabled>价格设置</el-button>
+			  <a v-else class="el-button el-button--primary btn_setprice" :href="'/activity/setPrice?id='+id+'&currency='+formData.currency">价格设置</a>
+      </el-form-item>
+      
+
+	  	<el-form-item label="货币类型 (Currency):" prop="currency" label-width="180px">
 	  		 <el-select v-model="formData.currency" placeholder="请选择币种">
 		      <el-option label="USD" value="USD"></el-option>
 		      <el-option label="CNY" value="CNY"></el-option>
@@ -16,25 +30,25 @@
 		      <el-option label="CAD" value="CAD"></el-option>
 		      <el-option label="JPY" value="JPY"></el-option>
 		    </el-select>
-			<el-button v-if="formData.unifiedPricing" type="primary" class="fr" disabled>价格设置</el-button>
-			 <a v-else class="el-button el-button--primary fr" :href="'/activity/setPrice?id='+id+'&currency='+formData.currency">价格设置</a>
+			
 		    <!--<el-button type="primary" class="fr"></el-button>-->
 	  	</el-form-item>
 	  	<div class="box">
-	  		 	<label style="display:inline-block; width: 140px;padding-right:15px;text-align: right;box-sizing: border-box;">退改规则:</label>
+	  		 	<label style="display:inline-block; width: 140px;padding-right:15px;text-align: right;box-sizing: border-box; font-size:16px;margin-bottom:10px;">退改规则</label>
 	  		 	<el-form-item label="是否支持全额退款:" label-width="140px" >
 		  		 	<el-radio-group v-model="formData.fullRefund" prop="fullRefund" @change="reset('formData')">
 					    <el-radio :label="true">是 </el-radio>
 					    <el-radio :label="false">否</el-radio>
 					  </el-radio-group>
 		  		</el-form-item>
-			    <el-form-item label="时间:" class="mt20" label-width="140px" prop="refundTimeLimit" v-if="formData.fullRefund">
+			    <el-form-item label="时间:" label-width="140px" prop="refundTimeLimit" v-if="formData.fullRefund">
 		  		 	<el-input class="w220" v-model="formData.refundTimeLimit" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" @input="changeRefundTimeLimit"></el-input> /天
 		  		 	<span v-show="changeDate" class="red ml30">退款时效有变动，请注意与细则说明保持同步！</span>
 		  		</el-form-item>
 	  			<el-form-item label="细则说明:" label-width="140px" prop="refundInstructions">
-	  				<el-button type="primary" v-if="formData.fullRefund" class="display" @click="replaceCont">自动套用模板</el-button>
-		  		 	<el-input class="wb60 mt20" v-model="formData.refundInstructions" type="textarea" :rows="7"></el-input>
+	  				
+		  		 	<el-input class="wb60 fl" v-model="formData.refundInstructions" type="textarea" :rows="7"></el-input>
+            <el-button type="primary fl" v-if="formData.fullRefund" class="display ml20" @click="replaceCont" plain>自动套用模板</el-button>
 		  		</el-form-item>
 	  	</div>
 	  	<el-row :gutter="20">
@@ -59,7 +73,7 @@
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="8">
-		  	<el-form-item :label=" formData.unifiedPricing?'统一价格: ':'最低价格Bottom Price：'" label-width="200px" prop="bottomPrice" class="mt40" v-if="formData.unifiedPricing||formData.bottomPrice">
+		  	<el-form-item :label=" formData.unifiedPricing?'统一价格: ':'最低价格Bottom Price：'" label-width="200px" prop="bottomPrice" class="mt5" v-if="formData.unifiedPricing||formData.bottomPrice">
 		  		<!--<span>{{formData.bottomPrice}}</span>-->
 		  		<el-input class="w120" v-if="formData.unifiedPricing" v-model="formData.bottomPrice"></el-input>
 				  <el-input class="w120" v-else v-model="formData.bottomPrice" :disabled="true"></el-input>
@@ -68,12 +82,12 @@
 		</el-row>
 	  	<el-row :gutter="20">
 		  <el-col :span="8">
-		  	<el-form-item label=" 最小成团人数minimum:" label-width="200px" class="mt20" prop="minParticipants">
+		  	<el-form-item label=" 最小成团人数minimum:" label-width="200px" class="mt5" prop="minParticipants">
 		  			<el-input class="w120" v-model="formData.minParticipants"></el-input>
 		  	</el-form-item>
 		  </el-col>
 		  <el-col :span="8">
-		  	<el-form-item label="最大接待人数maximum:" label-width="200px" class="mt20" v-if="formData.unifiedPricing"  prop="minParticipants">
+		  	<el-form-item label="最大接待人数maximum:" label-width="200px" class="mt5" v-if="formData.unifiedPricing"  prop="minParticipants">
 		  		<!--<span>{{formData.maxParticipants}}</span>-->
 		  		<el-input class="w120" v-model="formData.maxParticipants"></el-input>
 		  	</el-form-item>
@@ -107,12 +121,7 @@
 					   	至
 		  			 <el-input class="w220"></el-input>
 		  	</el-form-item>-->
-		<el-form-item label="是否统一定价" prop="unifiedPricing">
-			<el-radio-group v-model="formData.unifiedPricing">
-				<el-radio :label="true">是 </el-radio>
-				<el-radio :label="false">否</el-radio>
-			</el-radio-group>
-		</el-form-item>
+		
 	  	<el-form-item label="费用说明Additional instructions：">
 	  		<el-input type="textarea" v-model="formData.priceInstructions" :rows="7"></el-input>
 	  	</el-form-item>
@@ -144,16 +153,17 @@ export default {
       changeDate: false,
       initialrefund: false,
       initialrefundInstructions: "",
+      hasData:false,
       formData: {
         activityId: id,
         currency: "CNY", //币种
         refundTimeLimit: "", //退改时间
         refundInstructions: "", //退改细则
-        childStandard: "", //儿童年龄
+        childStandard: "12", //儿童年龄
         childDiscount: null, //儿童差价
         originalPrice: "", //原始价格
         priceInstructions: "", //费用说明
-        minParticipants: "", //最小成团人数
+        minParticipants: "1", //最小成团人数
         maxParticipants: "",
         //departureTime:[''],//出发时间
         startTime: null, //出发时间区间
@@ -232,8 +242,9 @@ export default {
         dataType: "json",
         method: "GET",
         success: function(data) {
+          self.hasData = true;
           self.formData = data;
-          this.changeDate = false;
+          self.changeDate = false;
           self.initialrefund = data.fullRefund;
           self.initialrefundInstructions = data.refundInstructions;
           if (data) {
@@ -247,7 +258,9 @@ export default {
             self.formData.refundTimeLimit = "";
           }
         },
-        error: function(data) {}
+        error: function(data) {
+          self.hasData = false;
+        }
       });
     },
     reset(formName) {
@@ -277,46 +290,37 @@ export default {
         time +
         " before your travel date.";
     },
-    //		addTime(arr){
-    //			arr.push('')
-    //			setTimeout(()=>{
-    //				this.fromValidate.init()
-    //			},200)
-    //		},
-    //		delTime(arr,index){
-    //			arr.splice(index,1)
-	//		},
-	
 
-	ajaxFn(){
-		let self=this,
-	    type = self.isType ? "POST" : "PUT",
-	    message = self.isType ? "您已更新成功！" : "您已创建成功！";
-		$.ajax({
-			url: "https://cms.localpanda.com/cms/product/activity/price",
-			method: type,
-			dataType: "json",
-			data: JSON.stringify(self.formData),
-			contentType: "application/json",
-			success: function(data) {
-			if (data.succeed) {
-				self.$alert(message, {
-				confirmButtonText: "确定",
-				callback: action => {
-					self.getData();
-				}
-				});
-			} else {
-					self.$alert("填写不正确，请重新填写！！", {
-					confirmButtonText: "确定"
-					});
-				}
-			},
-			error: function(data) {
-			alert("请求失败");
-			}
-		});
-	},
+
+    ajaxFn(){
+      let self=this,
+        type = self.isType ? "POST" : "PUT",
+        message = self.isType ? "您已更新成功！" : "您已创建成功！";
+      $.ajax({
+        url: "https://cms.localpanda.com/cms/product/activity/price",
+        method: type,
+        dataType: "json",
+        data: JSON.stringify(self.formData),
+        contentType: "application/json",
+        success: function(data) {
+          if (data.succeed) {
+            self.$alert(message, {
+              confirmButtonText: "确定",
+              callback: action => {
+                self.getData();
+              }
+            });
+          } else {
+            self.$alert("填写不正确，请重新填写！！", {
+            confirmButtonText: "确定"
+            });
+          }
+        },
+        error: function(data) {
+        alert("请求失败");
+        }
+      });
+    },
     sumbit(formName) {
       let self = this;
       let departureTime = [];
@@ -425,5 +429,11 @@ export default {
 .vTip {
   color: red !important;
   padding-left: 115px;
+}
+.btn_setprice{
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
 }
 </style>

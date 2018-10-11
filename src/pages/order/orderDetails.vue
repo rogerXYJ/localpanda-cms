@@ -182,7 +182,8 @@ export default {
                 operator:{required:true, message: '请输入操作人姓名', trigger: 'blur'},
                 comments:{required:true,message:'请输入备注说明',trigger:'blur'}
             },
-            tabdata:[]
+            tabdata:[],
+            submiting: false
         }
     },
     components:{
@@ -376,6 +377,11 @@ export default {
             form.orderId=self.details.orderId;
              this.$refs[formName].validate((valid) => {
                   if (valid) {
+
+                      if(self.submiting){
+                          return false;
+                      }
+                      self.submiting = true;
                        $.ajax({
                             url:postUrl,
                             type:'PUT',
@@ -394,8 +400,12 @@ export default {
                                }else {
                                     self.$alert("提交失败!!!")
                                }
+
+                               self.submiting = false;
                             },
-                            error:function(data){}
+                            error:function(data){
+                                self.submiting = false;
+                            }
 
                        })
                   }
