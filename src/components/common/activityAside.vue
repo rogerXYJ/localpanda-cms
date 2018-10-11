@@ -52,7 +52,8 @@ export default {
           {'title':'产品图片','url':'/activity/product_pic'+urlId},
           {'title':'游客图片（未开放）','url':'/activity/visitor_pic'+urlId},
           {'title':'供应商信息','url':'/activity/supplier'+urlId},
-          {'title':'搜索信息管理','url':'/activity/search'+urlId}
+          {'title':'搜索信息管理','url':'/activity/search'+urlId},
+          {'title':'推荐产品管理','url':'/activity/recommend'+urlId}
         ]
       }
     ];

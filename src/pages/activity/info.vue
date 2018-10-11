@@ -23,6 +23,10 @@
           <el-form-item label="产品标题（title）：" required prop="title">
             <el-input class="w_100b" v-model="pageData.title"></el-input>
           </el-form-item>
+
+          <el-form-item label="活动简述（shortTitle）：">
+            <el-input class="w_100b" v-model="pageData.shortTitle"></el-input>
+          </el-form-item>
           
 
           <el-form-item label="产品类型（category）：" prop="category">
@@ -143,7 +147,14 @@
           
           <el-form-item label="集合方式（pickup）：" required v-if="pageData.category!='Ticket'">
             <el-radio v-model="pageData.pickup" :value="1" :label="1">提供接送</el-radio>
+            <el-radio v-model="pageData.pickup" :value="2" :label="2">提供接</el-radio>
+            <el-radio v-model="pageData.pickup" :value="3" :label="3">提供送</el-radio>
             <el-radio v-model="pageData.pickup" :value="0" :label="0">自行前往</el-radio>
+
+            <div class="jiesong_info" v-if="pageData.pickup!==0">
+              <el-input type="textarea" :rows="4" placeholder="请输入接送说明" v-model="pageData.statement"></el-input>
+            </div>
+
             <div class="jihe_info" v-if="pageData.pickup==0">
               <ul>
                 <li v-for="(item,index) in pageData.venues" class="clearfix">
@@ -160,7 +171,7 @@
               
             </div>
           </el-form-item>
-          <el-form-item label="集合方式（pickup）：" v-else>
+          <!-- <el-form-item label="集合方式（pickup）：" v-else>
             <el-radio v-model="pageData.pickup" :value="1" :label="1">提供接送</el-radio>
             <el-radio v-model="pageData.pickup" :value="0" :label="0">自行前往</el-radio>
             <div class="jihe_info" v-if="pageData.pickup==0">
@@ -178,7 +189,7 @@
               </div>
               
             </div>
-          </el-form-item>
+          </el-form-item> -->
           
 
 
@@ -229,6 +240,19 @@
               v-model="pageData.remark">
             </el-input>
           </el-form-item>
+
+          <el-form-item label="活动限制（limits）：">
+            <el-input
+              type="textarea"
+              :rows="6"
+              placeholder="请输入内容"
+              v-model="pageData.limits">
+            </el-input>
+          </el-form-item>
+
+          
+
+          
 
 
 
@@ -329,7 +353,7 @@ export default {
 
       categoryAll: ['Day Trip','Trans-China Trip','Regional Multi-Day Trip','Transportation','Ticket'],
 
-      tourTypeArr: ["Landmarks","City tour","Food","Old Neighborhood","Architecture","History","Art","Cultural","Night","Nightlife","Performances & Shows","Family Friendly","Parks & Zoos","Outdoor","Wildlife","Short excursions","Shopping","Sightseeing","Nature & scenery","Layover tour","Multi-day tour","Popular & Classic Tours","Hiking","Watertown","Huangpu River Cruise"," Expat-friendly","Transfer"],
+      tourTypeArr: ["Landmarks","City Tour","Food","Old Neighborhood","Architecture","History","Art","Cultural","Night","Nightlife","Performances & Shows","Family Friendly","Parks & Zoos","Outdoor","Wildlife","Short Excursions","Shopping","Sightseeing","Nature & Scenery","Layover Tour","Multi-day Tour","Popular & Classic Tours","Hiking","Watertown","Huangpu River Cruise"," Expat-friendly","Transfer"],
 
       //目的地
       destinationAll:[],
@@ -356,6 +380,7 @@ export default {
       pageData:{
         owner:'',
         title: '',
+        shortTitle:'',
         category: '',
         groupType: '',
         trafficType: 'Walking',
@@ -401,6 +426,8 @@ export default {
         notice:'',
         introduction:'',
         remark: '',
+        limits:'',
+        statement:''
 
       },
       
@@ -798,6 +825,9 @@ export default {
         font-size: 14px;
         span{ margin-right: 20px;}
       }
+    }
+    .jiesong_info{
+      margin-top: 10px;
     }
     .jihe_info{
       li{
