@@ -92,6 +92,11 @@ export default {
       var self = this;
       this.fromValidate.init();
 
+      if(!this.idList[index].id){
+        self.idList.splice(index,1);
+        return;
+      };
+      
       $.ajax({
         url: 'https://cms.localpanda.com/cms/product/activity/binding/'+this.idList[index].id,
         type: 'DELETE',
@@ -110,25 +115,6 @@ export default {
           self.$message.error('删除失败，请重试!!');
         }
       });	
-    },
-    getDelId(){
-      var defaultList = this.defaultList;
-      var idList = this.idList;
-      var delArr = [];
-      for(var i=0;i<defaultList.length;i++){
-        var thisData = defaultList[i];
-        var hasId = false;
-        for(var j=0;j<idList.length;j++){
-          var thisData2 = idList[j];
-          if(thisData.activityId == thisData2.activityId){
-            hasId = true;
-          }
-        }
-        if(!hasId){
-          delArr.push(thisData.activityId);
-        }
-      }
-      return delArr;
     },
     submit(){
       var self = this;
