@@ -23,9 +23,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item class="ml30">
-          <el-button @click="onAddActivityBtn" type="primary" plain>新增产品</el-button>
-        </el-form-item>
+        
 
         
 
@@ -68,7 +66,11 @@
         
         <el-form-item label=" ">
           <el-button @click="onSubmit" type="primary">查询</el-button>
+          <el-button class="ml30" @click="onAddActivityBtn" type="primary" plain>新增产品</el-button>
         </el-form-item>
+        <!-- <el-form-item class="ml30">
+          
+        </el-form-item> -->
 
         
 

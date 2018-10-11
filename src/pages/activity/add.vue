@@ -174,6 +174,12 @@
             </div>
           </el-form-item>
 
+          <el-form-item label="门票说明（statement）：" v-else>
+            <div class="jiesong_info">
+              <el-input type="textarea" :rows="4" placeholder="请输入门票说明" v-model="pageData.statement"></el-input>
+            </div>
+          </el-form-item>
+
            <!-- <el-form-item label="集合方式（pickup）：" v-else>
             <el-radio v-model="pageData.pickup" :value="1" :label="1">提供接送</el-radio>
             <el-radio v-model="pageData.pickup" :value="0" :label="0">自行前往</el-radio>

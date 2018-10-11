@@ -15,8 +15,8 @@
           <el-radio :label="false">否</el-radio>
         </el-radio-group>
 
-        <el-button v-if="formData.unifiedPricing || !hasData" type="primary" class="btn_setprice" disabled>价格设置</el-button>
-			  <a v-else class="el-button el-button--primary btn_setprice" :href="'/activity/setPrice?id='+id+'&currency='+formData.currency">价格设置</a>
+        <el-button v-if="formData.unifiedPricing || !hasData" type="primary" class="btn_setprice" disabled>价格明细设置</el-button>
+			  <a v-else class="el-button el-button--primary btn_setprice" :href="'/activity/setPrice?id='+id+'&currency='+formData.currency">价格明细设置</a>
       </el-form-item>
       
 
@@ -66,7 +66,7 @@
 		
 		<el-row :gutter="20">
 		  <el-col :span="8">
-		  	<el-form-item label="原始价格 (Original Price)：" label-width="200px" class="mt40" v-if="formData.originalPrice">
+		  	<el-form-item label="原始价格 (Original Price)：" label-width="200px" v-if="formData.originalPrice">
 		  		<!-- <el-input class="w120"  v-model="formData.originalPrice" ></el-input> -->
 				  <el-input class="w120" v-model="formData.originalPrice"></el-input>
 		  		
