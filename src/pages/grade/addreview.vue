@@ -310,7 +310,7 @@
 					var self = this;
 					let postdata = {
 						objectId: id,
-						objectType: "USER_COMMENT",
+						objectType: "COMMENT_CONTENT",
 						files: files
 					}
 					let param = new FormData();
@@ -535,7 +535,7 @@
 							param.append("file",file);
 							param.append("photoId",photoId);
 							param.append("objectId",this.imageList[index].objectId);
-							param.append("objectType",'USER_COMMENT');
+							param.append("objectType",'COMMENT_CONTENT');
 							$.ajax({
 								url: 'https://cms.localpanda.com/cms/public/photo/update',
 								type: 'POST',
