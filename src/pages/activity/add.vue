@@ -150,11 +150,19 @@
           <el-form-item label="集合方式（pickup）：" required v-if="pageData.category!='Ticket'">
             <el-radio v-model="pageData.pickup" :value="1" :label="1">提供接送</el-radio>
             <el-radio v-model="pageData.pickup" :value="2" :label="2">提供接</el-radio>
-            <el-radio v-model="pageData.pickup" :value="3" :label="3">提供送</el-radio>
+            <!-- <el-radio v-model="pageData.pickup" :value="3" :label="3">提供送</el-radio> -->
             <el-radio v-model="pageData.pickup" :value="0" :label="0">自行前往</el-radio>
 
+            <div class="mt20" v-if="pageData.pickup ==1 || pageData.pickup ==2">
+              <el-select v-model="pageData.pickupRange" placeholder="请选择接/送范围">
+                <el-option label="范围内" :value="1">范围内</el-option>
+                <el-option label="范围外" :value="0">范围外</el-option>
+              </el-select>
+            </div>
+            
+
             <div class="jiesong_info" v-if="pageData.pickup!==0">
-              <el-input type="textarea" :rows="4" placeholder="请输入接送说明" v-model="pageData.statement"></el-input>
+              <el-input type="textarea" :rows="6" placeholder="请输入接送说明" v-model="pageData.statement"></el-input>
             </div>
 
             <div class="jihe_info" v-if="pageData.pickup==0">
@@ -388,6 +396,8 @@ export default {
 
       //venuesList: {},
 
+      pickupCity:['Shanghai','Beijing','Xi’an','Chengdu','Guilin'],
+
       pageData:{
         owner:'',
         title: '',
@@ -428,6 +438,7 @@ export default {
 
         //是否提高接送
         pickup: 1,
+        pickupRange: 1,
 
         //集合信息
         venues: [''],
@@ -501,6 +512,7 @@ export default {
     changeImg(e){
       
     },
+    
     addDestination(){
       this.destinationDialogShow =true;
       this.destinationDialogChange = this.pageData.destinations;
@@ -540,7 +552,83 @@ export default {
       this.departuresDialogShow = false;
       this.$refs.pageData.validateField('departures');
     },
+    getPickupTip(city,pickup,range){
+      var pickupInfo = {
+        shanghai:{
+          pickup1:{
+            inner:'The trip includes a pick-up and a drop-off from/to location within the middle ring road of Shanghai, including hotels in this range and Shanghai Railway Station. \nWe can also pick up/drop off you beyond the middle ring road, including\n*  Hotels outside the middle ring\n*	Hongqiao Railway Station\n*	Hongqiao Airport (SHA)\n*	Pudong Airport (PVG)\n*	Cruise Terminal\n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up and drop off from/to the following locations\n*	Hongqiao Railway Station\n*	Hongqiao Airport (SHA)\n*	Pudong Airport (PVG)\n*	Cruise Terminal\nWe can also pick up/drop off you at any location you specify (e.g. your hotel). If your hotel is within the middle ring road in Shanghai, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          },
+          pickup2:{
+            inner:'The trip includes a pick-up fromlocations within the middle ring road of Shanghai, including Shanghai Railway Station and hotels within this range.\nWe can also pick up/drop off you beyond the middle ring road, including\n*  Hotel outside of the middle ring \n*	Hongqiao Railway Station\n*	Hongqiao Airport (SHA)\n*	Pudong Airport (PVG)\n*	Cruise Terminal\n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up fromthe following locations, including\n*	Hotels outside the middle road\n*	Hongqiao Railway Station\n*	Hongqiao Airport (SHA)\n*	Pudong Airport (PVG)\n*	Cruise Terminal\nWe can also pick you up at any location you specify. If your hotel is within the middle ring road in Shanghai, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          }
+        },
+        beijing:{
+          pickup1:{
+            inner:'The trip includes a pick-up and a drop-off from/to location within the 4th ring road of Beijing, including hotels in this range, Beijing South Railway Station and Beijing West Railway Station. \nWe can also pick up/drop off you beyond the 4th ring road, including\n*	Hotels outside the 4th ring road\n*	Beijing Capital International Airport (PEK)\n*	Nanyuan Airport (NAY)\n*	Tianjin Port \n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up and drop off from/to the following locations\n*	Hotels outside the 4th ring road\n*	Beijing Capital International Airport (PEK)\n*	Nanyuan Airport (NAY)\n*	Tianjin Port\nWe can also pick up/drop off you at any location you specify (e.g. your hotel). If your hotel is within the 4th ring road in Beijing, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          },
+          pickup2:{
+            inner:'The trip includes a pick-up fromlocations within the 4th ring road of Shanghai, including hotels in this range, Beijing South Railway Station and Beijing West Railway Station. \nWe can also pick up you up beyond the 4th ring road, including\n*	Hotels outside the 4th ring road\n*	Beijing Capital International Airport (PEK)\n*	Nanyuan Airport (NAY)\n*	Tianjin Port \n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up fromthe following locations, including\n*	Hotels outside the 4th ring road\n*	Beijing Capital International Airport (PEK)\n*	Nanyuan Airport (NAY)\n*	Tianjin Port\nWe can also pick you up at any location you specify. If your hotel is within the 4th ring road in Beijing, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          }
+        },
+        xian:{
+          pickup1:{
+            inner:'The trip includes a pick-up and a drop-off from/to location in the city central area of Xi’an, including hotels in this range and Xi’an Railway Station. \nWe can also pick up/drop off you beyond the city central area, including\n*  Hotels outside the Xi’an’s central area\n*	Xi’an South Railway Station\n*	Xi’an Xianyang Airport (XIY)\n*	Others\n Please contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up and drop off from/to the following locations\n*  Hotels outside the Xi’an’s central area\n*	Xi’an North Railway Station\n*	Xi’an Xianyang Airport (XIY)\nWe can also pick up/drop off you at anyothers location you specify (e.g. your hotel). If your hotel is within city central area in Xi’an, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          },
+          pickup2:{
+            inner:'The trip includes a pick-up fromlocations within the central city area in Xi’an, including hotels in this area and Xi’an Railway Station. \nWe can also pick up you up beyond the city central area, including\n*	Hotels outside the city central area\n*	Xi’an North Railway Station\n*	Xi’an Xianyang Airport (XIY)\n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up fromthe following locations, including \n*  Hotels outside the Xi’an’s central area\n*	Xi’an North Railway Station\n*	Xi’an Xianyang Airport (XIY)\nWe can also pick you up at any location you specify. If your hotel is within the 4th ring road in Beijing, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          }
+        },
+        chengdu:{
+          pickup1:{
+            inner:'The trip includes a pick-up and a drop-off from/to location in the city central area of Chengdu, including hotels in this range, Chengdu Railway Station, Chengdu South and Chengdu East Railway Station.\nWe can also pick up/drop off you beyond the city central area, including\n*  Hotels outside the Chengdu’s city central area\n*	Chengdu Shuangliu International Airport (CTU)\n*	Others \nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up and drop off from/to the following locations\n*  Hotels outside the Chengdu’s city central area\n*	Chengdu Shuangliu International Airport (CTU)\nWe can also pick up/drop off you at anyothers location you specify.If your hotel is within city central area in Chengdu, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          },
+          pickup2:{
+            inner:'The trip includes a pick-up fromlocations within the central city area in Chengdu, including hotels in this range, Chengdu Railway Station, Chengdu South and Chengdu East Railway Station.\nWe can also pick up you up beyond the city central area, including\n*  Hotels outside the Chengdu’s city central area\n*	Chengdu Shuangliu International Airport (CTU)\n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up and drop off from/to the following locations\n*  Hotels outside the Chengdu’s city central area\n*	Chengdu Shuangliu International Airport (CTU)\nWe can also pick up/drop off you at anyothers location you specify.If your hotel is within city central area in Chengdu, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          }
+        },
+        guilin:{
+          pickup1:{
+            inner:'The trip includes a pick-up and a drop-off from/to locations in the city central area of Guilin, including hotels in this range and Guilin Railway Station. \nWe can also pick up/drop off you beyond the city central area, including\n*	Chengdu hotels outside the city central area \n*	Hotels in Yangshuo Village \n*	Guilin North Railway Station \n*	Guilin South Railway Station\n*	GuilinLiangjiang International Airport(KWL)\n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up and drop off from/to the following locations\n*  Chengdu hotels outside the city central area \n*	Hotels in Yangshuo Village \n*	Guilin North Railway Station \n*	Guilin South Railway Station\n*	GuilinLiangjiang International Airport(KWL)\nWe can also pick up/drop off you at anyothers location you specify.If your hotel is within city central area in Chengdu, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          },
+          pickup2:{
+            inner:'The trip includes a pick-up fromlocations in the city central area of Guilin, including hotels in this range and Guilin Railway Station. \nWe can also pick you up beyond the city central area, including\n*	Chengdu hotels outside the city central area \n*	Hotels in Yangshuo Village \n*	Guilin North Railway Station \n*	Guilin South Railway Station\n*	GuilinLiangjiang International Airport(KWL)\n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            outside:'The trip includes a pick-up fromthe following locations, including\n* Chengdu hotels outside the city central area \n*	Hotels in Yangshuo Village \n*	Guilin North Railway Station \n*	Guilin South Railway Station\n*	GuilinLiangjiang International Airport(KWL)\nWe can also pick you up at any location you specify. If your hotel is within city central area in Chengdu, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
+          }
+        }
+      };
 
+      
+      var city = city.toLowerCase();
+      if(city=="xi'an")city='xian';
+      var info = pickupInfo[city]['pickup'+pickup][(range==1?'inner':'outside')];
+      return info?info:'';
+        
+    },
+    setStatement(){
+      //根据城市显示接送提示，如果有2个以上的主要城市，则不显示接送提示
+      var nowDes = this.pageData.destinations;
+      var cityArr = [];
+      for(var i=0;i<nowDes.length;i++){
+        var thisData = nowDes[i];
+        if(thisData=="Beijing" || thisData=="Shanghai" || thisData=="Chengdu" || thisData=="Xi'an" || thisData=="Guilin"){
+          cityArr.push(thisData);
+        }
+      }
+      if(cityArr.length==1 && this.pageData.pickup!==0 && this.pageData.pickup!==3){
+        this.pageData.statement = this.getPickupTip(cityArr[0],this.pageData.pickup,this.pageData.pickupRange);
+      }else{
+        this.pageData.statement = '';
+      }
+    },
     jiheDel(index){
       this.pageData.venues.splice(index,1);
     },
@@ -572,6 +660,10 @@ export default {
               $('.shenzi_box').removeClass('is-success').addClass('is-error');
             },300);
             return;
+          }
+
+          if(this.pageData.pickup <1 || this.pageData.pickup>2){
+            this.pageData.pickupRange = '';
           }
 
 
@@ -671,7 +763,6 @@ export default {
       dataType: 'json', //如果跨域用jsonp
       contentType: 'application/json',
       success:function(data){
-        console.log(data);
         self.attractionsAll = data;
         
       },
@@ -695,11 +786,20 @@ export default {
       var self = this;
       self.attractionsDialogChange = self.pageData.attractions[val]?self.pageData.attractions[val]:[];
     },
-    'pageData.pickup':function(){
+    'pageData.pickup':function(val){
       var self = this;
       setTimeout(function(){
         self.fromValidate.init();
       },100);
+
+      //设置接送说明
+      this.setStatement();
+      
+      
+    },
+    'pageData.pickupRange':function(){
+      //设置接送说明
+      this.setStatement();
     },
     'pageData.destinations':function(val){
       var hasObj = {};
@@ -732,6 +832,10 @@ export default {
           }
         }
       }
+
+
+      //设置接送说明
+      this.setStatement();
 
 
     }
