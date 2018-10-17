@@ -777,12 +777,14 @@ export default {
         contentType: 'application/json',
         success:function(data){
 
+          console.log(data);
+
           $.ajax({
             url: 'https://cms.localpanda.com/cms/product/activity/attraction/structure',
             type: 'POST',
             dataType: 'json', //如果跨域用jsonp
             contentType: 'application/json',
-            data:JSON.stringify(data.destinations),
+            data:JSON.stringify(data.attractions),
             success:function(data2){
 
               data.attractions = data2;
@@ -792,8 +794,6 @@ export default {
               }
               //self.pageData = data;
 
-              console.log(self.pageData);
-
               if(self.pageData.category=='Day Trip' || self.pageData.category=='Ticket' || self.pageData.category=='Transportation'){
                 self.rules.departures = [{ required: false, message: '请选择出发地', trigger: 'blur' }]
               }
@@ -801,7 +801,9 @@ export default {
             
             },
             error:function(){
-              
+              for(var key in data){
+                self.pageData[key] = data[key];
+              }
             }
           });	
          
