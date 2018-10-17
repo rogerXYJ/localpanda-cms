@@ -156,6 +156,7 @@
                 <el-option label="范围内" :value="1">范围内</el-option>
                 <el-option label="范围外" :value="0">范围外</el-option>
               </el-select>
+              <el-button class="ml20" type="primary" plain @click="setStatement">套用模板</el-button>
             </div>
             
             <div class="jiesong_info" v-if="pageData.pickup!==0">
@@ -561,7 +562,7 @@ export default {
             outside:'The trip includes a pick-up and drop off from/to the following locations\n* Hotels outside the 4th ring road\n*	Beijing Capital International Airport (PEK)\n*	Nanyuan Airport (NAY)\n*	Tianjin Port\nWe can also pick up/drop off you at any location you specify (e.g. your hotel). If your hotel is within the 4th ring road in Beijing, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
           },
           pickup2:{
-            inner:'The trip includes a pick-up fromlocations within the 4th ring road of Shanghai, including hotels in this range, Beijing South Railway Station and Beijing West Railway Station. \nWe can also pick up you up beyond the 4th ring road, including\n* Hotels outside the 4th ring road\n*	Beijing Capital International Airport (PEK)\n*	Nanyuan Airport (NAY)\n*	Tianjin Port \n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            inner:'The trip includes a pick-up from locations within the 4th ring road of Beijing, including hotels in this range, Beijing South Railway Station and Beijing West Railway Station. \nWe can also pick up you up beyond the 4th ring road, including\n* Hotels outside the 4th ring road\n*	Beijing Capital International Airport (PEK)\n*	Nanyuan Airport (NAY)\n*	Tianjin Port \n*	Others\nPlease contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
             outside:'The trip includes a pick-up fromthe following locations, including\n* Hotels outside the 4th ring road\n*	Beijing Capital International Airport (PEK)\n*	Nanyuan Airport (NAY)\n*	Tianjin Port\nWe can also pick you up at any location you specify. If your hotel is within the 4th ring road in Beijing, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
           }
         },
@@ -839,13 +840,8 @@ export default {
         self.fromValidate.init();
       },100);
 
-      //设置接送说明
-      this.setStatement();
     },
-    'pageData.pickupRange':function(){
-      //设置接送说明
-      this.setStatement();
-    },
+    
     'pageData.destinations':function(val){
       var hasObj = {};
       for(var key in this.attractionsAll){
@@ -880,18 +876,8 @@ export default {
 
       
       
-      //设置接送说明
-      this.setStatement();
-
-      //delete this.pageData.attractions[this.attractionsCityValue];
 
     }
-    // 'pageData.venues':function (val, oldVal) { 
-    //   for(var i=0;i<val.length;i++){
-    //     var thisData = val[i];
-    //     this.venuesList['list'+i] = thisData;
-    //   }
-    // }
   },
   head(){
     return {
