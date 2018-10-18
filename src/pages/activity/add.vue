@@ -576,7 +576,7 @@ export default {
         },
         xian:{
           pickup1:{
-            inner:'The trip includes a pick-up and a drop-off from/to location in the city central area of Xi’an, including hotels in this range and Xi’an Railway Station. \nWe can also pick up/drop off you beyond the city central area, including\n* Hotels outside the Xi’an’s central area\n*	Xi’an South Railway Station\n*	Xi’an Xianyang Airport (XIY)\n*	Others\n Please contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
+            inner:'The trip includes a pick-up and a drop-off from/to location in the city central area of Xi’an, including hotels in this range and Xi’an Railway Station. \nWe can also pick up/drop off you beyond the city central area, including\n* Hotels outside the Xi’an’s central area\n*	Xi’an North Railway Station\n*	Xi’an Xianyang Airport (XIY)\n*	Others\n Please contact us to check the price difference. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.',
             outside:'The trip includes a pick-up and drop off from/to the following locations\n* Hotels outside the Xi’an’s central area\n*	Xi’an North Railway Station\n*	Xi’an Xianyang Airport (XIY)\nWe can also pick up/drop off you at anyothers location you specify (e.g. your hotel). If your hotel is within city central area in Xi’an, the trip cost will be lower. When you book, please fill your arrival location in “Other Information” column so that we calculate your cost accordingly.'
           },
           pickup2:{
