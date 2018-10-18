@@ -17,7 +17,7 @@
 
       </el-form>
 
-      <calendar v-if="allAvailable===false" type="multi2" size="big" showDouble="true" maxMonths="6" v-model="changeDate" @change="selectDate" :loading="isLoading"></calendar>
+      <calendar v-if="allAvailable===false" type="multi2" size="big" showDouble="true" v-model="changeDate" @change="selectDate" :loading="isLoading"></calendar>
 
 
       <el-form label-width="250px" class="mt30">
