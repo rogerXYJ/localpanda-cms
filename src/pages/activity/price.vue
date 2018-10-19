@@ -37,9 +37,9 @@
 	  		 	<label style="display:inline-block; width: 140px;padding-right:15px;text-align: right;box-sizing: border-box; font-size:16px;margin-bottom:10px;">退改规则</label>
 	  		 	<el-form-item label="是否支持全额退款:" label-width="140px" >
 		  		 	<el-radio-group v-model="formData.fullRefund" prop="fullRefund" @change="reset('formData')">
-					    <el-radio :value="1" :label="1">是</el-radio>
-					    <el-radio :value="0" :label="0">否</el-radio>
-              <el-radio :value="2" :label="2">条件退款</el-radio>
+					    <el-radio :value="1" :label="1">无条件支持</el-radio>
+              <el-radio :value="2" :label="2">有条件支持</el-radio>
+					    <el-radio :value="0" :label="0">不支持</el-radio>
 					  </el-radio-group>
 		  		</el-form-item>
 			    <el-form-item label="时间:" label-width="140px" prop="refundTimeLimit" v-if="formData.fullRefund">
