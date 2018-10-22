@@ -437,7 +437,7 @@ export default {
         confirmCostUnit: 'HOURS',
 
         //是否提高接送
-        pickup: 1,
+        pickup: urlQuery.category=='Ticket'?0:1,
         pickupRange: 1,
 
         //集合信息
@@ -664,9 +664,6 @@ export default {
 
           if(this.pageData.pickup <1 || this.pageData.pickup>2){
             this.pageData.pickupRange = '';
-          }
-          if(pageData.category=='Ticket'){
-            this.pageData.pickup = 0;
           }
 
 
