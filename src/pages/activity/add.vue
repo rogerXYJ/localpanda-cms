@@ -665,6 +665,9 @@ export default {
           if(this.pageData.pickup <1 || this.pageData.pickup>2){
             this.pageData.pickupRange = '';
           }
+          if(pageData.category=='Ticket'){
+            this.pageData.pickup = 0;
+          }
 
 
           //请求接口
