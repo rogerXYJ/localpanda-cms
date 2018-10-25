@@ -155,8 +155,8 @@
 
             <div class="mt20" v-if="pageData.pickup ==1 || pageData.pickup ==2">
               <el-select v-model="pageData.pickupRange" placeholder="请选择接/送范围">
-                <el-option label="范围内" :value="1">范围内</el-option>
-                <el-option label="范围外" :value="0">范围外</el-option>
+                <el-option label="市区范围内" :value="1">市区范围内</el-option>
+                <el-option label="市区范围外" :value="0">市区范围外</el-option>
               </el-select>
             </div>
             
@@ -596,12 +596,12 @@ export default {
         },
         guilin:{
           pickup1:{
-            inner:'The trip has a pick-up and a drop-off from/to locations in Guilin City Center, including hotels within this range and Guilin Railway Station.\n\nWe can also pick up/drop off from/to the following locations or any other location you specify, but there may be an additional fee.\n* Hotels outside Guilin City Center\n* Hotels in Yangshuo Village\n* Guilin North Railway Station\n* Guilin South Railway Station\n* Guilin Liangjiang International Airport(KWL)\nPlease contact us for further information on the expected cost from/to your pick-up/drop-off location.',
-            outside:'The trip has a pick-up and a drop-off from/to the following locations, including\n* Hotels in Yangshuo Village\n* Guilin North Railway Station\n* Guilin South Railway Station\n* Guilin Liangjiang International Airport(KWL)\n\nWe can also pick up/drop off you at any other location you specify (e.g. your hotel). If your hotel is within Guilin City Center, the trip cost will be lower.'
+            inner:'The trip has a pick-up and a drop-off from/to locations in Guilin City Center, including hotels within this range and Guilin Railway Station.\n\nWe can also pick up/drop off from/to the following locations or any other location you specify, but there may be an additional fee.\n* Hotels outside Guilin City Center\n* Hotels in Yangshuo Village\n* Guilin West Railway Station\n* Guilin North Railway Station\n* Guilin Liangjiang International Airport(KWL)\nPlease contact us for further information on the expected cost from/to your pick-up/drop-off location.',
+            outside:'The trip has a pick-up and a drop-off from/to the following locations, including\n* Hotels in Yangshuo Village\n* Guilin West Railway Station\n* Guilin North Railway Station\n* Guilin Liangjiang International Airport(KWL)\n\nWe can also pick up/drop off you at any other location you specify (e.g. your hotel). If your hotel is within Guilin City Center, the trip cost will be lower.'
           },
           pickup2:{
-            inner:'The trip has a pick-up from locations in Guilin City Center, including hotels within this range and Guilin Railway Station.\n\nWe can also pick you up from the following locations or any other location you specify, but there may be an additional fee.\n* Hotels outside Guilin City Center\n* Hotels in Yangshuo Village\n* Guilin North Railway Station\n* Guilin South Railway Station\n* Guilin Liangjiang International Airport(KWL)\nPlease contact us for further information on the expected cost from your pick-up location.',
-            outside:'The trip has a pick-up from the following locations, including\n* Hotels in Yangshuo Village\n* Guilin North Railway Station\n* Guilin South Railway Station\n* Guilin Liangjiang International Airport(KWL)\n\nWe can also pick you up at any other location you specify (e.g. your hotel). If your hotel is within Guilin City Center, the trip cost will be lower.'
+            inner:'The trip has a pick-up from locations in Guilin City Center, including hotels within this range and Guilin Railway Station.\n\nWe can also pick you up from the following locations or any other location you specify, but there may be an additional fee.\n* Hotels outside Guilin City Center\n* Hotels in Yangshuo Village\n* Guilin West Railway Station\n* Guilin North Railway Station\n* Guilin Liangjiang International Airport(KWL)\nPlease contact us for further information on the expected cost from your pick-up location.',
+            outside:'The trip has a pick-up from the following locations, including\n* Hotels in Yangshuo Village\n* Guilin West Railway Station\n* Guilin North Railway Station\n* Guilin Liangjiang International Airport(KWL)\n\nWe can also pick you up at any other location you specify (e.g. your hotel). If your hotel is within Guilin City Center, the trip cost will be lower.'
           }
         }
       };
