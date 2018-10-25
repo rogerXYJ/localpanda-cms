@@ -15,7 +15,7 @@
 	  			<el-button type="danger"  @click="del(formData.Inclusions,index)">Del</el-button>
 	  			<el-button type="warning"  @click="showContentFn(index,0)">{{item.showContent?'hide content':(!item.content?'add content':'show content')}}</el-button>
 	  			
-	  			<el-input class="mt20 wb60" v-show="item.showContent"  type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-input class="mt20 wb60" v-show="item.showContent"  type="textarea" :rows="4" v-model="item.content"></el-input>
 	  			<!--<div class="mt20 wb60 el-textarea" @click="aa(item.showContent)" >
 	  				<textarea rows="8" class="el-textarea__inner" v-model="item.content" style="min-height: 33px;">
 	  				</textarea>
@@ -32,7 +32,7 @@
 	  			<el-button type="primary" class="ml20" @click="commit(formData.Exclusions,index,'ITEMS_EXCLUDED')" v-else>Commit</el-button>
 	  			<el-button type="danger"  @click="del(formData.Exclusions,index)">Del</el-button>
 	  			<el-button type="warning"  @click="showContentFn(index,1)">{{item.showContent?'hide content':(!item.content?'add content':'show content')}}</el-button>
-	  			<el-input class="mt20 wb60"  v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-input class="mt20 wb60"  v-show="item.showContent" type="textarea" :rows="4" v-model="item.content"></el-input>
 	  			
 	  		</div>
 	  		<div class="text_c wb60">
@@ -41,12 +41,12 @@
 	  	</el-form-item>
 	  	<el-form-item  label="注意事项 (Additional Info): " label-width="200px">
 	  		<div class="item fl wb90 pb30" v-for="(item,index) in formData.AdditionalInfo">
-	  			<el-input class="wb60" v-model="item.title"></el-input>
+	  			<el-input class="wb60" v-model="item.title" type="textarea" rows="2"></el-input>
 	  			<el-button type="success" class="ml20" v-if="!item.newItem" @click="updata(formData.AdditionalInfo,index)">Update</el-button>
 	  			<el-button type="primary" class="ml20" @click="commit(formData.AdditionalInfo,index,'NOTICE')" v-else>Commit</el-button>
 	  			<el-button type="danger"  @click="del(formData.AdditionalInfo,index)">Del</el-button>
 	  			<el-button type="warning"   @click="showContentFn(index,2)">{{item.showContent?'hide content':(!item.content?'add content':'show content')}}</el-button>
-	  			<el-input class="mt20 wb60" v-show="item.showContent" type="textarea" :rows="8" v-model="item.content"></el-input>
+	  			<el-input class="mt20 wb60" v-show="item.showContent" type="textarea" :rows="4" v-model="item.content"></el-input>
 	  			
 	  		</div>
 	  		<div class="text_c wb60">

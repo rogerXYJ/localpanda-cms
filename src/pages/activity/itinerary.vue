@@ -74,7 +74,7 @@
           <el-input v-model="dialogData.title"></el-input>
         </el-form-item>
         <el-form-item label="描述：">
-          <el-input type="textarea" v-model="dialogData.description"></el-input>
+          <el-input type="textarea" v-model="dialogData.description" rows="5"></el-input>
           <p class="c_999">注：对应内容前台若需换行，请在描述中用“回车”</p>
         </el-form-item>
 
