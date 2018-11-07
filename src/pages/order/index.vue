@@ -14,35 +14,52 @@
                 <el-form-item label="订单状态:">
                    <el-checkbox-group v-model="formData.status">
                     <!-- <el-checkbox v-for="item in status" :key="item" :label="item">{{item}}</el-checkbox>  -->
-                    <div class="checkboxItem">
-                         <el-checkbox key="PAYMENT_PENDING" label="PAYMENT_PENDING">PAYMENT_PENDING (待支付)</el-checkbox>
-                         <el-checkbox key="PAYMENT_SUCCESS" label="PAYMENT_SUCCESS">PAYMENT_SUCCESS (已支付待资审)</el-checkbox>
-                    </div>
-                    <div class="checkboxItem">
-                         <el-checkbox key="CONFIRM_WAITING" label="CONFIRM_WAITING">CONFIRM_WAITING (资审中待确认)</el-checkbox>
-                         <el-checkbox key="BOOKING_SUCCESS" label="BOOKING_SUCCESS">BOOKING_SUCCESS (已确认)</el-checkbox>
-                    </div>
-                    <div class="checkboxItem">
-                         <el-checkbox key="COMPLETED" label="COMPLETED">COMPLETED (已出游)</el-checkbox>
-                        <el-checkbox key="CANCELED" label="CANCELED">CANCELED (已取消)</el-checkbox>
-                         
-                    </div>
-                    <div class="checkboxItem">
-                        <el-checkbox key="REFUNDING" label="REFUNDING">REFUNDING (退款中)</el-checkbox>
-                         <el-checkbox key="REFUNDED" label="REFUNDED">REFUNDED (已退款)</el-checkbox>
-                        
-                    </div>
+                        <div class="checkboxItem">
+                            <el-checkbox key="PAYMENT_PENDING" label="PAYMENT_PENDING">PAYMENT_PENDING (待支付)</el-checkbox>
+                            <el-checkbox key="PAYMENT_SUCCESS" label="PAYMENT_SUCCESS">PAYMENT_SUCCESS (已支付待资审)</el-checkbox>
+                        </div>
+                        <div class="checkboxItem">
+                            <el-checkbox key="CONFIRM_WAITING" label="CONFIRM_WAITING">CONFIRM_WAITING (资审中待确认)</el-checkbox>
+                            <el-checkbox key="BOOKING_SUCCESS" label="BOOKING_SUCCESS">BOOKING_SUCCESS (已确认)</el-checkbox>
+                        </div>
+                        <div class="checkboxItem">
+                            <el-checkbox key="COMPLETED" label="COMPLETED">COMPLETED (已出游)</el-checkbox>
+                            <el-checkbox key="CANCELED" label="CANCELED">CANCELED (已取消)</el-checkbox>
+                            
+                        </div>
+                        <div class="checkboxItem">
+                            <el-checkbox key="REFUNDING" label="REFUNDING">REFUNDING (退款中)</el-checkbox>
+                            <el-checkbox key="REFUNDED" label="REFUNDED">REFUNDED (已退款)</el-checkbox>
+                            
+                        </div>
 
-                </el-checkbox-group>
+                    </el-checkbox-group>
                 </el-form-item>
-                 <el-form-item label="设备类型:" class="inline">
-                     <el-select v-model="formData.deviceType">
-                            <el-option value="PC" label="PC"></el-option>
-                            <el-option value="MOBILE" label="MOBILE"></el-option>
-                             <el-option value="IPAD" label="IPAD"></el-option>
-                        </el-select>
-                 </el-form-item>
-                  <el-form-item label="邮箱:" class="inline">
+
+                <el-form-item label="产品经理:" class="inline">
+                    <el-select v-model="formData.owner">
+                        <el-option v-for="item in ownerAll" :value="item" :label="item" :key="item"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="目的地:" class="inline">
+                    <el-select v-model="formData.destination">
+                        <el-option v-for="item in destinationAll" :value="item" :label="item" :key="item"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                <br>
+                
+                <el-form-item label="设备类型:" class="inline">
+                    <el-select v-model="formData.deviceType">
+                        <el-option value="PC" label="PC"></el-option>
+                        <el-option value="MOBILE" label="MOBILE"></el-option>
+                            <el-option value="IPAD" label="IPAD"></el-option>
+                    </el-select>
+                </el-form-item>
+
+                
+
+                <el-form-item label="邮箱:" class="inline">
                     <el-input v-model="formData.emailAddress" class="w320"></el-input>
                 </el-form-item>
                 <el-form-item label="出行日期:">
@@ -174,6 +191,8 @@ export default {
     data(){
         return {
             status:['PAYMENT_PENDING', 'PAYMENT_SUCCESS', 'CONFIRM_WAITING', 'BOOKING_SUCCESS', 'COMPLETED', 'REFUNDING', 'REFUNDED', 'CANCELED'],
+            ownerAll: ['Cindy','Leo','Vicky','Jeremy'],
+            destinationAll:[],
             formData:{
                activityId:null,
                status:[],
@@ -186,6 +205,8 @@ export default {
                sort:'CREATE_TIME',
                deviceType:null,
                includeTest:false,
+               owner:'',
+               destination:''
                
             },
             pageNum:1,
@@ -211,7 +232,27 @@ export default {
         }
     },
     mounted(){
-
+        var self = this;
+        
+        //目的地 和 出发地
+        $.ajax({
+            url: 'https://cms.localpanda.com/cms/public/dest/list/all',
+            type: 'GET',
+            dataType: 'json', //如果跨域用jsonp
+            contentType: 'application/json',
+            data: {
+                "detail":false,
+                "valid":true
+            },
+            success:function(data){
+                var fData = new fArray(data);
+                self.destinationAll = fData.get('name');
+                
+            },
+            error:function(){
+                
+            }
+        });	
     },
     methods:{
     downLoad(){
