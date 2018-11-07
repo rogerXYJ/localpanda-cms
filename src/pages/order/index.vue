@@ -205,8 +205,8 @@ export default {
                sort:'CREATE_TIME',
                deviceType:null,
                includeTest:false,
-               owner:'',
-               destination:''
+               owner:null,
+               destination:null
                
             },
             pageNum:1,
@@ -435,7 +435,9 @@ export default {
             contentType='application/json; charset=UTF-8';
             formData.pageNum=self.pageNum;
             formData.pageSize=self.pageSize;
-             console.log(formData)
+            if(formData.destination=="Xi'an"){
+                formData.destination="Xi\\'an";
+            }
             $.ajax({
                 url: postUrl,
                 type: 'POST',
