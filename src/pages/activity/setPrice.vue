@@ -14,8 +14,7 @@
 				
 				<div class="hr"></div>
 				<div>
-					<span class="red">* 为避免价格公式及价格明细中总价与人均价的计算结果有偏差,现在系统要求价格必须能够整除当前人数(整除包括两位小数).
-如3人价格为100是不允许的,但99.99或100.02是可以的.</span>
+					<span class="red">* 为避免价格公式中人均价的计算结果与总价存在偏差，目前系统要求价格必须能在两位小数内除尽当前人数。</span>
 					<div class="setPice" v-for="(item,index) in formData.records">
 						<div class="clearfix">
 							<el-form-item label="Number of People：" required :key="item.key" class="fl">

@@ -33,25 +33,7 @@
 			
 		    <!--<el-button type="primary" class="fr"></el-button>-->
 	  	</el-form-item>
-	  	<div class="box">
-	  		 	<label style="display:inline-block; width: 140px;padding-right:15px;text-align: right;box-sizing: border-box; font-size:16px;margin-bottom:10px;">退改规则</label>
-	  		 	<el-form-item label="是否支持全额退款:" label-width="140px" >
-		  		 	<el-radio-group v-model="formData.fullRefund" prop="fullRefund" @change="reset('formData')">
-					    <el-radio :value="1" :label="1">无条件支持</el-radio>
-              <el-radio :value="2" :label="2">有条件支持</el-radio>
-					    <el-radio :value="0" :label="0">不支持</el-radio>
-					  </el-radio-group>
-		  		</el-form-item>
-			    <el-form-item label="时间:" label-width="140px" prop="refundTimeLimit" v-if="formData.fullRefund">
-		  		 	<el-input class="w220" v-model="formData.refundTimeLimit" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" @input="changeRefundTimeLimit"></el-input> /天
-		  		 	<span v-show="changeDate" class="red ml30">退款时效有变动，请注意与细则说明保持同步！</span>
-		  		</el-form-item>
-	  			<el-form-item label="细则说明:" label-width="140px" prop="refundInstructions">
-	  				
-		  		 	<el-input class="wb60 fl" v-model="formData.refundInstructions" type="textarea" :rows="7"></el-input>
-            <el-button type="primary fl" v-if="formData.fullRefund" class="display ml20" @click="replaceCont" plain>自动套用模板</el-button>
-		  		</el-form-item>
-	  	</div>
+	  	
 	  	<el-row :gutter="20">
 		  <el-col :span="8">
 		  	<el-form-item label="儿童年龄 (Child Standard):" class="mt20" label-width="200px" prop="childStandard">
@@ -122,7 +104,28 @@
 					   	至
 		  			 <el-input class="w220"></el-input>
 		  	</el-form-item>-->
-		
+      
+      <div class="box">
+	  		 	<label style="display:inline-block; width: 140px;padding-right:15px;text-align: right;box-sizing: border-box; font-size:16px;margin-bottom:10px;">退改规则</label>
+	  		 	<el-form-item label="是否支持全额退款:" label-width="140px" >
+		  		 	<el-radio-group v-model="formData.fullRefund" prop="fullRefund" @change="reset('formData')">
+					    <el-radio :value="1" :label="1">无条件支持</el-radio>
+              <el-radio :value="2" :label="2">有条件支持</el-radio>
+					    <el-radio :value="0" :label="0">不支持</el-radio>
+					  </el-radio-group>
+		  		</el-form-item>
+			    <el-form-item label="时间:" label-width="140px" prop="refundTimeLimit" v-if="formData.fullRefund">
+		  		 	<el-input class="w220" v-model="formData.refundTimeLimit" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" @input="changeRefundTimeLimit"></el-input> /天
+		  		 	<span v-show="changeDate" class="red ml30">退款时效有变动，请注意与细则说明保持同步！</span>
+		  		</el-form-item>
+	  			<el-form-item label="细则说明:" label-width="140px" prop="refundInstructions">
+	  				
+		  		 	<el-input class="wb60 fl" v-model="formData.refundInstructions" type="textarea" :rows="7"></el-input>
+            <el-button type="primary fl" v-if="formData.fullRefund" class="display ml20" @click="replaceCont" plain>自动套用模板</el-button>
+		  		</el-form-item>
+	  	</div>
+
+
 	  	<el-form-item label="费用说明Additional instructions：">
 	  		<el-input type="textarea" v-model="formData.priceInstructions" :rows="7"></el-input>
 	  	</el-form-item>
@@ -404,10 +407,11 @@ export default {
 
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped>
 .box {
   padding: 20px;
   background: #f2f2f2;
+  margin-bottom: 10px;
 }
 .ml60 {
   margin-left: 60px;

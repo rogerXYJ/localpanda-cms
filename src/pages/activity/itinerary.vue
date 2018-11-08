@@ -530,6 +530,11 @@ export default {
       if(!self.objectId){
         formData.files = this.file;
       }
+
+      
+      if(dialogData.photo){
+        formData.photoId = dialogData.photo.photoId;
+      }
       
       let param = new FormData()  // 创建form对象
       for(let key in formData){
