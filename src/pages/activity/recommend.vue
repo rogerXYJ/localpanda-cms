@@ -84,7 +84,7 @@ export default {
       this.idList.push({
         "activityId": '',
         "objectId": this.activityId,
-        "objectType": "GUIDE_SERVICE"
+        "objectType": "ACTIVITY"
       });
       this.fromValidate.init();
     },
