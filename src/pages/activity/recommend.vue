@@ -157,7 +157,7 @@ export default {
   mounted(){
     var self = this;
     $.ajax({
-      url: 'https://cms.localpanda.com/cms/product/GUIDE_SERVICE/'+this.activityId+'/activity/binding/list',
+      url: 'https://cms.localpanda.com/cms/product/ACTIVITY/'+this.activityId+'/activity/binding/list',
       type: 'GET',
       dataType: 'json', //如果跨域用jsonp
       contentType: 'application/json',
