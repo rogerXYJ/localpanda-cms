@@ -87,9 +87,13 @@
 
             </div>
             <button v-if="btnText()"  class="el-button el-button--primary mt30" @click="btnFn">{{btnText()}}</button>
-             <button  class="el-button el-button--primary mt30" @click="remark">查看/添加备注</button>
-              <button  class="el-button el-button--primary mt30" v-if="(details.status=='PAYMENT_SUCCESS'||details.status=='CONFIRM_WAITING'||details.status=='BOOKING_SUCCESS')&&(details.paymentInfo&&details.paymentInfo.status!='PARTIALLY_REFUNDED')" @click="refund">全额退款</button>
-               <button  class="el-button el-button--primary mt30" @click="refundStatus=true"  v-if="(details.status=='PAYMENT_SUCCESS'||details.status=='CONFIRM_WAITING'||details.status=='BOOKING_SUCCESS'||details.status=='COMPLETED')&&(details.paymentInfo&&details.paymentInfo.status!='PARTIALLY_REFUNDED')">部分退款</button>
+            <button  class="el-button el-button--primary mt30" @click="remark">查看/添加备注</button>
+            <button  class="el-button el-button--primary mt30" v-if="(details.status=='PAYMENT_SUCCESS'||details.status=='CONFIRM_WAITING'||details.status=='BOOKING_SUCCESS')&&(details.paymentInfo&&details.paymentInfo.status!='PARTIALLY_REFUNDED')" @click="refund">全额退款</button>
+            <button  class="el-button el-button--primary mt30" @click="refundStatus=true"  v-if="(details.status=='PAYMENT_SUCCESS'||details.status=='CONFIRM_WAITING'||details.status=='BOOKING_SUCCESS'||details.status=='COMPLETED')&&(details.paymentInfo&&details.paymentInfo.status!='PARTIALLY_REFUNDED')">部分退款</button>
+
+
+            <a :href="'/order/orderCost?id='+id" class="el-button el-button--primary mt30">计调信息</a>
+            
         </div>
          <el-dialog title="线下搬单" :visible.sync="dialogFormVisible">
             <el-form :model="form" :rules="rules" ref="ruleForm">

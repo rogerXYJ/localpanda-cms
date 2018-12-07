@@ -9,7 +9,7 @@
 
 	  <el-form :model="formData" :rules="rules" ref="formData"  class="mt40 paddingL40">
       
-      <el-form-item label="是否统一定价:" prop="unifiedPricing" label-width="180px">
+      <el-form-item label="是否统一定价:" prop="unifiedPricing" label-width="200px">
         <el-radio-group v-model="formData.unifiedPricing">
           <el-radio :label="true">是 </el-radio>
           <el-radio :label="false">否</el-radio>
@@ -20,8 +20,8 @@
       </el-form-item>
       
 
-	  	<el-form-item label="货币类型 (Currency):" prop="currency" label-width="180px">
-	  		 <el-select v-model="formData.currency" placeholder="请选择币种">
+	  	<el-form-item label="货币类型 (Currency):" prop="currency" label-width="200px">
+	  		 <el-select class="w120" v-model="formData.currency" placeholder="请选择币种">
 		      <el-option label="USD" value="USD"></el-option>
 		      <el-option label="CNY" value="CNY"></el-option>
 		      <el-option label="EUR" value="EUR"></el-option>
@@ -33,6 +33,34 @@
 			
 		    <!--<el-button type="primary" class="fr"></el-button>-->
 	  	</el-form-item>
+
+
+      <el-row :gutter="20">
+        <el-col :span="8">
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        
+        <el-col :span="8">
+          <el-form-item :label=" formData.unifiedPricing?'统一价格: ':'最低价格Bottom Price：'" label-width="200px" prop="bottomPrice" class="mt5" v-if="formData.unifiedPricing||formData.bottomPrice">
+            <!--<span>{{formData.bottomPrice}}</span>-->
+            <el-input class="w120" v-if="formData.unifiedPricing" v-model="formData.bottomPrice"></el-input>
+            <el-input class="w120" v-else v-model="formData.bottomPrice" :disabled="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <!-- <el-col :span="8">
+          <el-form-item label="原始价格 (Original Price)：" label-width="200px" v-if="formData.originalPrice">
+            <el-input class="w120" v-model="formData.originalPrice"></el-input>
+          </el-form-item>
+        </el-col> -->
+
+        <el-col :span="8">
+          <el-form-item label="成本价 (Cost)：" label-width="200px" v-if="formData.unifiedPricing">
+            <el-input class="w120" v-model="formData.costPrice"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 	  	
 	  	<el-row :gutter="20">
 		  <el-col :span="8">
@@ -47,22 +75,7 @@
 		  </el-col>
 		</el-row>
 		
-		<el-row :gutter="20">
-		  <el-col :span="8">
-		  	<el-form-item label="原始价格 (Original Price)：" label-width="200px" v-if="formData.originalPrice">
-		  		<!-- <el-input class="w120"  v-model="formData.originalPrice" ></el-input> -->
-				  <el-input class="w120" v-model="formData.originalPrice"></el-input>
-		  		
-		  	</el-form-item>
-		  </el-col>
-		  <el-col :span="8">
-		  	<el-form-item :label=" formData.unifiedPricing?'统一价格: ':'最低价格Bottom Price：'" label-width="200px" prop="bottomPrice" class="mt5" v-if="formData.unifiedPricing||formData.bottomPrice">
-		  		<!--<span>{{formData.bottomPrice}}</span>-->
-		  		<el-input class="w120" v-if="formData.unifiedPricing" v-model="formData.bottomPrice"></el-input>
-				  <el-input class="w120" v-else v-model="formData.bottomPrice" :disabled="true"></el-input>
-		  	</el-form-item>
-		  </el-col>
-		</el-row>
+		
 	  	<el-row :gutter="20">
 		  <el-col :span="8">
 		  	<el-form-item label=" 最小成团人数minimum:" label-width="200px" class="mt5" prop="minParticipants">
@@ -166,6 +179,7 @@ export default {
         childStandard: "12", //儿童年龄
         childDiscount: null, //儿童差价
         originalPrice: "", //原始价格
+        costPrice: null, //成本价
         priceInstructions: "", //费用说明
         minParticipants: "1", //最小成团人数
         maxParticipants: "",
@@ -279,6 +293,7 @@ export default {
       let time = "";
       let refundTimeLimit = this.formData.refundTimeLimit;
       if (!refundTimeLimit) {
+        this.$message({message: "请先填写退改时间！",type: "error"});
         return;
       }
       if (refundTimeLimit <= 2) {

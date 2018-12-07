@@ -47,6 +47,7 @@ let routers = [
   
   {path:'/order/',name: 'index', title:'订单查询'},
   {path:'/order/orderDetails',name: 'orderDetails', title:'订单详情'},
+  {path:'/order/orderCost',name: 'orderCost', title:'订单计调信息'},
   
 
 

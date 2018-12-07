@@ -113,13 +113,18 @@
             <el-select v-model="pageData.ranking" placeholder="请选择排序值">
               <el-option :label="item" :value="item" v-for="item in 10" :key="item">{{item}}</el-option>
             </el-select>
-            数值越小，排序权重越大！
+            数值越小，排序越靠前！
           </el-form-item>
 
-          <el-form-item label="适合儿童：" required prop="suitableForChildren">
+          <el-form-item label="是否需要护照信息：" required prop="passportRequired">
+            <el-radio v-model="pageData.passportRequired" :label="true" :value="true">Yes</el-radio>
+            <el-radio v-model="pageData.passportRequired" :label="false" :value="false">No</el-radio>
+          </el-form-item>
+
+          <!-- <el-form-item label="适合儿童：" required prop="suitableForChildren">
             <el-radio v-model="pageData.suitableForChildren" :label="1" :value="1">Yes</el-radio>
             <el-radio v-model="pageData.suitableForChildren" :label="0" :value="0">No</el-radio>
-          </el-form-item>
+          </el-form-item> -->
 
           <el-form-item label="是否在列表页显示：" v-if="pageId">
             <el-radio v-model="pageData.display" :label="1" :value="1">Yes</el-radio>
@@ -227,7 +232,7 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item label="注意事项（notice）：">
+          <!-- <el-form-item label="注意事项（notice）：">
             <el-input
               type="textarea"
               :rows="6"
@@ -243,7 +248,7 @@
               placeholder="请输入内容"
               v-model="pageData.introduction">
             </el-input>
-          </el-form-item>
+          </el-form-item> -->
           
           <el-form-item label="备注说明（remark）：">
             <el-input
@@ -257,7 +262,7 @@
           <el-form-item label="活动限制（limits）：">
             <el-input
               type="textarea"
-              :rows="6"
+              :rows="2"
               placeholder="请输入内容"
               v-model="pageData.limits">
             </el-input>
@@ -418,6 +423,9 @@ export default {
 
         //是否适合儿童
         suitableForChildren: 1,
+
+        //是否需要护照信息
+        passportRequired: false,
 
         //是否前台可见
         display: 1,
