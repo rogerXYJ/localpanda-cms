@@ -12,16 +12,16 @@
             <div class="mt20 fs16">
                
                 <el-row class="mt20">
-                        <el-col :span="12">
-                        
-                        <div class="grid-content bg-purple fs16 pd20"><label> 订单ID: </label><b>{{details.orderId}}</b></div>
-                        </el-col>
-                        <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label>产品ID: </label><b>{{details.activityId}}</b></div></el-col>
+                  <el-col :span="12">
+                  
+                  <div class="grid-content bg-purple fs16 pd20"><label> 订单ID: </label><b>{{details.orderId}}</b></div>
+                  </el-col>
+                  <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label>产品ID: </label><b>{{details.activityId}}</b></div></el-col>
                 </el-row>
-                <el-row v-if="details.guideBasicInfo">
-                        <el-col :span="12" v-if="details.guideBasicInfo"><div class="grid-content bg-purple fs16 pd20"><label>导游ID: </label><b>{{details.guideBasicInfo.guideId}}</b></div></el-col>
-                        <el-col :span="12" v-if="details.guideBasicInfo"><div class="grid-content bg-purple-light fs16 pd20"><label> 导游姓名: </label><b>{{details.guideBasicInfo.enName}}</b></div></el-col>
+                <el-row>
+                  <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label> 产品标题: </label><a class="btn_text" target="_blank" :href="'https://www.localpanda.com/activity/details/'+details.activityId"><b>{{details.activityInfo?details.activityInfo.title:''}}</b></a></div></el-col>
                 </el-row>
+                
                  <!-- <el-row>
                         <el-col :span="24"><div class="grid-content bg-purple fs16 mt20"><label> 产品标题: </label><b>{{details.activityInfo?details.activityInfo.title:''}}</b></div></el-col>
                 </el-row> -->
@@ -30,28 +30,31 @@
                         <el-col :span="12" v-if="details.deviceType"><div class="grid-content bg-purple-light fs16 pd20"><label> 终端: </label><b>{{details.deviceType}}</b></div></el-col>
                 </el-row>
                 <el-row>
-                        <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>总金额: </label><b>{{details.symbol}} {{details.amount}}</b></div></el-col>
-                        <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> 平均价: </label><b>{{details.symbol}} {{details.averagePrice}}</b></div></el-col>
+                        <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>总金额: </label><b>{{details.currency}} {{details.symbol}} {{details.amount}}</b></div></el-col>
+                        <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>人数: </label><b>Adult(s) x {{details.adultNum}}</b>，<b v-if="details.childrenNum">Child(ren) x {{details.childrenNum}}</b></div></el-col>
+                        <!-- <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> 平均价: </label><b>{{details.symbol}} {{details.averagePrice}}</b></div></el-col> -->
                 </el-row>
                 
                  <el-row>
                         <el-col :span="24" v-if="details.comments"><div class="grid-content bg-purple fs16 pd20"><label> Comments: </label><b>{{details.comments}}</b></div></el-col>
                 </el-row>
                 <el-row>
-                        <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>成人数: </label><b>{{details.adultNum}}</b></div></el-col>
-                        <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> 儿童数: </label><b>{{details.childrenNum}}</b></div></el-col>
+                        
+                  <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>出行日期: </label><b>{{details.startDate}}</b></div></el-col>
+                  <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> 订单创建时间(北京时间): </label><b>{{details.createTime}}</b></div></el-col>
+                </el-row>
+                <el-row v-if="details.guideBasicInfo">
+                  <el-col :span="12" v-if="details.guideBasicInfo"><div class="grid-content bg-purple fs16 pd20"><label>导游ID: </label><b>{{details.guideBasicInfo.guideId}}</b></div></el-col>
+                  <el-col :span="12" v-if="details.guideBasicInfo"><div class="grid-content bg-purple-light fs16 pd20"><label> 导游姓名: </label><b>{{details.guideBasicInfo.enName}}</b></div></el-col>
                 </el-row>
                 <el-row>
-                        <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>出行日期: </label><b>{{details.startDate}}</b></div></el-col>
-                        <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> 订单创建时间(北京时间): </label><b>{{details.createTime}}</b></div></el-col>
+                  <el-col :span="24" v-if="details.paymentInfo&&details.paymentInfo.status=='PARTIALLY_REFUNDED'"><div class="grid-content bg-purple fs16 pd20"><label> 部分退款金额: </label><b>{{details.paymentInfo.refundAmount}}</b></div></el-col>
                 </el-row>
                  <el-row>
-                        <el-col :span="details.paymentInfo&&details.paymentInfo.status=='PARTIALLY_REFUNDED'?12:24"><div class="grid-content bg-purple fs16 pd20"><label> 货币: </label><b>{{details.currency}}</b></div></el-col>
-                        <el-col :span="12" v-if="details.paymentInfo&&details.paymentInfo.status=='PARTIALLY_REFUNDED'"><div class="grid-content bg-purple fs16 pd20"><label> 部分退款金额: </label><b>{{details.paymentInfo.refundAmount}}</b></div></el-col>
+                        <!-- <el-col :span="details.paymentInfo&&details.paymentInfo.status=='PARTIALLY_REFUNDED'?12:24"><div class="grid-content bg-purple fs16 pd20"><label> 货币: </label><b>{{details.currency}}</b></div></el-col> -->
+                        <!-- <el-col :span="24" v-if="details.paymentInfo&&details.paymentInfo.status=='PARTIALLY_REFUNDED'"><div class="grid-content bg-purple fs16 pd20"><label> 部分退款金额: </label><b>{{details.paymentInfo.refundAmount}}</b></div></el-col> -->
                 </el-row>
-                 <el-row>
-                        <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label> 产品标题: </label><a class="btn_text" target="_blank" :href="'https://www.localpanda.com/activity/details/'+details.activityId"><b>{{details.activityInfo?details.activityInfo.title:''}}</b></a></div></el-col>
-                </el-row>
+                
                  <el-row>
                         <el-col :span="24" v-if="details.comments"><div class="grid-content bg-purple fs16 pd20"><label> Comments: </label><b>{{details.comments}}</b></div></el-col>
                 </el-row>
@@ -68,20 +71,132 @@
                         <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>UTC offset: </label><b>{{details.utcOffset}}</b></div></el-col>
                         <el-col :span="12" v-show="details.createTime"><div class="grid-content bg-purple-light fs16 pd20"><label> Current Local Time: </label><b>{{userLocalTime}}</b></div></el-col>
                 </el-row>
-                <div class="hr"></div>
+
+
+                <div class="hr" v-if="details.contactInfo && details.contactInfo.pickup"></div>
+
+                <!-- Pick-up Info -->
+                <div v-if="details.contactInfo && details.contactInfo.pickup">
+                  <h4>Pick-up Info</h4>
+                  <el-row>
+                    <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label>Pick-up Location: </label><b>{{details.contactInfo.pickup['Pick-up Location']}}</b></div></el-col>
+                  </el-row>
+                  <div v-if="details.contactInfo.pickup['Pick-up Location']=='Hotel'">
+                    <el-row>
+                      <el-col :span="24"><div class="grid-content bg-purple-light fs16 pd20"><label> Pick-up Time: </label><b>{{details.contactInfo.pickup['Pick-up Time']}}</b></div></el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="24"><div class="grid-content bg-purple-light fs16 pd20"><label> Hotel Name & Address: </label><b>{{details.contactInfo.pickup['Hotel Name & Address']}}</b></div></el-col>
+                    </el-row>
+                  </div>
+                  <div v-else-if="details.contactInfo.pickup['Pick-up Location']=='Airport'">
+                    <el-row>
+                      <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>Flight Number: </label><b>{{details.contactInfo.pickup['Flight Number']}}</b></div></el-col>
+                      <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> Arrival Time: </label><b>{{details.contactInfo.pickup['Arrival Time']}}</b></div></el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="24"><div class="grid-content bg-purple-light fs16 pd20"><label> Airport: </label><b>{{details.contactInfo.pickup['Airport']}}</b></div></el-col>
+                    </el-row>
+                  </div>
+                  <div v-else-if="details.contactInfo.pickup['Pick-up Location']=='Cruise Port'">
+                    <el-row>
+                      <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>Cruise Number: </label><b>{{details.contactInfo.pickup['Cruise Number']}}</b></div></el-col>
+                      <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> Arrival Time: </label><b>{{details.contactInfo.pickup['Arrival Time']}}</b></div></el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="24"><div class="grid-content bg-purple-light fs16 pd20"><label> Cruise Port: </label><b>{{details.contactInfo.pickup['Cruise Port']}}</b></div></el-col>
+                    </el-row>
+                  </div>
+                  <div v-else-if="details.contactInfo.pickup['Pick-up Location']=='Railway Station'">
+                    <el-row>
+                      <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>Train Number: </label><b>{{details.contactInfo.pickup['Train Number']}}</b></div></el-col>
+                      <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> Arrival Time: </label><b>{{details.contactInfo.pickup['Arrival Time']}}</b></div></el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="24"><div class="grid-content bg-purple-light fs16 pd20"><label> Railway Station: </label><b>{{details.contactInfo.pickup['Railway Station']}}</b></div></el-col>
+                    </el-row>
+                  </div>
+                  <div v-else-if="details.contactInfo.pickup['Pick-up Location']=='Address or Intersection'">
+                    <el-row>
+                      <el-col :span="24"><div class="grid-content bg-purple-light fs16 pd20"><label> Pick-up Time: </label><b>{{details.contactInfo.pickup['Pick-up Time']}}</b></div></el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="24"><div class="grid-content bg-purple-light fs16 pd20"><label> Address or Intersection: </label><b>{{details.contactInfo.pickup['Address or Intersection']}}</b></div></el-col>
+                    </el-row>
+                  </div>
+                </div>
+
+                <div class="hr" v-if="details.contactInfo && details.contactInfo.phoneDelivery"></div>
                 
-                <div class="" v-if="details.phoneHire">
+                <div v-if="details.contactInfo && details.contactInfo.phoneDelivery">
                     <h4>Panda Phone Info</h4>
                     <el-row>
-                        <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>接送点: </label><b>{{details.phoneHireInfo?(details.phoneHireInfo.hotel?'Hotel':'Airport'):"Haven't decided yet"}}</b></div></el-col>
-                            <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> 递送日期: </label><b>{{details.phoneHireInfo?details.phoneHireInfo.arrivalDate:'-'}}</b></div></el-col>
+                      <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label>Delivery Time ( Beijing Time ): </label><b>{{details.contactInfo.phoneDelivery['Delivery Date ( Beijing Time )'] +' '+ details.contactInfo.phoneDelivery['Delivery Time ( Beijing Time )']}}</b></div></el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label>递送详细: </label><b>{{details.phoneHireInfo?(details.phoneHireInfo.hotel?details.phoneHireInfo.hotel:details.phoneHireInfo.flightNumber):'-'}}</b></div></el-col>
+                      <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label>Panda Phone Delivery Address ( Hotel Only ): </label><b>{{details.contactInfo.phoneDelivery['Panda Phone Delivery Address ( Hotel Only )']}}</b></div></el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label>押金方式: </label><b>{{details.phoneDepositPayOnline?'Online':'Offline'}}</b></div></el-col>
+                      <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label>押金方式: </label><b>{{details.phoneDepositPayOnline?'Online':'Offline'}}</b></div></el-col>
                     </el-row>
+                </div>
+
+                <div class="hr" v-if="details.contactInfo && details.contactInfo.passport"></div>
+
+                <!-- Passport Info -->
+                <div v-if="details.contactInfo && details.contactInfo.passport">
+                  <h4>Passport Info</h4>
+                  <div class="mt15" v-for="(items,index) in details.contactInfo.passport" :key="index">
+                    <el-row>
+                      <el-col :span="24">
+                        <div class="grid-content bg-purple fs16 pd20">
+                          <b class="c_999">Traveler{{index+1}}</b>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="12">
+                        <div class="grid-content bg-purple fs16 pd20">
+                          <label>First Name: </label>
+                          <b>{{items['First Name']}}</b>
+                        </div>
+                      </el-col>
+                      <el-col :span="12">
+                        <div class="grid-content bg-purple fs16 pd20">
+                          <label>Last Name: </label>
+                          <b>{{items['Last Name']}}</b>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="12">
+                        <div class="grid-content bg-purple fs16 pd20">
+                          <label>Passport Number: </label>
+                          <b>{{items['Passport Number']}}</b>
+                        </div>
+                      </el-col>
+                      <el-col :span="12">
+                        <div class="grid-content bg-purple fs16 pd20">
+                          <label>Birthday: </label>
+                          <b>{{items['Birthday']}}</b>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="12">
+                        <div class="grid-content bg-purple fs16 pd20">
+                          <label>Gender: </label>
+                          <b>{{items['Gender']}}</b>
+                        </div>
+                      </el-col>
+                      <el-col :span="12">
+                        <div class="grid-content bg-purple fs16 pd20">
+                          <label>Nationality: </label>
+                          <b>{{items['Nationality']}}</b>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
                 </div>
                 
 
@@ -287,6 +402,16 @@ export default {
         type: "GET",
         dataType: "json",
         success: function(data) {
+          if(data.contactInfo.pickup){
+            data.contactInfo.pickup = JSON.parse(data.contactInfo.pickup);
+          }
+          if(data.contactInfo.phoneDelivery){
+            data.contactInfo.phoneDelivery = JSON.parse(data.contactInfo.phoneDelivery);
+          }
+          if(data.contactInfo.passport){
+            data.contactInfo.passport = JSON.parse(data.contactInfo.passport);
+          }
+
           self.details = data;
           self.contactInfo = data.contactInfo;
           self.userLocalTime = data.userLocalTime;

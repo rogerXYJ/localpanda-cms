@@ -5,9 +5,9 @@
         <h3 class="text_c">计调信息明细</h3>
         
         <el-table :data="tableData" border style="width: 100%">
-          <el-table-column  label="类型" width="200">
+          <el-table-column  label="类型" width="160">
             <template slot-scope="scope">
-              <el-select class="w150" v-model="scope.row.objectType" placeholder="请选择类型">
+              <el-select class="w140" v-model="scope.row.objectType" placeholder="请选择类型">
                 <el-option
                   v-for="item in typeArr"
                   :key="item.typeStr"
@@ -17,6 +17,31 @@
               </el-select>
             </template>
           </el-table-column>
+
+
+          <el-table-column  label="开始时间" width="170" v-if="durationUnit=='DAYS'">
+            <template slot-scope="scope">
+              <el-date-picker  class="w140"
+                v-model="scope.row.startDate" 
+                :default-value="scope.row.startDate"
+                type="date" 
+                value-format="yyyy-MM-dd"
+                placeholder="开始日期">
+              </el-date-picker>
+            </template>
+          </el-table-column>
+          <el-table-column  label="结束时间" width="170" v-if="durationUnit=='DAYS'">
+            <template slot-scope="scope">
+              <el-date-picker class="w140"
+                v-model="scope.row.endDate"
+                type="date" 
+                value-format="yyyy-MM-dd"
+                placeholder="结束日期">
+              </el-date-picker>
+            </template>
+          </el-table-column>
+
+
           <el-table-column width="200" :render-header="getAllPrice">
             <template slot-scope="scope">
               　¥　<el-input class="w120" v-model="scope.row.amount" placeholder="请输入价格"></el-input>
@@ -52,12 +77,17 @@ export default {
     let id = this.$route.query.id;
     return {
       orderId: id,
+      durationUnit: '',
+      startDate:'',
       typeArr:[
         {'objectType':'GUIDE', 'typeStr': '导游'},
         {'objectType':'DRIVER', 'typeStr': '司机'},
         {'objectType':'TICKET', 'typeStr': '门票'},
         {'objectType':'CATERING', 'typeStr': '餐饮'},
         {'objectType':'MEAL_SUBSIDY', 'typeStr': '司机导游餐补'},
+        {'objectType':'TRAIN', 'typeStr': '火车票'},
+        {'objectType':'FLIGHT', 'typeStr': '机票'},
+        {'objectType':'HOTEL', 'typeStr': '酒店'},
         {'objectType':'OTHER', 'typeStr': '其他'}
       ],
       tableData:[
@@ -83,15 +113,18 @@ export default {
           priceAll += thisData.amount*1;
         }
       }
-      console.log(priceAll);
       return '成本（ 总：¥'+priceAll+' ）';
     },
     addList(){
+      // var dayArr = this.startDate.split('-');
+      // console.log(new Date(parseInt(dayArr[0]),parseInt(dayArr[1])-1,parseInt(dayArr[2])));
       this.tableData.push({
         "id":'',
         "orderId": this.orderId,
         "amount": '',
         "message": "",
+        "startDate": this.startDate,
+        "endTime":'',
         "objectType": "", //[ GUIDE, DRIVER, TICKET, CATERING, MEAL_SUBSIDY ]
       });
     },
@@ -190,6 +223,23 @@ export default {
         success: function(data) {
           console.log(data);
           self.tableData = data;
+        },
+        error: function(data) {
+          self.$message({
+            message: "请求失败！",
+            type: "error"
+          });
+        }
+      });
+
+      $.ajax({
+        url: "https://cms.localpanda.com/cms/order/" + self.orderId + "/activity",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          console.log(data);
+          self.startDate = data.startDate;
+          self.durationUnit = data.activityInfo.durationUnit;
         },
         error: function(data) {
           self.$message({
