@@ -19,24 +19,24 @@
           </el-table-column>
 
 
-          <el-table-column  label="开始时间" width="170" v-if="durationUnit=='DAYS'">
+          <el-table-column  label="起始日期" width="170" v-if="durationUnit=='DAYS'">
             <template slot-scope="scope">
               <el-date-picker  class="w140"
                 v-model="scope.row.startDate" 
                 :default-value="scope.row.startDate"
                 type="date" 
                 value-format="yyyy-MM-dd"
-                placeholder="开始日期">
+                placeholder="起始日期">
               </el-date-picker>
             </template>
           </el-table-column>
-          <el-table-column  label="结束时间" width="170" v-if="durationUnit=='DAYS'">
+          <el-table-column  label="截止日期" width="170" v-if="durationUnit=='DAYS'">
             <template slot-scope="scope">
               <el-date-picker class="w140"
                 v-model="scope.row.endDate"
                 type="date" 
                 value-format="yyyy-MM-dd"
-                placeholder="结束日期">
+                placeholder="截止日期">
               </el-date-picker>
             </template>
           </el-table-column>

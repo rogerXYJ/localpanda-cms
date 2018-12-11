@@ -31,7 +31,7 @@
                 </el-row>
                 <el-row>
                         <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>总金额: </label><b>{{details.currency}} {{details.symbol}} {{details.amount}}</b></div></el-col>
-                        <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>人数: </label><b>Adult(s) x {{details.adultNum}}</b>，<b v-if="details.childrenNum">Child(ren) x {{details.childrenNum}}</b></div></el-col>
+                        <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>人数: </label><b>Adult(s) x {{details.adultNum}}</b><b v-if="details.childrenNum">，Child(ren) x {{details.childrenNum}}</b></div></el-col>
                         <!-- <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> 平均价: </label><b>{{details.symbol}} {{details.averagePrice}}</b></div></el-col> -->
                 </el-row>
                 
