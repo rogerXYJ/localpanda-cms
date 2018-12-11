@@ -379,7 +379,7 @@ export default {
 
       categoryAll: ['Day Trip','Trans-China Trip','Regional Multi-Day Trip','Transportation','Ticket'],
 
-      tourTypeArr: ["Landmarks","City tour","Food","Old Neighborhood","Architecture","History","Art","Cultural","Night","Nightlife","Performances & Shows","Family Friendly","Parks & Zoos","Outdoor","Wildlife","Short excursions","Shopping","Sightseeing","Nature & scenery","Layover tour","Multi-day tour","Popular & Classic Tours","Hiking","Watertown","Huangpu River Cruise"," Expat-friendly","Transfer"],
+      tourTypeArr: ["Landmarks","City Tour","Food","Old Neighborhood","Architecture","History","Art","Cultural","Night","Nightlife","Performances & Shows","Family Friendly","Parks & Zoos","Outdoor","Wildlife","Short Excursions","Shopping","Sightseeing","Nature & Scenery","Layover Tour","Multi-day Tour","Popular & Classic Tours","Hiking","Watertown","Huangpu River Cruise"," Expat-friendly","Transfer"],
 
       //目的地
       destinationAll:[],

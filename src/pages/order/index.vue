@@ -113,7 +113,7 @@
                 
                 <el-table-column  label="操作" width="140">
                     <template slot-scope="scope" class="pd30">
-                        <a class="btn_text" :href="'/order/orderDetails?id='+scope.row.orderId">明细</a>
+                        <a class="btn_text" :href="'/order/orderDetails?id='+scope.row.orderId" target="_blank">明细</a>
                          <a class="btn_text"  @click="btnFn(scope)" v-show="btnText(scope)" >{{btnText(scope)}}</a>
                        
                     </template>

@@ -35,9 +35,9 @@
                         <!-- <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> 平均价: </label><b>{{details.symbol}} {{details.averagePrice}}</b></div></el-col> -->
                 </el-row>
                 
-                 <el-row>
+                 <!-- <el-row>
                         <el-col :span="24" v-if="details.comments"><div class="grid-content bg-purple fs16 pd20"><label> Comments: </label><b>{{details.comments}}</b></div></el-col>
-                </el-row>
+                </el-row> -->
                 <el-row>
                         
                   <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>出行日期: </label><b>{{details.startDate}}</b></div></el-col>
@@ -58,7 +58,10 @@
                  <el-row>
                         <el-col :span="24" v-if="details.comments"><div class="grid-content bg-purple fs16 pd20"><label> Comments: </label><b>{{details.comments}}</b></div></el-col>
                 </el-row>
+
                 <div class="hr"></div>
+
+                <h4>Contact Info</h4>
                 <el-row>
                         <el-col :span="12"><div class="grid-content bg-purple fs16 pd20"><label>First Name: </label><b>{{contactInfo.firstName}}</b></div></el-col>
                         <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label> Last Name: </label><b>{{contactInfo.lastName}}</b></div></el-col>
@@ -203,11 +206,11 @@
             </div>
             <button v-if="btnText()"  class="el-button el-button--primary mt30" @click="btnFn">{{btnText()}}</button>
             <button  class="el-button el-button--primary mt30" @click="remark">查看/添加备注</button>
-            <button  class="el-button el-button--primary mt30" v-if="(details.status=='PAYMENT_SUCCESS'||details.status=='CONFIRM_WAITING'||details.status=='BOOKING_SUCCESS')&&(details.paymentInfo&&details.paymentInfo.status!='PARTIALLY_REFUNDED')" @click="refund">全额退款</button>
-            <button  class="el-button el-button--primary mt30" @click="refundStatus=true"  v-if="(details.status=='PAYMENT_SUCCESS'||details.status=='CONFIRM_WAITING'||details.status=='BOOKING_SUCCESS'||details.status=='COMPLETED')&&(details.paymentInfo&&details.paymentInfo.status!='PARTIALLY_REFUNDED')">部分退款</button>
+            <button  class="el-button el-button--primary mt30" v-if="(details.status=='PAYMENT_SUCCESS'||details.status=='CONFIRM_WAITING'||details.status=='BOOKING_SUCCESS')&&(details.paymentInfo&&details.paymentInfo.status!='PARTIALLY_REFUNDED') && refundAdmin" @click="refund">全额退款</button>
+            <button  class="el-button el-button--primary mt30" @click="refundStatus=true"  v-if="(details.status=='PAYMENT_SUCCESS'||details.status=='CONFIRM_WAITING'||details.status=='BOOKING_SUCCESS'||details.status=='COMPLETED')&&(details.paymentInfo&&details.paymentInfo.status!='PARTIALLY_REFUNDED') && refundAdmin">部分退款</button>
 
 
-            <a :href="'/order/orderCost?id='+id" class="el-button el-button--primary mt30">计调信息</a>
+            <a :href="'/order/orderCost?id='+id" class="el-button el-button--primary mt30" target="_blank">计调信息</a>
             
         </div>
          <el-dialog title="线下搬单" :visible.sync="dialogFormVisible">
@@ -311,6 +314,7 @@ export default {
         //部分退款
         refundAmount: ""
       },
+      refundAdmin: false,
       refundStatus: false,
       rules: {
         paymentPlatform: {
@@ -341,6 +345,16 @@ export default {
   },
   methods: {
     refund() {
+      var localStorage = window.localStorage.getItem('userName');
+      if(localStorage != 'davidwang@localpanda.com' && localStorage != 'luluyao'){
+        this.$message({
+          message: '抱歉，您老没有退款权限，请放弃挣扎！',
+          type: 'warning'
+        });
+        return false;
+      }
+
+
       let self = this,
         obj = {
           businessType: "ACTIVITY",
@@ -349,15 +363,13 @@ export default {
         };
       if (!self.refundForm.refundAmount) {
         delete obj.refundAmount;
-        self
-          .$confirm("请确定是否全额退款？", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          })
-          .then(() => {
-            self.ajaxFn(obj);
-          });
+        self.$confirm("请确定是否全额退款？", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          self.ajaxFn(obj);
+        });
       } else {
         self.ajaxFn(obj);
       }
@@ -605,6 +617,13 @@ export default {
   mounted() {
     let that = this;
     this.getData();
+
+
+    var localStorage = window.localStorage.getItem('userName');
+    if(localStorage == 'davidwang@localpanda.com' || localStorage == 'luluyao'){
+      this.refundAdmin = true;
+    }
+
   }
 };
 </script>

@@ -105,7 +105,7 @@
           </el-table-column>
           <el-table-column label="操作" width="140">
             <template slot-scope="scope">
-              <a class="btn_text" :href="'/activity/info?id='+scope.row.activityId">编辑</a>
+              <a class="btn_text" :href="'/activity/info?id='+scope.row.activityId" target="_blank">编辑</a>
               <a class="btn_text" @click="setValid(scope.row,scope.$index)">{{scope.row.valid?'设为无效':'设为有效'}}</a>
             </template>
           </el-table-column>
@@ -349,8 +349,12 @@ export default {
         keyData.resourceTip = true;
         return;
       }
+
+      this.addActivity.showAddActivity = false;
       //成功跳转新增关键词页面
-      location.href = '/activity/add?category='+keyData.resource;
+      window.open('/activity/add?category='+keyData.resource,'_blank');
+      //location.href = '/activity/add?category='+keyData.resource;
+
     },
     handleCurrentChange(val) {
       this.formInline.pageNum = val;
