@@ -345,14 +345,14 @@ export default {
   },
   methods: {
     refund() {
-      var localStorage = window.localStorage.getItem('userName');
-      if(localStorage != 'davidwang@localpanda.com' && localStorage != 'luluyao'){
-        this.$message({
-          message: '抱歉，您老没有退款权限，请放弃挣扎！',
-          type: 'warning'
-        });
-        return false;
-      }
+      // var localStorage = window.localStorage.getItem('userName');
+      // if(localStorage != 'davidwang@localpanda.com' && localStorage != 'luluyao'){
+      //   this.$message({
+      //     message: '抱歉，您老没有退款权限，请放弃挣扎！',
+      //     type: 'warning'
+      //   });
+      //   return false;
+      // }
 
 
       let self = this,
@@ -620,7 +620,8 @@ export default {
 
 
     var localStorage = window.localStorage.getItem('userName');
-    if(localStorage == 'davidwang@localpanda.com' || localStorage == 'luluyao'){
+    var emailAddress = this.contactInfo.emailAddress;
+    if(localStorage == 'davidwang@localpanda.com' || localStorage == 'luluyao' && /^(test|luluyao)@/.test(emailAddress)){
       this.refundAdmin = true;
     }
 
