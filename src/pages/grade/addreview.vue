@@ -472,11 +472,11 @@
 					var file = e.target.files[0];
 					const isJPG = file.type === 'image/jpeg';
 					const isPNG = file.type === 'image/png';
-					const isLt2K = file.size / 1024 < 200;
+					const isLt2K = file.size / 1024 < 10*1024;
 					if(!isJPG && !isPNG) {
 						this.$message.error('上传头像图片格式不正确！');
 					} else if(!isLt2K) {
-						this.$message.error('上传头像图片大小不能超过 200KB!');
+						this.$message.error('上传头像图片大小不能超过 10M!');
 					} else {
 						this.fileData = file
 						var windowURL = window.URL || window.webkitURL;
@@ -491,11 +491,11 @@
 					for(var i = 0; i < file.length; i++) {
 						const isJPG = file[i].type === 'image/jpeg';
 						const isPNG = file[i].type === 'image/png';
-						const isLt2K = file[i].size / 1024  < 200;
+						const isLt2K = file[i].size / 1024  < 10*1024;
 						if(!isJPG && !isPNG) {
 							self.$message.error('上传头像图片格式不正确！');
 						} else if(!isLt2K) {
-							self.$message.error('上传图片大小不能超过 200k!');
+							self.$message.error('上传图片大小不能超过 10M!');
 						} else {
 							if(file.length+imgArr.length > 6) {
 								
