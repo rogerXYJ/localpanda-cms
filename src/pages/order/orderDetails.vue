@@ -201,6 +201,31 @@
                     </el-row>
                   </div>
                 </div>
+
+
+                <div class="hr" v-if="details.contactInfo && details.contactInfo.passport"></div>
+                <!-- 备注信息 Info -->
+                <div class="mt40">
+                  <h4>备注信息</h4>
+                  <el-table class="keyword_table" :data="tabdata" border>
+                    <el-table-column  label="operator" width="200px" align="center">
+                      <template slot-scope="scope">
+                        {{scope.row.operator}}
+                      </template>
+                    </el-table-column>
+                    <el-table-column  label="comments" align="center">
+                      <template slot-scope="scope">
+                        {{scope.row.comments}}
+                      </template>
+                    </el-table-column>
+                    <el-table-column  label="createTime" width="200px" align="center">
+                      <template slot-scope="scope">
+                        {{scope.row.createTime}}
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </div>
+                
                 
 
             </div>
@@ -429,6 +454,8 @@ export default {
           self.userLocalTime = data.userLocalTime;
 
           console.log(self.details);
+
+          self.getViewRemark();
         },
         error: function(data) {
           self.$alert("请求失败");
@@ -617,6 +644,8 @@ export default {
   mounted() {
     let that = this;
     this.getData();
+
+    
 
 
     var localStorage = window.localStorage.getItem('userName');

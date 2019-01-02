@@ -432,9 +432,11 @@
 												
 									} else {
 										alert('参数错误！');
+										self.showLoading = false;
 									}
 								},
 								error: function() {
+									self.showLoading = false;
 									alert('请求失败！');
 								}
 							});

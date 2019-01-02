@@ -44,6 +44,8 @@ let routers = [
   {path:'/activity/search',name: 'search', title:'搜索信息管理'},
   {path:'/activity/book',name: 'book', title:'预定信息'},
   {path:'/activity/recommend',name: 'recommend', title:'推荐产品管理'},
+  {path:'/activity/ad',name: 'ad', title:'广告位管理'},
+  
   
   {path:'/order/',name: 'index', title:'订单查询'},
   {path:'/order/orderDetails',name: 'orderDetails', title:'订单详情'},
