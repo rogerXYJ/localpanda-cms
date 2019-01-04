@@ -19,7 +19,7 @@
                   <el-col :span="12"><div class="grid-content bg-purple-light fs16 pd20"><label>产品ID: </label><b>{{details.activityId}}</b></div></el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label> 产品标题: </label><a class="btn_text" target="_blank" :href="'https://www.localpanda.com/activity/details/'+details.activityId"><b>{{details.activityInfo?details.activityInfo.title:''}}</b></a></div></el-col>
+                  <el-col :span="24"><div class="grid-content bg-purple fs16 pd20"><label> 产品标题: </label><a class="btn_text" target="_blank" :href="details.detailUrl"><b>{{details.activityInfo?details.activityInfo.title:''}}</b></a></div></el-col>
                 </el-row>
                 
                  <!-- <el-row>
